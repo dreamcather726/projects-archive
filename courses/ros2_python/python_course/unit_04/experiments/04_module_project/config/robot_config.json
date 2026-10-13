@@ -1,0 +1,5 @@
+{
+  "robot_name": "robot_01",
+  "stop_distance_m": 0.4,
+  "slow_distance_m": 0.8
+}

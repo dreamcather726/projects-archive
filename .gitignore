@@ -1,0 +1,53 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.pem
+*.key
+*.p12
+credentials.json
+secrets.json
+
+# Dependencies and environments
+node_modules/
+.venv/
+venv/
+.pio/
+.uv-cache/
+managed_components/
+__pycache__/
+*.pyc
+
+# Generated output
+build/
+build-*/
+build_*/
+dist/
+install/
+log/
+logs/
+target/
+*.log
+*.exe
+*.dll
+*.bin
+*.o
+*.obj
+*.elf
+
+# Archives, disk images, model weights
+*.zip
+*.7z
+*.rar
+*.img
+*.iso
+*.pth
+*.pt
+*.onnx
+*.safetensors
+
+# Editor local files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,42 @@
+{
+    "configurations": [
+        {
+            "name": "STC8_4Motor_AOnly",
+            "includePath": [
+                "c:\\Users\\12547\\Desktop\\ros2_car2.0\\STC8\\Firmware\\Include",
+                "c:\\Users\\12547\\Desktop\\ros2_car2.0\\STC8\\Peripheral\\Include",
+                "c:\\Users\\12547\\Desktop\\ros2_car2.0\\STC8\\Firmware\\Source",
+                "c:\\Users\\12547\\Desktop\\ros2_car2.0\\STC8\\Firmware\\Startup",
+                "c:\\Users\\12547\\Desktop\\ros2_car2.0\\STC8\\Peripheral\\Source"
+            ],
+            "defines": [
+                "STC_MOTOR_APP",
+                "MOTOR_ENCODER_AB=0",
+                "__C51__",
+                "__VSCODE_C51__",
+                "reentrant=",
+                "compact=",
+                "small=",
+                "large=",
+                "data=",
+                "idata=",
+                "pdata=",
+                "bdata=",
+                "xdata=",
+                "code=",
+                "bit=char",
+                "sbit=char",
+                "sfr=char",
+                "sfr16=int",
+                "sfr32=int",
+                "interrupt=",
+                "using=",
+                "_at_=",
+                "_priority_=",
+                "_task_="
+            ],
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,74 @@
+# 第三模块 拓展
+
+## 1. 知识拓展
+- 本课相关原理的进一步解释：
+  - 轮询和外部中断的本质区别在于：轮询要靠主循环不停检查引脚状态，而外部中断是在边沿到来时由硬件触发 ISR，所以更适合捕获高速脉冲。
+  - `RISING`、`FALLING`、`CHANGE` 是最常见的中断触发方式。对于编码器来说，只统计 A 相上升沿属于 1 倍频；统计 A 相上升沿和下降沿属于 2 倍频；同时统计 A/B 两相全部边沿则属于 4 倍频。
+  - 增量式编码器的 A 相和 B 相存在固定相位差。若 A 相领先 B 相，或 B 相领先 A 相，就可以据此判断旋转方向。教学程序里常用“在 A 相边沿到来时读取 B 相电平”的办法判断方向。
+  - `volatile` 不是用来“加快速度”的，而是告诉编译器：“这个变量可能在你意想不到的时候被修改”。中断函数和主循环共同访问的变量，通常都应该写成 `volatile`。
+  - 在 ESP32 中，很多示例会把中断函数写成 `void IRAM_ATTR isrName()`。课堂阶段不必过度纠结底层细节，但要形成习惯：ISR 要短、小、快。
+  - 主循环读取共享变量时，常用 `noInterrupts(); copy = shared; interrupts();` 这种模板。关闭中断的时间应尽量短，只复制变量，不要把串口打印、屏幕刷新、延时等操作放进去。
+  - 编码器距离换算公式为：`距离 = 总计数 ÷ 每圈计数 × 车轮周长`。车轮周长为 `π × 轮径`。若轮径单位是毫米，而希望结果用厘米表示，则要进行单位换算。
+  - 编码器速度换算公式为：`速度 = 一段时间内的距离变化 ÷ 时间变化`。因此测速一定需要“两个时刻”的数据，而不只是一个瞬时计数值。
+  - 4 倍频程序中使用的是状态转移判断法。AB 两相一共只有 `00`、`01`、`10`、`11` 四种状态，正转和反转都会呈现固定顺序。只要比较“上一次状态”和“当前状态”，就能判断加减。
+  - 真正的小车项目中，编码器抖动、长线干扰、电平不兼容、接地不良，都会导致计数异常。因此课堂中的“计数跳动”并不一定是代码错了，也可能是硬件连接问题。
+
+## 2. 速查表
+- 重要函数速查：
+  - `attachInterrupt()`：绑定外部中断
+  - `digitalPinToInterrupt()`：把 GPIO 转成中断编号
+  - `digitalRead()`：读取数字引脚电平
+  - `noInterrupts()`：临时关闭中断
+  - `interrupts()`：重新开启中断
+  - `millis()`：获取程序运行毫秒数
+  - `screen.init()`：初始化 TFT
+  - `screen.setRotation()`：设置屏幕方向
+  - `screen.fillScreen()`：整屏填充颜色
+  - `screen.drawFastHLine()`：画水平线
+  - `screen.fillRect()`：填充矩形区域
+  - `screen.setCursor()`：设置文字坐标
+  - `screen.print()`：显示文字和数字
+  - `drawStaticScreen()`：绘制静态界面
+  - `updateScreen()`：更新动态数据显示
+- 重要参数速查：
+  - `ENCODER_A_PIN = 6`：编码器 A 相引脚
+  - `ENCODER_B_PIN = 7`：编码器 B 相引脚
+  - `RISING`：上升沿触发
+  - `FALLING`：下降沿触发
+  - `CHANGE`：电平变化触发
+  - `SINGLE_EDGE_COUNTS_PER_REVOLUTION = 430`：单边沿每圈计数
+  - `ENCODER_MULTIPLY = 2`：当前测速实验采用 2 倍频
+  - `COUNTS_PER_REVOLUTION = 860`：2 倍频后每圈总计数
+  - `WHEEL_DIAMETER_MM = 60.0`：车轮直径，单位毫米
+  - `TFT_CS_PIN = 47`：TFT 片选
+  - `TFT_DC_PIN = 21`：TFT 数据/命令选择
+  - `TFT_SDA_PIN = 20`：SPI `MOSI`
+  - `TFT_SCL_PIN = 19`：SPI `SCK`
+  - `TFT_RST_PIN = -1`：不使用独立复位引脚
+  - `TFT_ROTATION = 3`：横屏显示方向
+- 重要单词速查：
+  - `interrupt`：中断
+  - `encoder`：编码器
+  - `rising`：上升的
+  - `falling`：下降的
+  - `change`：变化
+  - `count`：计数
+  - `pulse`：脉冲
+  - `edge`：边沿
+  - `signal`：信号
+  - `forward`：正向 / 正转
+  - `reverse`：反向 / 反转
+  - `shared`：共享的
+  - `copy`：复制
+  - `distance`：距离
+  - `speed`：速度
+  - `measure`：测量
+  - `wheel`：车轮
+  - `diameter`：直径
+  - `rotation`：旋转
+  - `monitor`：监视器 / 监测界面
+  - `volatile`：易变的
+  - `attach`：附加 / 绑定
+  - `digital`：数字的
+  - `read`：读取
+  - `print`：打印 / 输出

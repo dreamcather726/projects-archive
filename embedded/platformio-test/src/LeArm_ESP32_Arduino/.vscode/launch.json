@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/12547/Desktop/控制部分/开源舵机控制器-2025款/1.教程资料/2.开发教程/2.1 ESP32开发教程/2.1.2 基础开发课程/07 手柄控制/02 手柄控制程序/LeArm_ESP32_Arduino",
+      "program": "c:/Users/12547/Desktop/控制部分/开源舵机控制器-2025款/1.教程资料/2.开发教程/2.1 ESP32开发教程/2.1.2 基础开发课程/07 手柄控制/02 手柄控制程序/LeArm_ESP32_Arduino/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

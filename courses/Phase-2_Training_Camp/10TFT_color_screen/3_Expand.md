@@ -1,0 +1,58 @@
+# 第三模块 拓展
+
+## 1. 知识拓展
+- 本课相关原理的进一步解释：
+  - ST7789 是一类常见的 TFT 彩屏驱动芯片，能够接收 SPI 指令和像素颜色数据，并控制屏幕显示。
+  - `Adafruit_GFX` 提供通用绘图能力，如文字、坐标、线条和矩形；`Adafruit_ST7789` 负责和 ST7789 芯片通信。
+  - SPI 中 `MOSI` 负责发送数据，`SCK` 提供时钟，`CS` 选择设备，`DC` 区分当前发送的是命令还是显示数据。
+  - 课程中的 TFT 丝印 `SDA`、`SCL` 指的是 SPI 信号，并不等于 I2C 的 `SDA`、`SCL`。
+  - `RGB565` 是常见 16 位颜色格式，库中 `ST77XX_RED`、`ST77XX_GREEN` 等常量已经封装好了颜色值。
+  - 彩屏每次整屏重绘的数据量比单色 OLED 更大，所以综合实验更强调“固定区域只画一次，动态区域局部刷新”。
+  - 综合仪表盘不只是把数据全部堆上去，而是要把信息排版得更容易看、更容易理解，这就是嵌入式界面设计的入门思路。
+
+## 2. 速查表
+- 重要函数速查：
+  - `screen.init()`：初始化 TFT
+  - `screen.setRotation()`：设置屏幕方向
+  - `screen.fillScreen()`：整屏填充颜色
+  - `screen.drawRect()`：绘制矩形边框
+  - `screen.drawFastHLine()`：绘制水平线
+  - `screen.fillRect()`：填充矩形区域
+  - `screen.setTextColor()`：设置文字颜色
+  - `screen.setTextSize()`：设置文字大小
+  - `screen.setCursor()`：设置光标位置
+  - `screen.print()`：输出文字或数字
+  - `drawStaticScreen()`：绘制固定界面
+  - `updateScreen()`：更新动态数据区域
+  - `stopProgram()`：显示错误并停止程序
+- 重要参数速查：
+  - `TFT_CS_PIN = 47`：片选引脚
+  - `TFT_DC_PIN = 21`：数据/命令选择引脚
+  - `TFT_SDA_PIN = 20`：SPI `MOSI`
+  - `TFT_SCL_PIN = 19`：SPI `SCK`
+  - `TFT_RST_PIN = -1`：不使用独立复位引脚
+  - `TFT_NATIVE_WIDTH = 240`：原生宽度
+  - `TFT_NATIVE_HEIGHT = 320`：原生高度
+  - `TFT_ROTATION = 3`：横屏方向
+  - `PIN_SDA = 8`：I2C 数据线
+  - `PIN_SCL = 9`：I2C 时钟线
+  - `PIN_IR = 40`：红外模块引脚
+  - `PIN_TRIG = 12`：超声波触发引脚
+  - `PIN_ECHO = 13`：超声波回波引脚
+  - `PIN_RGB = 48`：WS2812 数据引脚
+- 重要单词速查：
+  - `screen`：屏幕
+  - `color`：颜色
+  - `rotation`：旋转
+  - `dashboard`：仪表盘
+  - `static`：静态的
+  - `update`：更新
+  - `integrated`：整合的
+  - `error`：错误
+  - `distance`：距离
+  - `detected`：检测到
+  - `clear`：无遮挡 / 清除
+  - `width`：宽度
+  - `height`：高度
+  - `refresh`：刷新
+  - `native`：原生的

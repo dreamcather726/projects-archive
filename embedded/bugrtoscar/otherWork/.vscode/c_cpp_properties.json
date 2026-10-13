@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "name": "windows-gcc-x64",
+      "compilerPath": "C:/Users/12547/scoop/apps/gcc/current/bin/gcc.exe",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [],
+      "cStandard": "c17",
+      "intelliSenseMode": "windows-gcc-x64",
+      "cppStandard": "${default}"
+    }
+  ],
+  "version": 4
+}

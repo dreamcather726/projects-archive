@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>程序结构思维导图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .mindmap {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .node {
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .node-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e8f5e8;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .node-content {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+        
+        .sub-node {
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid #2196F3;
+        }
+        
+        .sub-node-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .sub-node-content {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        
+        .sub-sub-node {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            border-left: 2px solid #FF9800;
+        }
+        
+        .connection {
+            position: absolute;
+            background-color: #ddd;
+            z-index: -1;
+        }
+        
+        .connection.vertical {
+            width: 2px;
+            height: 20px;
+            left: 15px;
+        }
+        
+        .connection.horizontal {
+            height: 2px;
+            width: 20px;
+            top: 25px;
+        }
+        
+        .module-color-1 {
+            border-left-color: #4CAF50;
+            background-color: #e8f5e8;
+        }
+        
+        .module-color-2 {
+            border-left-color: #2196F3;
+            background-color: #e3f2fd;
+        }
+        
+        .module-color-3 {
+            border-left-color: #FF9800;
+            background-color: #fff3e0;
+        }
+        
+        .module-color-4 {
+            border-left-color: #9C27B0;
+            background-color: #f3e5f5;
+        }
+        
+        .module-color-5 {
+            border-left-color: #00BCD4;
+            background-color: #e0f7fa;
+        }
+    </style>
+</head>
+<body>
+    <h1>程序结构思维导图</h1>
+    
+    <div class="mindmap">
+        <!-- 主节点 -->
+        <div class="node">
+            <div class="node-title module-color-1">灵巧手控制器程序</div>
+            
+            <!-- 子节点：main.py -->
+            <div class="node-content">
+                <div class="sub-node module-color-2">
+                    <div class="sub-node-title">main.py（主入口）</div>
+                    <div class="sub-node-content">
+                        <div class="sub-sub-node">
+                            <strong>功能：</strong>整合4个模块，绑定信号，启动程序
+                        </div>
+                        <div class="sub-sub-node">
+                            <strong>主要类：</strong>FingerControllerApp
+                        </div>
+                        <div class="sub-sub-node">
+                            <strong>主要方法：</strong>
+                            <ul>
+                                <li>__init__() - 初始化应用</li>
+                                <li>_bind_signals() - 绑定信号</li>
+                                <li>closeEvent() - 处理窗口关闭</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 子节点：模块结构 -->
+                <div class="sub-node module-color-3">
+                    <div class="sub-node-title">模块结构</div>
+                    <div class="sub-node-content">
+                        <!-- UI模块 -->
+                        <div class="sub-sub-node">
+                            <strong>ui_module.py</strong>
+                            <ul>
+                                <li>功能：创建和显示界面控件</li>
+                                <li>主要类：FingerControllerUI</li>
+                                <li>主要方法：_setup_ui() - 设置界面</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 控制层 -->
+                        <div class="sub-sub-node">
+                            <strong>interaction_module.py</strong>
+                            <ul>
+                                <li>功能：处理用户交互逻辑</li>
+                                <li>主要类：InteractionController</li>
+                                <li>主要方法：
+                                    <ul>
+                                        <li>refresh_ports() - 刷新串口</li>
+                                        <li>toggle_connection() - 连接/断开</li>
+                                        <li>on_slider_changed() - 处理滑块变化</li>
+                                        <li>apply_preset_by_name() - 应用预设动作</li>
+                                        <li>run_script() - 执行脚本</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 串口模块 -->
+                        <div class="sub-sub-node">
+                            <strong>serial_module.py</strong>
+                            <ul>
+                                <li>功能：与机械手通信</li>
+                                <li>主要类：SerialPortClient</li>
+                                <li>主要方法：
+                                    <ul>
+                                        <li>scan_ports() - 扫描串口</li>
+                                        <li>connect() - 连接串口</li>
+                                        <li>disconnect() - 断开连接</li>
+                                        <li>send_command() - 发送命令</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 脚本模块 -->
+                        <div class="sub-sub-node">
+                            <strong>script_module.py</strong>
+                            <ul>
+                                <li>功能：执行脚本指令</li>
+                                <li>主要类：
+                                    <ul>
+                                        <li>ScriptRunner - 脚本执行线程</li>
+                                        <li>ScriptService - 脚本服务</li>
+                                    </ul>
+                                </li>
+                                <li>主要方法：
+                                    <ul>
+                                        <li>run() - 执行脚本</li>
+                                        <li>start() - 启动脚本</li>
+                                        <li>stop() - 停止脚本</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 子节点：执行流程 -->
+                <div class="sub-node module-color-4">
+                    <div class="sub-node-title">执行流程</div>
+                    <div class="sub-node-content">
+                        <div class="sub-sub-node">
+                            <strong>1. 启动程序</strong>
+                            <ul>
+                                <li>执行 python main.py</li>
+                                <li>导入必要的库和模块</li>
+                                <li>定义FingerControllerApp类</li>
+                            </ul>
+                        </div>
+                        <div class="sub-sub-node">
+                            <strong>2. 初始化应用</strong>
+                            <ul>
+                                <li>创建QApplication实例</li>
+                                <li>创建FingerControllerApp实例</li>
+                                <li>初始化各个模块</li>
+                                <li>绑定信号</li>
+                                <li>刷新串口列表</li>
+                            </ul>
+                        </div>
+                        <div class="sub-sub-node">
+                            <strong>3. 运行应用</strong>
+                            <ul>
+                                <li>显示窗口</li>
+                                <li>执行应用程序主循环</li>
+                                <li>等待用户操作</li>
+                            </ul>
+                        </div>
+                        <div class="sub-sub-node">
+                            <strong>4. 处理用户操作</strong>
+                            <ul>
+                                <li>点击按钮</li>
+                                <li>滑动滑块</li>
+                                <li>运行脚本</li>
+                            </ul>
+                        </div>
+                        <div class="sub-sub-node">
+                            <strong>5. 关闭应用</strong>
+                            <ul>
+                                <li>处理窗口关闭事件</li>
+                                <li>停止脚本线程</li>
+                                <li>关闭串口</li>
+                                <li>退出程序</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 子节点：信号与槽 -->
+                <div class="sub-node module-color-5">
+                    <div class="sub-node-title">信号与槽</div>
+                    <div class="sub-node-content">
+                        <div class="sub-sub-node">
+                            <strong>UI控件信号</strong>
+                            <ul>
+                                <li>refresh_btn.clicked → controller.refresh_ports</li>
+                                <li>connect_btn.clicked → controller.toggle_connection</li>
+                                <li>slider.valueChanged → controller.on_slider_changed</li>
+                                <li>preset_btn.clicked → controller.apply_preset_by_name</li>
+                                <li>load_btn.clicked → controller.load_script</li>
+                                <li>save_btn.clicked → controller.save_script</li>
+                                <li>run_btn.clicked → controller.run_script</li>
+                                <li>stop_btn.clicked → controller.stop_script</li>
+                            </ul>
+                        </div>
+                        <div class="sub-sub-node">
+                            <strong>脚本服务信号</strong>
+                            <ul>
+                                <li>script_service.log_signal → script_log.append</li>
+                                <li>script_service.finished_signal → controller.on_script_finished</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

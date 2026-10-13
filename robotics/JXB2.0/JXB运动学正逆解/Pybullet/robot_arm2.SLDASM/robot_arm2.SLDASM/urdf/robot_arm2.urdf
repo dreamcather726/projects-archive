@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="robot_arm2_description">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.1698 -0.05285 -0.18307"
+        rpy="0 0 0" />
+      <mass
+        value="0.15077" />
+      <inertia
+        ixx="0.00018232"
+        ixy="1.4601E-05"
+        ixz="4.8649E-07"
+        iyy="0.00048684"
+        iyz="3.2468E-06"
+        izz="0.00038499" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="Empty_Link1">
+    <inertial>
+      <origin
+        xyz="-0.00061893 -0.0022184 0.013845"
+        rpy="0 0 0" />
+      <mass
+        value="0.056355" />
+      <inertia
+        ixx="4.7087E-05"
+        ixy="9.0578E-08"
+        ixz="-8.9365E-08"
+        iyy="3.3897E-05"
+        iyz="1.2007E-06"
+        izz="6.17E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J1"
+    type="revolute">
+    <origin
+      xyz="-0.19012 0.1825 -0.0325"
+      rpy="0 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="Empty_Link1" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Empty_Link2">
+    <inertial>
+      <origin
+        xyz="-0.0540152365441462 -0.00027850788285249 0.00287258804127491"
+        rpy="0 0 0" />
+      <mass
+        value="0.0943036351242445" />
+      <inertia
+        ixx="7.00395109614572E-05"
+        ixy="-2.89904301752358E-07"
+        ixz="4.44263366807282E-06"
+        iyy="0.000185111273809948"
+        iyz="-9.5964150347015E-09"
+        izz="0.00014438982236278" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J2"
+    type="revolute">
+    <origin
+      xyz="0 0 0.0325"
+      rpy="1.5708 0 0" />
+    <parent
+      link="Empty_Link1" />
+    <child
+      link="Empty_Link2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Empty_Link3">
+    <inertial>
+      <origin
+        xyz="0.0239378694663576 0.024917571639988 -0.0022378200225909"
+        rpy="0 0 0" />
+      <mass
+        value="0.0672117855059067" />
+      <inertia
+        ixx="4.7132404585826E-05"
+        ixy="-1.48543663708376E-05"
+        ixz="2.55140729507865E-06"
+        iyy="8.94174316686288E-05"
+        iyz="-1.0708901644033E-06"
+        izz="9.57025391970068E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J3"
+    type="revolute">
+    <origin
+      xyz="-0.11 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Empty_Link2" />
+    <child
+      link="Empty_Link3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Empty_Link4">
+    <inertial>
+      <origin
+        xyz="0.0291342485138213 9.85660582764475E-05 0.00119008431121928"
+        rpy="0 0 0" />
+      <mass
+        value="0.0521606802869807" />
+      <inertia
+        ixx="2.93354782592522E-05"
+        ixy="-4.05276633442892E-08"
+        ixz="2.0621313073729E-06"
+        iyy="3.96112735027713E-05"
+        iyz="2.15810457235452E-09"
+        izz="1.94390980307816E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J4"
+    type="revolute">
+    <origin
+      xyz="0.066203 0.0355 0"
+      rpy="0 0 0" />
+    <parent
+      link="Empty_Link3" />
+    <child
+      link="Empty_Link4" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Empty_TOOT">
+    <inertial>
+      <origin
+        xyz="0.0618899433669391 -8.54632837164124E-05 -5.35880192556459E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.0109737720178714" />
+      <inertia
+        ixx="2.29253403988498E-06"
+        ixy="2.12425126817291E-09"
+        ixz="-2.73800756106607E-10"
+        iyy="1.78537624572278E-06"
+        iyz="-8.06045050119882E-08"
+        izz="1.32140759692674E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_TOOT.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_arm2_description/meshes/Empty_TOOT.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="T1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Empty_Link4" />
+    <child
+      link="Empty_TOOT" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

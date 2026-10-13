@@ -1,0 +1,198 @@
+[
+  {
+    "path": "embedded/dog/12tets/test/wifi_control.cpp",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/dog/test - 副本/wifi_control.cpp",
+    "replacements": 1
+  },
+  {
+    "path": "embedded/dog/test/wifi_control.cpp",
+    "replacements": 1
+  },
+  {
+    "path": "embedded/test/wifi_control.cpp",
+    "replacements": 1
+  },
+  {
+    "path": "embedded/xiaozhi-esp32-main/docs/mqtt-udp.md",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/xiaozhi-esp32-main/docs/mqtt-udp_zh.md",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/xiaozhi-esp32-main---副本/docs/mqtt-udp.md",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/xiaozhi-esp32-main---副本/docs/mqtt-udp_zh.md",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/孟/Bluetooth_dog/LeArm_ESP32_Arduino.ino",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/孟/Bluetooth_dog/wifi-web-control-user-manual.md",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/孟/LeArm_ESP32_Arduino/LeArm_ESP32_Arduino.ino",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/孟/LeArm_ESP32_Arduino/wifi-web-control-user-manual.md",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB/JXB.ino",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB/TUTORIAL.md",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB_UDP/JXB_UDP.ino",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB_WIFI/JXB_WIFI.ino",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB_controlPYBULLET/JXB.ino",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB_controlbyGUI/JXB.ino",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB_pybullteInit/JXB.ino",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/JXB2.0/JXB运动学正逆解/JXB.ino",
+    "replacements": 2
+  },
+  {
+    "path": "robotics/ROBO/robonexus/src/pages/uesr/Login/Login.vue",
+    "replacements": 1
+  },
+  {
+    "path": "vision/HandTracking-4指/CameraWebServer/CameraWebServer.ino",
+    "replacements": 2
+  },
+  {
+    "path": "references/LeLamp/docs/6. Common Issues.md",
+    "replacements": 2
+  },
+  {
+    "path": "references/microduck/docs/design/app-path-design.md",
+    "replacements": 1
+  },
+  {
+    "path": "references/microduck/scripts/migrate-network.sh",
+    "replacements": 1
+  },
+  {
+    "path": "embedded/platformio-test/src/LeArm_ESP32_Arduino.ino",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/platformio-test/src/main.cpp",
+    "replacements": 2
+  },
+  {
+    "path": "vision/HandTracking-4指-d-drive/CameraWebServer/CameraWebServer.ino",
+    "replacements": 2
+  },
+  {
+    "path": "applications/robonexus/src/pages/uesr/Login/Login.vue",
+    "replacements": 1
+  },
+  {
+    "path": "embedded/xiaozhi-esp32-main-d-drive/docs/mqtt-udp.md",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/xiaozhi-latest/docs/mqtt-udp.md",
+    "replacements": 2
+  },
+  {
+    "path": "embedded/xiaozhi-latest/docs/mqtt-udp_zh.md",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/微信小程序工作流程详解.md",
+    "replacements": 1
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/手机控制/utils/iotapi.js",
+    "replacements": 1
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/树莓派中控发送/242047.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/树莓派中控发送/main.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/电脑端测试代码/main.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/电脑端测试代码/mqtt_subscriber.py",
+    "replacements": 3
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/电脑端测试代码/text.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/设备连接属性.txt",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/python代码例子/151156.py",
+    "replacements": 1
+  },
+  {
+    "path": "applications/iot-seedling-graduation/python代码例子/2个设备上传数据到华为云.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/python代码例子/MQTT.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/python代码例子/实现上传数据（10231221）.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/python代码例子/监听华为云数据copy.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/文本文件/设备连接属性.txt",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/树莓派中控发送/main.py",
+    "replacements": 2
+  },
+  {
+    "path": "applications/iot-seedling-graduation/电脑端数据获取/main.py",
+    "replacements": 2
+  },
+  {
+    "path": "references/ESP32连接服务器/ESP32_Client/ESP32_Client.ino",
+    "replacements": 2
+  }
+]

@@ -1,0 +1,61 @@
+# 第三模块 拓展
+
+## 1. 知识拓展
+- 本课相关原理的进一步解释：
+  - `setup()` 只在上电或复位后先执行一次，`loop()` 会一直循环执行。
+  - 串口监视器可以把程序运行结果显示出来，是最基础的调试工具。
+  - GPIO 设为 `OUTPUT` 后，可以输出高低电平控制 LED。
+  - 普通 LED 需要串联限流电阻，避免电流过大。
+  - `INPUT_PULLUP` 模式下，按键松开读到 `HIGH`，按下读到 `LOW`。
+  - PWM 通过快速开关改变平均亮度，不是直接输出连续变化电压。
+  - RGB 灯是红、绿、蓝三个通道的组合。
+  - `WS2812` 和普通 RGB 灯不同，通常只需要一根数据线控制。
+  - `WS2812` 设置颜色后必须调用 `show()` 才会刷新显示。
+
+## 2. 速查表
+- 重要函数速查：
+  - `Serial.begin()`：启动串口通信
+  - `Serial.println()`：向串口监视器输出内容并换行
+  - `pinMode()`：设置引脚模式
+  - `digitalWrite()`：输出高低电平
+  - `digitalRead()`：读取按键电平
+  - `analogWrite()`：输出 PWM 值
+  - `delay()`：延时
+  - `strip.begin()`：启动 WS2812 对象
+  - `strip.fill()`：设置灯珠颜色
+  - `strip.show()`：刷新灯珠显示
+- 重要参数速查：
+  - `HIGH`：高电平
+  - `LOW`：低电平
+  - `OUTPUT`：输出模式
+  - `INPUT_PULLUP`：内部上拉输入模式
+  - `0~255`：PWM 常用亮度范围
+  - `115200`：本课基础语法示例串口波特率
+  - `NEO_GRB`：WS2812 颜色顺序
+  - `NEO_KHZ800`：WS2812 通信速度
+- 重要单词速查：
+  - `setup`：初始化
+  - `loop`：循环
+  - `serial`：串口
+  - `print`：打印 / 输出
+  - `println`：打印并换行
+  - `pin`：引脚
+  - `mode`：模式
+  - `button`：按键
+  - `blink`：闪烁
+  - `input`：输入
+  - `output`：输出
+  - `digital`：数字的 / 数字电平的
+  - `analog`：模拟的
+  - `read`：读取
+  - `write`：写入 / 输出
+  - `light`：灯光 / 亮度
+  - `red`：红色
+  - `green`：绿色
+  - `blue`：蓝色
+  - `high`：高
+  - `low`：低
+  - `delay`：延时
+  - `pullup`：上拉
+  - `state`：状态
+  - `value`：数值 / 值

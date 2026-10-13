@@ -1,0 +1,16 @@
+/* 金融服务页（/finance）：页面级样式与页面文件放在同一目录，避免跨目录查找 */
+.page-container {
+  padding: 0 0 80px;
+  min-height: calc(100vh - var(--navbar-height) - var(--page-top-gap));
+}
+
+h1 {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  color: #666;
+}

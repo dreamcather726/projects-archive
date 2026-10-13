@@ -1,0 +1,16 @@
+{
+    "username": "68ee03050a9ab42ae5847f9e_test",
+    "password": "REDACTED_CONFIGURE_LOCALLY",
+    "clientId": "68ee03050a9ab42ae5847f9e_test_0_0_2025102308",
+    "hostname": "6d5aef22d8.st1.iotda-device.cn-east-3.myhuaweicloud.com",
+    "port": 8883,
+    "protocol": "MQTTS"
+}
+{
+    "username": "68ee03050a9ab42ae5847f9e_text2",
+    "password": "REDACTED_CONFIGURE_LOCALLY",
+    "clientId": "68ee03050a9ab42ae5847f9e_text2_0_0_2025102308",
+    "hostname": "6d5aef22d8.st1.iotda-device.cn-east-3.myhuaweicloud.com",
+    "port": 8883,
+    "protocol": "MQTTS"
+}

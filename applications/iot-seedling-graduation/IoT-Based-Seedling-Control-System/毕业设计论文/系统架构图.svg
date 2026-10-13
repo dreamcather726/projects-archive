@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- 背景和标题 -->
+  <rect width="800" height="600" fill="#f9f9f9"/>
+  <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">物联网育苗控制系统架构图</text>
+  
+  <!-- 应用层 -->
+  <rect x="150" y="80" width="500" height="100" rx="10" fill="#b3d9ff" stroke="#0066cc" stroke-width="2"/>
+  <text x="400" y="110" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#003366">应用层</text>
+  <text x="250" y="140" font-family="Arial" font-size="16" text-anchor="middle" fill="#003366">微信小程序</text>
+  <text x="550" y="140" font-family="Arial" font-size="16" text-anchor="middle" fill="#003366">树莓派本地界面</text>
+  
+  <!-- 应用层图标 -->
+  <rect x="220" y="130" width="60" height="30" rx="5" fill="#0066cc"/>
+  <text x="250" y="150" font-family="Arial" font-size="12" text-anchor="middle" fill="white">用户交互</text>
+  <rect x="520" y="130" width="60" height="30" rx="5" fill="#0066cc"/>
+  <text x="550" y="150" font-family="Arial" font-size="12" text-anchor="middle" fill="white">本地监控</text>
+  
+  <!-- 处理层 -->
+  <rect x="150" y="220" width="500" height="100" rx="10" fill="#ccffcc" stroke="#009900" stroke-width="2"/>
+  <text x="400" y="250" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#003300">处理层</text>
+  <text x="300" y="280" font-family="Arial" font-size="16" text-anchor="middle" fill="#003300">树莓派中控平台</text>
+  <text x="500" y="280" font-family="Arial" font-size="16" text-anchor="middle" fill="#003300">华为云IoT平台</text>
+  
+  <!-- 处理层图标 -->
+  <rect x="250" y="270" width="100" height="30" rx="5" fill="#009900"/>
+  <text x="300" y="290" font-family="Arial" font-size="12" text-anchor="middle" fill="white">数据处理</text>
+  <rect x="450" y="270" width="100" height="30" rx="5" fill="#009900"/>
+  <text x="500" y="290" font-family="Arial" font-size="12" text-anchor="middle" fill="white">云服务</text>
+  
+  <!-- 传输层 -->
+  <rect x="150" y="360" width="500" height="100" rx="10" fill="#ffffcc" stroke="#cccc00" stroke-width="2"/>
+  <text x="400" y="390" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#333300">传输层</text>
+  <text x="250" y="420" font-family="Arial" font-size="16" text-anchor="middle" fill="#333300">LoRa无线通信</text>
+  <text x="550" y="420" font-family="Arial" font-size="16" text-anchor="middle" fill="#333300">互联网通信</text>
+  
+  <!-- 传输层图标 -->
+  <rect x="220" y="410" width="60" height="30" rx="5" fill="#cccc00"/>
+  <text x="250" y="430" font-family="Arial" font-size="12" text-anchor="middle" fill="#333300">本地传输</text>
+  <rect x="520" y="410" width="60" height="30" rx="5" fill="#cccc00"/>
+  <text x="550" y="430" font-family="Arial" font-size="12" text-anchor="middle" fill="#333300">远程传输</text>
+  
+  <!-- 感知层 -->
+  <rect x="150" y="500" width="500" height="70" rx="10" fill="#ffcccc" stroke="#cc0000" stroke-width="2"/>
+  <text x="400" y="530" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#330000">感知层</text>
+  
+  <!-- 感知层设备 -->
+  <rect x="170" y="520" width="100" height="30" rx="5" fill="#cc0000"/>
+  <text x="220" y="540" font-family="Arial" font-size="12" text-anchor="middle" fill="white">传感器</text>
+  
+  <rect x="290" y="520" width="100" height="30" rx="5" fill="#cc0000"/>
+  <text x="340" y="540" font-family="Arial" font-size="12" text-anchor="middle" fill="white">Arduino控制器</text>
+  
+  <rect x="410" y="520" width="100" height="30" rx="5" fill="#cc0000"/>
+  <text x="460" y="540" font-family="Arial" font-size="12" text-anchor="middle" fill="white">执行设备</text>
+  
+  <rect x="530" y="520" width="100" height="30" rx="5" fill="#cc0000"/>
+  <text x="580" y="540" font-family="Arial" font-size="12" text-anchor="middle" fill="white">LoRa模块</text>
+  
+  <!-- 连接线 -->
+  <line x1="400" y1="180" x2="400" y2="220" stroke="#333" stroke-width="2"/>
+  <line x1="400" y1="320" x2="400" y2="360" stroke="#333" stroke-width="2"/>
+  <line x1="400" y1="460" x2="400" y2="500" stroke="#333" stroke-width="2"/>
+  
+  <!-- 箭头 -->
+  <polygon points="395,500 400,490 405,500" fill="#333"/>
+  <polygon points="395,360 400,350 405,360" fill="#333"/>
+  <polygon points="395,220 400,210 405,220" fill="#333"/>
+  
+  <!-- 双向箭头 -->
+  <polygon points="395,180 400,190 405,180" fill="#333"/>
+  <polygon points="395,320 400,330 405,320" fill="#333"/>
+  <polygon points="395,460 400,470 405,460" fill="#333"/>
+</svg>

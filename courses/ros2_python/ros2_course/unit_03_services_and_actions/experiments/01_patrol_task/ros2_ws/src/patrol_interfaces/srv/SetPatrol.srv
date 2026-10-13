@@ -1,0 +1,5 @@
+# 服务适合立即完成的启停设置。
+bool enabled
+---
+bool success
+string message

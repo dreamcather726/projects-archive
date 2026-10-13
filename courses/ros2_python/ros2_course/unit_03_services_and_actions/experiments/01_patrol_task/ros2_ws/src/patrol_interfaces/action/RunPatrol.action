@@ -1,0 +1,12 @@
+# Goal：客户端希望服务端完成什么。
+int32 waypoint_count
+float32 dwell_seconds
+---
+# Result：任务结束后的业务结果。
+bool success
+int32 visited_count
+string message
+---
+# Feedback：长任务执行期间的可观测进度。
+int32 current_waypoint
+float32 progress

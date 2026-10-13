@@ -1,0 +1,62 @@
+# 第三模块 拓展
+
+## 1. 知识拓展
+- 本课相关原理的进一步解释：
+  - `Serial` 常用于开发板和电脑之间的调试通信，而 `SoftwareSerial` 可以用普通 GPIO 模拟额外串口，适合课堂双板实验。
+  - `available()` 反映的是缓冲区里的字节数，不代表“已经收到了完整的一条消息”。
+  - `peek()` 适合先观察下一个字节，`read()` 才会真正把字节取走。
+  - `readStringUntil('\n')` 适合读取人工输入的文字命令，但它可能等待结束符或超时，因此属于可能阻塞的读取函数。
+  - `print()` 和 `println()` 会把数据转换成可读文本，`write()` 发送的是原始二进制字节。
+  - 固定数据帧 `55 05 CMD DATA CHECKSUM FF` 通过帧头、长度、校验和帧尾保证接收方能区分有效数据和干扰数据。
+  - 加法校验计算简单，适合课堂手算和入门协议，但可靠性不如 CRC。
+  - UART 是异步串口通信方式，没有单独时钟线，因此双方必须约定相同波特率和数据格式。
+  - 两块开发板通信时，`TX` 和 `RX` 必须交叉连接，并且两端必须共地，否则即使程序正确也无法稳定通信。
+
+## 2. 速查表
+- 重要函数速查：
+  - `Serial.begin()`：启动串口通信
+  - `Serial.available()`：查看接收缓冲区里有多少字节
+  - `Serial.peek()`：查看下一个字节但不取走
+  - `Serial.read()`：读取一个字节
+  - `Serial.readStringUntil()`：读取到指定结束符为止
+  - `Serial.setTimeout()`：设置等待数据的超时时间
+  - `Serial.print()`：输出文本，不换行
+  - `Serial.println()`：输出文本并换行
+  - `Serial.write()`：发送原始字节
+  - `readFrame()`：检查并解析一条完整协议帧
+  - `sendFrame()`：发送一条完整协议帧
+  - `calculateChecksum()`：计算加法校验值
+  - `SoftwareSerial.begin()`：启动软串口
+- 重要参数速查：
+  - `115200`：本章 USB 串口常用波特率
+  - `9600`：双板软串口波特率
+  - `FRAME_HEADER = 0x55`：帧头
+  - `FRAME_LENGTH = 0x05`：长度字段
+  - `FRAME_TAIL = 0xFF`：帧尾
+  - `FRAME_SIZE = 6`：整帧字节数
+  - `CMD_LED = 0x01`：LED 亮度控制指令
+  - `CMD_SONG = 0x02`：歌曲切换指令
+  - `CMD_BREATH = 0x03`：呼吸灯启停指令
+  - `CMD_SPEED = 0x04`：呼吸灯速度设置指令
+  - `CMD_PING = 0x05`：连通性测试指令
+  - `CMD_ERROR = 0x7F`：错误应答指令
+- 重要单词速查：
+  - `serial`：串口
+  - `communication`：通信
+  - `read`：读取
+  - `write`：写入 / 发送原始字节
+  - `available`：可用的 / 缓冲区中已有的
+  - `peek`：偷看 / 只查看不取走
+  - `frame`：数据帧
+  - `header`：帧头
+  - `length`：长度
+  - `command`：指令
+  - `data`：数据
+  - `checksum`：校验和
+  - `tail`：帧尾
+  - `uart`：通用异步收发器
+  - `timeout`：超时
+  - `string`：字符串
+  - `newline`：换行
+  - `reply`：应答 / 回复
+  - `ping`：连通性测试

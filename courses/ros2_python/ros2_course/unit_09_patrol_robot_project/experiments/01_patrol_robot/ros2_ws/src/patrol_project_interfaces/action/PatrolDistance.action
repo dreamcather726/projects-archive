@@ -1,0 +1,13 @@
+# 目标：本次巡检累计行驶多远。
+float32 target_distance
+---
+# 结果：无论成功、取消或故障，都返回已完成距离和原因。
+bool success
+float32 traveled_distance
+string final_state
+string message
+---
+# 反馈：客户端可以持续显示任务进度和机器人状态。
+float32 traveled_distance
+float32 progress
+string state

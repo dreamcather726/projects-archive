@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机械手开机运行流程图</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei", sans-serif;
+    }
+    body {
+        background-color: #f7f8fa;
+        padding: 40px 20px;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .title {
+        text-align: center;
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 50px;
+    }
+
+    /* 流程布局：横向箭头流程图 */
+    .flow-chart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* 步骤框样式 */
+    .step {
+        background: #ffffff;
+        border: 1px solid #dcdfe6;
+        border-radius: 8px;
+        padding: 18px 14px;
+        min-width: 150px;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .step p {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.5;
+    }
+
+    /* 箭头样式 */
+    .arrow {
+        font-size: 22px;
+        color: #777;
+        margin: 0 5px;
+    }
+
+    /* 高亮首步和尾步 */
+    .start {
+        border-left: 4px solid #009944;
+        background: #f0fff4;
+    }
+    .end {
+        border-left: 4px solid #cc0000;
+        background: #fff0f0;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="title">ESP32 机械手开机执行流程图</h2>
+
+    <div class="flow-chart">
+        <div class="step start">
+            <p>开机</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="step">
+            <p>setup()<br>初始化</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="step">
+            <p>loop()<br>等待指令</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="step">
+            <p>解析串口指令</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="step">
+            <p>调用控制函数</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="step">
+            <p>角度转PWM</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="step">
+            <p>PCA9685<br>驱动舵机</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="step end">
+            <p>机械手动作</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

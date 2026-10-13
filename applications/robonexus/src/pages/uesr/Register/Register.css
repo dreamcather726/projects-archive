@@ -1,0 +1,181 @@
+/* 注册页（/user/register） */
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f6f8fb;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(43, 91, 169, 0.08);
+}
+
+.bubble-a {
+  width: 320px;
+  height: 320px;
+  left: -120px;
+  bottom: 80px;
+}
+
+.bubble-b {
+  width: 360px;
+  height: 360px;
+  right: -140px;
+  top: 60px;
+}
+
+.card {
+  position: relative;
+  width: 460px;
+  max-width: calc(100vw - 48px);
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #111827;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.title {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.sub {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.form {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.phone-row {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 10px;
+}
+
+.code-row {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 10px;
+}
+
+.select {
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 0 10px;
+  background: #fff;
+  outline: none;
+  font-size: 13px;
+}
+
+.input {
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 0 12px;
+  outline: none;
+  font-size: 13px;
+  background: #fff;
+}
+
+.input:focus,
+.select:focus {
+  border-color: rgba(43, 91, 169, 0.35);
+  box-shadow: 0 0 0 4px rgba(43, 91, 169, 0.12);
+}
+
+.ghost {
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(43, 91, 169, 0.35);
+  background: rgba(43, 91, 169, 0.06);
+  color: #2b5ba9;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ghost:hover {
+  background: rgba(43, 91, 169, 0.1);
+}
+
+.agreement {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.primary {
+  margin-top: 4px;
+  height: 42px;
+  border: none;
+  border-radius: 12px;
+  background: #234d8f;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: #1f4380;
+}
+
+.auth-footer {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.link {
+  color: #2b5ba9;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

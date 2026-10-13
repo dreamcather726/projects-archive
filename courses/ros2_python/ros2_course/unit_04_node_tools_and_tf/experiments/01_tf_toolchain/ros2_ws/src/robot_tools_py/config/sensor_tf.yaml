@@ -1,0 +1,8 @@
+static_sensor_tf:
+  ros__parameters:
+    parent_frame: base_link
+    child_frame: front_laser
+    x: 0.25
+    y: 0.0
+    z: 0.18
+    yaw: 0.0

@@ -1,0 +1,7 @@
+patrol_controller:
+  ros__parameters:
+    safe_distance: 0.75
+    clear_distance: 0.95
+    forward_speed: 0.30
+    turn_speed: 0.75
+    sensor_timeout: 1.0

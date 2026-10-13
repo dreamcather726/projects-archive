@@ -1,0 +1,55 @@
+# 第三模块 拓展
+
+## 1. 知识拓展
+- 本课相关原理的进一步解释：
+  - `SSD1306` OLED 是自发光屏幕，不需要额外背光，适合做体积小、显示信息量适中的嵌入式界面。
+  - `128x64` 表示屏幕横向 `128` 个像素、纵向 `64` 个像素，文字和图形本质上都由像素点构成。
+  - `Adafruit_SSD1306` 库采用“先写缓冲区，再统一刷新”的方式工作，所以 `print()` 后如果不执行 `display.display()`，屏幕不会更新。
+  - OLED 和 `MPU6050` 能够共用 I2C，是因为它们地址不同，主机通过地址区分设备。
+  - 默认库字体更适合英文、数字和符号，若要稳定显示中文，通常需要额外字库或点阵资源。
+  - 频繁刷新会占用 I2C 通信时间，因此组合实验一般设置 `100~200ms` 刷新周期，避免画面抖动和总线负担过大。
+  - 综合实验最有价值的地方，不只是“把东西都接上”，而是把多路传感器数据整理成有意义的界面和联动反馈。
+
+## 2. 速查表
+- 重要函数速查：
+  - `display.begin()`：初始化 OLED
+  - `display.clearDisplay()`：清空显示缓冲区
+  - `display.setTextColor()`：设置文字颜色
+  - `display.setTextSize()`：设置文字大小
+  - `display.setCursor()`：设置光标位置
+  - `display.print()`：输出内容但不换行
+  - `display.println()`：输出内容并换行
+  - `display.display()`：刷新 OLED 屏幕
+  - `mpu.dmpInitialize()`：初始化 DMP
+  - `digitalRead()`：读取红外模块数字状态
+  - `pulseIn()`：测量超声波回波时间
+  - `rgb.setPixelColor()`：设置 RGB 颜色
+  - `rgb.show()`：刷新 RGB 灯颜色
+- 重要参数速查：
+  - `PIN_SDA = 8`：I2C 数据线
+  - `PIN_SCL = 9`：I2C 时钟线
+  - `OLED_ADDRESS = 0x3C`：OLED 常见地址
+  - `OLED_RESET = -1`：不使用独立复位引脚
+  - `SCREEN_WIDTH = 128`：屏幕宽度
+  - `SCREEN_HEIGHT = 64`：屏幕高度
+  - `PIN_IR = 40`：红外模块数字输出
+  - `PIN_TRIG = 12`：超声波触发引脚
+  - `PIN_ECHO = 13`：超声波回波引脚
+  - `PIN_RGB = 48`：WS2812 数据引脚
+  - `0x68`：`MPU6050` 默认地址
+- 重要单词速查：
+  - `display`：显示
+  - `screen`：屏幕
+  - `clear`：清除 / 无遮挡
+  - `cursor`：光标
+  - `text`：文本
+  - `color`：颜色
+  - `white`：白色
+  - `distance`：距离
+  - `detected`：检测到
+  - `integrated`：整合的
+  - `dashboard`：仪表盘
+  - `error`：错误
+  - `address`：地址
+  - `refresh`：刷新
+  - `yellow`：黄色

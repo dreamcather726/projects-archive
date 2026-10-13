@@ -1,0 +1,19 @@
+{
+    "files.autoGuessEncoding": true,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/*.log.lock": true
+    },
+    "terminal.integrated.profiles.windows": {
+        "PowerShell (STC8)": {
+            "source": "PowerShell",
+            "args": ["-NoProfile"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell (STC8)",
+    "terminal.integrated.automationProfile.windows": {
+        "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": ["-NoProfile"]
+    }
+}

@@ -1,0 +1,16 @@
+/* 招聘页（/recruitment）：页面级样式放在页面目录内，便于独立维护 */
+.page-container {
+  padding: 0 0 80px;
+  min-height: calc(100vh - var(--navbar-height) - var(--page-top-gap));
+}
+
+h1 {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  color: #666;
+}
