@@ -1,0 +1,14 @@
+STC8/Objects/*
+!STC8/Objects/.gitkeep
+STC8/Listings/*
+!STC8/Listings/.gitkeep
+*.uvopt
+*.uvoptx
+*.uvgui.*
+*.uvguix.*
+*.uvproj.bak
+*.uvprojx.bak
+*.uvopt.bak
+*.uvoptx.bak
+STC8/Tools/STC-ISP/
+STC8/Tools/*.zip

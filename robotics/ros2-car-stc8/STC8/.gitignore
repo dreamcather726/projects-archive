@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.vscode/*.log
+.vscode/*.log.lock
+Build/Objects/*
+!Build/Objects/.gitkeep
+Build/Listings/*
+!Build/Listings/.gitkeep
+*.uvopt
+*.uvoptx
+*.uvgui.*
+*.uvguix.*
+*.uvproj.bak
+*.uvprojx.bak
+*.uvopt.bak

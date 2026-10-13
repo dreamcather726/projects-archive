@@ -1,0 +1,67 @@
+<!-- settings.wxml -->
+<view class="custom-header">
+  <view class="header-content">
+    <text class="header-title">智能灌溉系统</text>
+  </view>
+</view>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 阈值设置 -->
+    <view class="settings-section">
+      <!-- 设备1阈值设置 -->
+      <view class="setting-subsection">
+        <text class="subsection-title">设备1</text>
+        
+        <view class="setting-item">
+          <text class="setting-label">温度阈值</text>
+          <view class="setting-input-container">
+            <input type="digit" value="{{device1TempThreshold}}" bindinput="onDevice1TempChange" placeholder="请输入温度阈值" class="setting-input" disabled="{{isReadOnly}}"/>
+            <text class="unit">°C</text>
+          </view>
+        </view>
+        
+        <view class="setting-item">
+          <text class="setting-label">湿度阈值</text>
+          <view class="setting-input-container">
+            <input type="digit" value="{{device1HumThreshold}}" bindinput="onDevice1HumChange" placeholder="请输入湿度阈值" class="setting-input" disabled="{{isReadOnly}}"/>
+            <text class="unit">%</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 设备2阈值设置 -->
+      <view class="setting-subsection">
+        <text class="subsection-title">设备2</text>
+        
+        <view class="setting-item">
+          <text class="setting-label">温度阈值</text>
+          <view class="setting-input-container">
+            <input type="digit" value="{{device2TempThreshold}}" bindinput="onDevice2TempChange" placeholder="请输入温度阈值" class="setting-input" disabled="{{isReadOnly}}"/>
+            <text class="unit">°C</text>
+          </view>
+        </view>
+        
+        <view class="setting-item">
+          <text class="setting-label">湿度阈值</text>
+          <view class="setting-input-container">
+            <input type="digit" value="{{device2HumThreshold}}" bindinput="onDevice2HumChange" placeholder="请输入湿度阈值" class="setting-input" disabled="{{isReadOnly}}"/>
+            <text class="unit">%</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions-section">
+      
+      <view wx:if="{{isReadOnly}}" class="permission-hint">
+        <text>普通用户只能查看阈值设置，无法修改</text>
+      </view>
+      <button wx:else bindtap="saveSettings" class="primary-button">保存设置</button>
+      <button bindtap="goBack" class="secondary-button">返回</button>
+    </view>
+    
+    <!-- Token管理 -->
+    
+  </view>
+</scroll-view>

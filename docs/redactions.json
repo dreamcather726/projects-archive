@@ -132,6 +132,10 @@
     "replacements": 1
   },
   {
+    "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/手机控制/pages/register/register.wxml",
+    "replacements": 2
+  },
+  {
     "path": "applications/iot-seedling-graduation/IoT-Based-Seedling-Control-System/手机控制/utils/iotapi.js",
     "replacements": 1
   },

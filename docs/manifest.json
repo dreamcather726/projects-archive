@@ -4,10 +4,10 @@
     "owner": "dreamcather726",
     "repository": "projects-archive",
     "project_directories": 65,
-    "source_files": 9856,
-    "source_bytes": 334656946,
-    "redacted_files": 49,
-    "redaction_placeholders": 89,
+    "source_files": 10066,
+    "source_bytes": 370695448,
+    "redacted_files": 50,
+    "redaction_placeholders": 91,
     "source_verification": "Every selected source file matches its source hash except verified credential placeholder replacements."
   },
   "projects": [
@@ -17,6 +17,12 @@
       "source": "C盘桌面/workspace/01_ESP32嵌入式/dog",
       "technology": "Arduino",
       "files": [
+        {
+          "path": ".gitattributes.source",
+          "sha256": "d8fb0de4792538f93822b2c0d235604921299d5e54a3d6ec7a6cb34536e8bf1e",
+          "bytes": 68,
+          "redacted": false
+        },
         {
           "path": "12tets/.vscode/c_cpp_properties.json",
           "sha256": "377859d0a410f41cf974f1b8790c210cbba24a08b53e723b26c953a441896217",
@@ -348,6 +354,12 @@
           "redacted": false
         },
         {
+          "path": "esp32_ros2_car/.clangd",
+          "sha256": "b64f692298e718f35ed78bfdff2d4eccba2d5f8e7b995a119a7cfffba463b931",
+          "bytes": 39,
+          "redacted": false
+        },
+        {
           "path": "esp32_ros2_car/.devcontainer/Dockerfile",
           "sha256": "5b86515dbea1edf3c18fbe791524a49d256ef6c18543233d7bea71352ab8d058",
           "bytes": 279,
@@ -357,6 +369,12 @@
           "path": "esp32_ros2_car/.devcontainer/devcontainer.json",
           "sha256": "f31ae0ef926b6a185474bfd297bb451fbce94f05257cd300fb2af8c381f60043",
           "bytes": 345,
+          "redacted": false
+        },
+        {
+          "path": "esp32_ros2_car/.gitignore",
+          "sha256": "a0c3e71b0a115ff6f5893bb809bb558bb3d5f00edf6a22375b601f39355397a9",
+          "bytes": 1188,
           "redacted": false
         },
         {
@@ -482,6 +500,12 @@
       "source": "C盘桌面/workspace/01_ESP32嵌入式/helloWorld_test",
       "technology": "PlatformIO、Arduino、Python",
       "files": [
+        {
+          "path": ".gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
+        },
         {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "d5484de95ee31b42ba934f26249a2d2890258abf1ff6d04703e1b87a1d8acb3a",
@@ -786,6 +810,12 @@
           "redacted": false
         },
         {
+          "path": "dog/.gitattributes.source",
+          "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+          "bytes": 66,
+          "redacted": false
+        },
+        {
           "path": "dog/API.md",
           "sha256": "3abc7eb82dafa82314f67f4260d51cfcab4d847c0101a1b0b4a7e2db5c86b604",
           "bytes": 957,
@@ -894,6 +924,12 @@
           "path": ".vscode/settings.json",
           "sha256": "e4252112c437eb00b4ba82ec65ffc4cf154e65925f257d2114521c15bd2bafe6",
           "bytes": 1452,
+          "redacted": false
+        },
+        {
+          "path": "rtos_ros/.gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
           "redacted": false
         },
         {
@@ -1053,6 +1089,18 @@
       "technology": "ESP-IDF / CMake、Python",
       "files": [
         {
+          "path": ".clang-format",
+          "sha256": "5b6cd6d73fb5aabc0f48478b08b55cbb7033f4852a469ec838eb233622c7c6b9",
+          "bytes": 3337,
+          "redacted": false
+        },
+        {
+          "path": ".clangd",
+          "sha256": "b64f692298e718f35ed78bfdff2d4eccba2d5f8e7b995a119a7cfffba463b931",
+          "bytes": 39,
+          "redacted": false
+        },
+        {
           "path": ".github/ISSUE_TEMPLATE/01_build_install_bug.yml",
           "sha256": "49958d4b8047a54284b48a846df4f05eab8ee0f99896b1d1f6c1b5f521b6a45f",
           "bytes": 3326,
@@ -1080,6 +1128,12 @@
           "path": ".github/workflows/build.yml",
           "sha256": "8de80ca5478a435a0a7d5ff009caa59b24de749f53e76619044b80685cd25639",
           "bytes": 3293,
+          "redacted": false
+        },
+        {
+          "path": ".gitignore",
+          "sha256": "315a7d9c4773bf75f3167a466027ba8f72087084e3bc72faeaee9778ff6eb04e",
+          "bytes": 239,
           "redacted": false
         },
         {
@@ -7635,6 +7689,12 @@
           "redacted": false
         },
         {
+          "path": "main/boards/m5stack-tab5/sdkconfig.tab5",
+          "sha256": "5db61df7ebc29ab79a30b56a07e0d07477df5c8b9a605e57a7fe1ab490871fd5",
+          "bytes": 573,
+          "redacted": false
+        },
+        {
           "path": "main/boards/m5stack-tab5/tab5_audio_codec.cc",
           "sha256": "d8e2931c81c09d3a2123207263e038ca75f5e5bb55643671dc0c22f54b8890ea",
           "bytes": 8294,
@@ -9237,6 +9297,12 @@
           "redacted": false
         },
         {
+          "path": "main/boards/waveshare/esp32-s3-touch-lcd-4.3c/sdkconfig.4_3c",
+          "sha256": "2e8b3e220b75a9344cc5299b209d9b0410fbc70a683ffaa1a0a88da6ed1c9383",
+          "bytes": 102376,
+          "redacted": false
+        },
+        {
           "path": "main/boards/waveshare/esp32-s3-touch-lcd-4b/README.md",
           "sha256": "3d73ca50933a172c0d45f13868bf6e7f36cbe518393be2ed02a41bd2ceebc76b",
           "bytes": 387,
@@ -10398,6 +10464,18 @@
       "technology": "ESP-IDF / CMake、Python",
       "files": [
         {
+          "path": ".clang-format",
+          "sha256": "5b6cd6d73fb5aabc0f48478b08b55cbb7033f4852a469ec838eb233622c7c6b9",
+          "bytes": 3337,
+          "redacted": false
+        },
+        {
+          "path": ".clangd",
+          "sha256": "b64f692298e718f35ed78bfdff2d4eccba2d5f8e7b995a119a7cfffba463b931",
+          "bytes": 39,
+          "redacted": false
+        },
+        {
           "path": ".github/ISSUE_TEMPLATE/01_build_install_bug.yml",
           "sha256": "49958d4b8047a54284b48a846df4f05eab8ee0f99896b1d1f6c1b5f521b6a45f",
           "bytes": 3326,
@@ -10425,6 +10503,12 @@
           "path": ".github/workflows/build.yml",
           "sha256": "8de80ca5478a435a0a7d5ff009caa59b24de749f53e76619044b80685cd25639",
           "bytes": 3293,
+          "redacted": false
+        },
+        {
+          "path": ".gitignore",
+          "sha256": "315a7d9c4773bf75f3167a466027ba8f72087084e3bc72faeaee9778ff6eb04e",
+          "bytes": 239,
           "redacted": false
         },
         {
@@ -16980,6 +17064,12 @@
           "redacted": false
         },
         {
+          "path": "main/boards/m5stack-tab5/sdkconfig.tab5",
+          "sha256": "5db61df7ebc29ab79a30b56a07e0d07477df5c8b9a605e57a7fe1ab490871fd5",
+          "bytes": 573,
+          "redacted": false
+        },
+        {
           "path": "main/boards/m5stack-tab5/tab5_audio_codec.cc",
           "sha256": "d8e2931c81c09d3a2123207263e038ca75f5e5bb55643671dc0c22f54b8890ea",
           "bytes": 8294,
@@ -18582,6 +18672,12 @@
           "redacted": false
         },
         {
+          "path": "main/boards/waveshare/esp32-s3-touch-lcd-4.3c/sdkconfig.4_3c",
+          "sha256": "2e8b3e220b75a9344cc5299b209d9b0410fbc70a683ffaa1a0a88da6ed1c9383",
+          "bytes": 102376,
+          "redacted": false
+        },
+        {
           "path": "main/boards/waveshare/esp32-s3-touch-lcd-4b/README.md",
           "sha256": "3d73ca50933a172c0d45f13868bf6e7f36cbe518393be2ed02a41bd2ceebc76b",
           "bytes": 387,
@@ -19743,6 +19839,12 @@
       "technology": "Arduino",
       "files": [
         {
+          "path": "Bluetooth_dog/.gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
+        },
+        {
           "path": "Bluetooth_dog/.vscode/c_cpp_properties.json",
           "sha256": "b6a14207e34e28e6abaddd78a2123d33e547aad96ae15608a3d3a2626600a21c",
           "bytes": 30561,
@@ -19807,6 +19909,12 @@
           "sha256": "9a24be60389483ed1eada515f749655dfc075e7d90c06461f8a51f351a28a529",
           "bytes": 14409,
           "redacted": true
+        },
+        {
+          "path": "LeArm_ESP32_Arduino/.gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
         },
         {
           "path": "LeArm_ESP32_Arduino/.vscode/c_cpp_properties.json",
@@ -19943,6 +20051,12 @@
       "source": "C盘桌面/workspace/02_ROS机器人/JXB2.0",
       "technology": "ESP-IDF / CMake、Arduino、Python、ROS、CAD",
       "files": [
+        {
+          "path": ".gitattributes.source",
+          "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+          "bytes": 66,
+          "redacted": false
+        },
         {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "5487b8f659d179267be343973824123447d3d39ec229f98af87f28c1f7085be2",
@@ -20715,6 +20829,12 @@
           "redacted": false
         },
         {
+          "path": "robonexus/.gitignore",
+          "sha256": "fe718e7babb14f3cbad2d97f08889b9ce5215ed3fe0e43b2b8cfbfb3b9b844e8",
+          "bytes": 253,
+          "redacted": false
+        },
+        {
           "path": "robonexus/.vscode/extensions.json",
           "sha256": "70d56b550e796e3ea92922763ae03037a1a94596fda9d737982c75f6a20e88dd",
           "bytes": 39,
@@ -21012,6 +21132,12 @@
       "technology": "PlatformIO、ESP-IDF / CMake、Arduino、Python、ROS、CAD",
       "files": [
         {
+          "path": ".gitattributes.source",
+          "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+          "bytes": 66,
+          "redacted": false
+        },
+        {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "66b7d821741afe768726b3a5dd399f6c109f84aa3fdf5828995de892c033fa2c",
           "bytes": 339,
@@ -21045,6 +21171,12 @@
           "path": "ESP32S3/.vscode/settings.json",
           "sha256": "e4252112c437eb00b4ba82ec65ffc4cf154e65925f257d2114521c15bd2bafe6",
           "bytes": 1452,
+          "redacted": false
+        },
+        {
+          "path": "ESP32S3/helloWorld/.gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
           "redacted": false
         },
         {
@@ -21237,6 +21369,12 @@
           "path": "ESP32S3/helloWorld/test/备份.txt",
           "sha256": "0e1ebe2b8137e471b6faa24641fcad51ba96b14f404ba513280dbe0d921467bf",
           "bytes": 6398,
+          "redacted": false
+        },
+        {
+          "path": "ESP32S3/helloWorld_test/.gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
           "redacted": false
         },
         {
@@ -21438,6 +21576,12 @@
           "redacted": false
         },
         {
+          "path": "ROS2/ros_car/XC-URDF/COLCON_IGNORE",
+          "sha256": "d5898d942b0be221aaa38a5c23fb0598cd092dbaff606f1d2b11666dac983cbb",
+          "bytes": 105,
+          "redacted": false
+        },
+        {
           "path": "ROS2/ros_car/XC-URDF/config/joint_names_XC-URDF.yaml",
           "sha256": "f0b25080091a5c727baf4cad93188f1458d250c2c3a6a3a6b579200383f61778",
           "bytes": 59,
@@ -21504,9 +21648,21 @@
           "redacted": false
         },
         {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/.gitignore",
+          "sha256": "cb90f8c00b722575f93ea3a681c0c531a81261a9e2484f6b5d23bfe58504e29d",
+          "bytes": 6244,
+          "redacted": false
+        },
+        {
           "path": "ROS2/ros_car/YDLidar-SDK-master/CMakeLists.txt",
           "sha256": "624f98c48c63d903c4fe3226611b4dffee5138d757435cdb9de36d77bff4ad3f",
           "bytes": 8016,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/Doxyfile",
+          "sha256": "0c71fa310df62aa134a32566e31a7d7eafc6a22cc012519577429db35767229c",
+          "bytes": 108061,
           "redacted": false
         },
         {
@@ -21519,6 +21675,36 @@
           "path": "ROS2/ros_car/YDLidar-SDK-master/README.md",
           "sha256": "3c1b922dbef0d9a43921fc7f1d8d0ad05d53102c16ac8af24cb21c3df061bd7f",
           "bytes": 3602,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/cmake/FindPackage.cmake.in",
+          "sha256": "aef858595ef831d06d2219b8533d042c4c56dde2e85ea6944531663a8283eaa6",
+          "bytes": 512,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/cmake/PackageConfig.cmake.in",
+          "sha256": "1499844f4de0f74354df335dc9c54b830dea845a644f102de4cc2782bb45cdbe",
+          "bytes": 1217,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/cmake/PackageConfigVersion.cmake.in",
+          "sha256": "a9814ecf1048421d2b4249c81d1f7fbd818f2e4819737dad21cd3bc97eb2999d",
+          "bytes": 636,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/cmake/PkgConfig.pc.in",
+          "sha256": "31f82bfc490eb9a2aba673b0d83c82a1b21c2d39b7b0ce0b38b9cfc5255c5904",
+          "bytes": 273,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/cmake/cmake_uninstall.cmake.in",
+          "sha256": "f2b6d4651a3e9bfd638b21c0b9eaa8da910279584d310e2a3dbbc8adc2a9eaac",
+          "bytes": 1596,
           "redacted": false
         },
         {
@@ -21837,6 +22023,12 @@
           "path": "ROS2/ros_car/YDLidar-SDK-master/csharp/examples/Program.cs",
           "sha256": "8b4c4752f9fd3a5d50adbd19280e87f46dff6e846e3521de5f61d0067d3862a3",
           "bytes": 1364,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/csharp/ydlidar_sdk.i",
+          "sha256": "77b5c3d7abce47ab9b253dad3de50754762ef03bd229d97d514c04f6853a59bc",
+          "bytes": 1878,
           "redacted": false
         },
         {
@@ -22224,9 +22416,21 @@
           "redacted": false
         },
         {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/python/numpy.i",
+          "sha256": "190f3ec34218d53ad331dadee27199d002081289322820276b3380f3d4800498",
+          "bytes": 109459,
+          "redacted": false
+        },
+        {
           "path": "ROS2/ros_car/YDLidar-SDK-master/python/test/pytest.py",
           "sha256": "d3c7ea38c33b9d198ceafd51b793239efadf339b816293e0c7ff63fa5c336748",
           "bytes": 1333,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/python/ydlidar_sdk.i",
+          "sha256": "cef29603644a9de3748f6e2d7ef2ac966107d3f8fd5591666403228b85cab5ba",
+          "bytes": 2376,
           "redacted": false
         },
         {
@@ -22368,6 +22572,12 @@
           "redacted": false
         },
         {
+          "path": "ROS2/ros_car/YDLidar-SDK-master/ydlidar_config.h.in",
+          "sha256": "c5110fdd28cc9ae33b9c3ad4f4a2148374eb014d05485100ef3bae829cab1d2f",
+          "bytes": 1281,
+          "redacted": false
+        },
+        {
           "path": "ROS2/ros_car/docs/ros2_car_build_and_mapping_steps.md",
           "sha256": "77bc294d91db703413a381908a7a761ac912479ce1f5d9ec966ed499af395f3d",
           "bytes": 10641,
@@ -22485,6 +22695,12 @@
           "path": "ROS2/ros_car/src/my_pkg/package.xml",
           "sha256": "c1bf171ede9aec1257472c2fe76d477b37c729b9518a93eb207f6f4616d3d434",
           "bytes": 1093,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/src/my_pkg/resource/my_pkg",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
           "redacted": false
         },
         {
@@ -22767,6 +22983,12 @@
           "path": "ROS2/ros_car/src/openslam_gmapping/include/gmapping/gridfastslam/gridslamprocessor.h",
           "sha256": "0fce9b70c3d296fd5f706891cea1e06ec03c0f26d0df3153027d0f8fe0e80a14",
           "bytes": 13248,
+          "redacted": false
+        },
+        {
+          "path": "ROS2/ros_car/src/openslam_gmapping/include/gmapping/gridfastslam/gridslamprocessor.hxx",
+          "sha256": "b04b4ee046648699e0bd4012897520b01d0aca523d7ab952041d54a96d53079a",
+          "bytes": 5766,
           "redacted": false
         },
         {
@@ -23124,6 +23346,12 @@
           "redacted": false
         },
         {
+          "path": "ROS2/ros_car/src/openslam_gmapping/utils/orientedboundingbox.hxx",
+          "sha256": "4ac0c7532891537f4748dec2c4df63c21fbfbb374d954036efd9780112e744ea",
+          "bytes": 3256,
+          "redacted": false
+        },
+        {
           "path": "ROS2/ros_car/src/openslam_gmapping/utils/printmemusage.cpp",
           "sha256": "8f09c3d86c7a1b3df96f3c457983032542f7c938df9d68cfc91e421659842ea0",
           "bytes": 440,
@@ -23394,9 +23622,21 @@
           "redacted": false
         },
         {
+          "path": "源码/YDLidar-SDK-master/.gitignore",
+          "sha256": "cb90f8c00b722575f93ea3a681c0c531a81261a9e2484f6b5d23bfe58504e29d",
+          "bytes": 6244,
+          "redacted": false
+        },
+        {
           "path": "源码/YDLidar-SDK-master/CMakeLists.txt",
           "sha256": "624f98c48c63d903c4fe3226611b4dffee5138d757435cdb9de36d77bff4ad3f",
           "bytes": 8016,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/Doxyfile",
+          "sha256": "0c71fa310df62aa134a32566e31a7d7eafc6a22cc012519577429db35767229c",
+          "bytes": 108061,
           "redacted": false
         },
         {
@@ -23409,6 +23649,36 @@
           "path": "源码/YDLidar-SDK-master/README.md",
           "sha256": "3c1b922dbef0d9a43921fc7f1d8d0ad05d53102c16ac8af24cb21c3df061bd7f",
           "bytes": 3602,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/cmake/FindPackage.cmake.in",
+          "sha256": "aef858595ef831d06d2219b8533d042c4c56dde2e85ea6944531663a8283eaa6",
+          "bytes": 512,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/cmake/PackageConfig.cmake.in",
+          "sha256": "1499844f4de0f74354df335dc9c54b830dea845a644f102de4cc2782bb45cdbe",
+          "bytes": 1217,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/cmake/PackageConfigVersion.cmake.in",
+          "sha256": "a9814ecf1048421d2b4249c81d1f7fbd818f2e4819737dad21cd3bc97eb2999d",
+          "bytes": 636,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/cmake/PkgConfig.pc.in",
+          "sha256": "31f82bfc490eb9a2aba673b0d83c82a1b21c2d39b7b0ce0b38b9cfc5255c5904",
+          "bytes": 273,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/cmake/cmake_uninstall.cmake.in",
+          "sha256": "f2b6d4651a3e9bfd638b21c0b9eaa8da910279584d310e2a3dbbc8adc2a9eaac",
+          "bytes": 1596,
           "redacted": false
         },
         {
@@ -23727,6 +23997,12 @@
           "path": "源码/YDLidar-SDK-master/csharp/examples/Program.cs",
           "sha256": "8b4c4752f9fd3a5d50adbd19280e87f46dff6e846e3521de5f61d0067d3862a3",
           "bytes": 1364,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/csharp/ydlidar_sdk.i",
+          "sha256": "77b5c3d7abce47ab9b253dad3de50754762ef03bd229d97d514c04f6853a59bc",
+          "bytes": 1878,
           "redacted": false
         },
         {
@@ -24114,9 +24390,21 @@
           "redacted": false
         },
         {
+          "path": "源码/YDLidar-SDK-master/python/numpy.i",
+          "sha256": "190f3ec34218d53ad331dadee27199d002081289322820276b3380f3d4800498",
+          "bytes": 109459,
+          "redacted": false
+        },
+        {
           "path": "源码/YDLidar-SDK-master/python/test/pytest.py",
           "sha256": "d3c7ea38c33b9d198ceafd51b793239efadf339b816293e0c7ff63fa5c336748",
           "bytes": 1333,
+          "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/python/ydlidar_sdk.i",
+          "sha256": "cef29603644a9de3748f6e2d7ef2ac966107d3f8fd5591666403228b85cab5ba",
+          "bytes": 2376,
           "redacted": false
         },
         {
@@ -24256,6 +24544,12 @@
           "sha256": "47d20adb77d761a0f39e77a361c6291fe1996479d05ba0f470d6c1c9bd95746d",
           "bytes": 844,
           "redacted": false
+        },
+        {
+          "path": "源码/YDLidar-SDK-master/ydlidar_config.h.in",
+          "sha256": "c5110fdd28cc9ae33b9c3ad4f4a2148374eb014d05485100ef3bae829cab1d2f",
+          "bytes": 1281,
+          "redacted": false
         }
       ],
       "duplicate_sources": []
@@ -24266,6 +24560,12 @@
       "source": "C盘桌面/workspace/02_ROS机器人/ROS-CAR-main-publish",
       "technology": "PlatformIO、Python、ROS",
       "files": [
+        {
+          "path": ".gitattributes.source",
+          "sha256": "d8fb0de4792538f93822b2c0d235604921299d5e54a3d6ec7a6cb34536e8bf1e",
+          "bytes": 68,
+          "redacted": false
+        },
         {
           "path": "ESP32S3/.vscode/c_cpp_properties.json",
           "sha256": "3f8861b48df69d904f30a0325534a8280b753bc2a87dd226b54d709975fc26fd",
@@ -24282,6 +24582,12 @@
           "path": "ESP32S3/.vscode/settings.json",
           "sha256": "f38822f298aeefe2966a76e02c72d0ff3e0901fd0bcb2fce9e61ed0da6ae2165",
           "bytes": 1510,
+          "redacted": false
+        },
+        {
+          "path": "ESP32S3/helloWorld/.gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
           "redacted": false
         },
         {
@@ -24495,6 +24801,12 @@
           "redacted": false
         },
         {
+          "path": "ROS2/ros_car/src/my_pkg/resource/my_pkg",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "redacted": false
+        },
+        {
           "path": "ROS2/ros_car/src/my_pkg/setup.cfg",
           "sha256": "f4a787168f9ef0b8bb453097c48221d66f35a0c4e760bf375ca10dd308f4f6b0",
           "bytes": 85,
@@ -24699,6 +25011,18 @@
           "path": "ros_car_simulator/setup.py",
           "sha256": "06c4ab8d5111e3b9a571b24784e89d6b2596a9fc94adc901635ff14195a6c22d",
           "bytes": 746,
+          "redacted": false
+        },
+        {
+          "path": "ros_car_cockpit/resource/ros_car_cockpit",
+          "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+          "bytes": 2,
+          "redacted": false
+        },
+        {
+          "path": "ros_car_simulator/resource/ros_car_simulator",
+          "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+          "bytes": 2,
           "redacted": false
         }
       ],
@@ -24978,6 +25302,12 @@
           "path": "src/openslam_gmapping/include/gmapping/gridfastslam/gridslamprocessor.h",
           "sha256": "0fce9b70c3d296fd5f706891cea1e06ec03c0f26d0df3153027d0f8fe0e80a14",
           "bytes": 13248,
+          "redacted": false
+        },
+        {
+          "path": "src/openslam_gmapping/include/gmapping/gridfastslam/gridslamprocessor.hxx",
+          "sha256": "b04b4ee046648699e0bd4012897520b01d0aca523d7ab952041d54a96d53079a",
+          "bytes": 5766,
           "redacted": false
         },
         {
@@ -25335,6 +25665,12 @@
           "redacted": false
         },
         {
+          "path": "src/openslam_gmapping/utils/orientedboundingbox.hxx",
+          "sha256": "4ac0c7532891537f4748dec2c4df63c21fbfbb374d954036efd9780112e744ea",
+          "bytes": 3256,
+          "redacted": false
+        },
+        {
           "path": "src/openslam_gmapping/utils/printmemusage.cpp",
           "sha256": "8f09c3d86c7a1b3df96f3c457983032542f7c938df9d68cfc91e421659842ea0",
           "bytes": 440,
@@ -25581,6 +25917,30 @@
           "path": "otherWork/.vscode/tasks.json",
           "sha256": "a89b0f67cb91a86e9bdc1262fde09fbb472cf34104243651636c4715850bb15d",
           "bytes": 1251,
+          "redacted": false
+        },
+        {
+          "path": "otherWork/STM32F407ZGT6/.clang-format",
+          "sha256": "a33d89ab837a50377c65314d5b241e4820a5d0be4a5ac74ecadc8f7ea75cd115",
+          "bytes": 184,
+          "redacted": false
+        },
+        {
+          "path": "otherWork/STM32F407ZGT6/.editorconfig",
+          "sha256": "d2db4d14016a1bb08aa65c4db25f2f1e136aa059102a59098fcf6786d1a932f5",
+          "bytes": 214,
+          "redacted": false
+        },
+        {
+          "path": "otherWork/STM32F407ZGT6/.gitattributes.source",
+          "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+          "bytes": 66,
+          "redacted": false
+        },
+        {
+          "path": "otherWork/STM32F407ZGT6/.gitignore",
+          "sha256": "9a493b9b81151407a3b965ec6cd6585fe98345be8b7baab5b9a6e2340ee72864",
+          "bytes": 83,
           "redacted": false
         },
         {
@@ -26010,6 +26370,12 @@
           "redacted": false
         },
         {
+          "path": "otherWork/STM32F407ZGT6/DebugConfig/STM32F407ZGT6_STM32F407ZGTx_1.0.1.dbgconf",
+          "sha256": "6cad85eacc0e21c594393904deea7162768d2e6a4f06bf1777cf8fa454d2b44e",
+          "bytes": 2804,
+          "redacted": false
+        },
+        {
           "path": "otherWork/STM32F407ZGT6/Docs/CHASSIS_STUDY_GUIDE.md",
           "sha256": "040f855e7363e21ece9ffa16458edd895a51e98eaf39f606dd4b0ba3277624d9",
           "bytes": 57479,
@@ -26313,6 +26679,12 @@
           "path": "otherWork/STM32F407ZGT6/RTOS/FreeRTOS-Kernel/include/stack_macros.h",
           "sha256": "70d0f0b931c1caf5de5448cc27ece59528e7b29553b096548f93b8a4bd012c08",
           "bytes": 10063,
+          "redacted": false
+        },
+        {
+          "path": "otherWork/STM32F407ZGT6/RTOS/FreeRTOS-Kernel/include/stdint.readme",
+          "sha256": "34d4a2c9540eafff15322f2f37d648afd9cb89b157ef8e8751001e6546872d91",
+          "bytes": 2234,
           "redacted": false
         },
         {
@@ -28092,9 +28464,105 @@
           "redacted": false
         },
         {
+          "path": "新/1/1齿条.SLDPRT",
+          "sha256": "e50e7b468a48e8986c5b7415bcd8489ba0c15a786dbe994256e27c7bab306bf6",
+          "bytes": 453594,
+          "redacted": false
+        },
+        {
+          "path": "新/1/2.自由.SLDPRT",
+          "sha256": "7db260bda2f0fbfa1cbf795c211dae76b79f776ea25111e334341d9e27e44b28",
+          "bytes": 491697,
+          "redacted": false
+        },
+        {
           "path": "新/1/2.自由.STEP",
           "sha256": "d25830f092d7f59abc4449ac3aa3829dd45a6c1c30f530083a5acbf83be35d38",
           "bytes": 337477,
+          "redacted": false
+        },
+        {
+          "path": "新/1/3，主板支架.SLDPRT",
+          "sha256": "727f982947cb5372c2921ec6a700dff55e155ce44c407097c4ea62abff70232d",
+          "bytes": 187638,
+          "redacted": false
+        },
+        {
+          "path": "新/1/7舵机.SLDPRT",
+          "sha256": "1301f4952f73fcca72208eb40cb2af6c7b11f00a00a240cb7a98f99a2e3c62dc",
+          "bytes": 224827,
+          "redacted": false
+        },
+        {
+          "path": "新/1/8自由2.SLDPRT",
+          "sha256": "a8fc7b31d22b4413f239c5b342d660e5940ed40f71bd911d8e3ba60523c01d2a",
+          "bytes": 211644,
+          "redacted": false
+        },
+        {
+          "path": "新/1/夹爪2柱外齿轮.SLDPRT",
+          "sha256": "d585027e0b43e7ad0b765e176eb26e428a9bbc6fec1dab38d00ddb35207fec88",
+          "bytes": 721114,
+          "redacted": false
+        },
+        {
+          "path": "新/1/夹爪_直齿圆柱外齿轮.SLDPRT",
+          "sha256": "9b3300e842856337cd0ee0dc80f608ebfb22e8b325e32315edcc73290638cae6",
+          "bytes": 444795,
+          "redacted": false
+        },
+        {
+          "path": "新/1/夹爪支架.SLDPRT",
+          "sha256": "c0a92e2dbcd9dca2caafbe5bf9cebc22bbcb85e0ee5f7b4e544ec6325363f048",
+          "bytes": 401245,
+          "redacted": false
+        },
+        {
+          "path": "新/1/屏幕支架1.SLDPRT",
+          "sha256": "c625487c6446bae030d78eb4bf3aae3bfa966ec07ac1ce94dfd5cf063cc54aa7",
+          "bytes": 250919,
+          "redacted": false
+        },
+        {
+          "path": "新/1/摄像头支架.SLDPRT",
+          "sha256": "f36872a05c18977e2894bfa85a196535776196bdb7ccef1bb54ce9bf74801589",
+          "bytes": 186247,
+          "redacted": false
+        },
+        {
+          "path": "新/1/支架一.SLDPRT",
+          "sha256": "403826db8f4c7755431e4c7efa00b4f94ac456765c4c552931e7bf2c396ea2a6",
+          "bytes": 496404,
+          "redacted": false
+        },
+        {
+          "path": "新/1/装配体2.SLDASM",
+          "sha256": "eb657d287fe5002b049da654bbb39fbdac71b55f0b85bc015a45dc79757b0b78",
+          "bytes": 869807,
+          "redacted": false
+        },
+        {
+          "path": "新/1/零件2(2).SLDPRT",
+          "sha256": "23b9219b7f6e8d7478b6b214fffca920a78c190f3cb0689934b85ea24be897da",
+          "bytes": 366448,
+          "redacted": false
+        },
+        {
+          "path": "新/1/零件2.SLDPRT",
+          "sha256": "5ee623da2a13e9db4dc611ac2a105052d380ca37b146ad3d083081300ae0a8bb",
+          "bytes": 341038,
+          "redacted": false
+        },
+        {
+          "path": "新/1/零件3.SLDPRT",
+          "sha256": "26fce8bdfe976aa96ccde6775559dfba3fa2a0fcb6e136dcabe617518da64bc3",
+          "bytes": 200277,
+          "redacted": false
+        },
+        {
+          "path": "新/1/零件4.SLDPRT",
+          "sha256": "844e4c5bb69cae25fb735993167eacf0b9fb979d7bbd4c6f0e6d6ebe4dc5b095",
+          "bytes": 123250,
           "redacted": false
         },
         {
@@ -28581,6 +29049,12 @@
           "path": "python_course/面向ROS2的Python讲课大纲.md",
           "sha256": "ff1266b28153b26d2d74e2249f598fa54ee1e766d1c7993f4fdb32dd054260a4",
           "bytes": 11741,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/.gitignore",
+          "sha256": "b76637d65cf9f28a6cea73d90bc31e5935f9a2ee9df9d9979b1469ae544e76da",
+          "bytes": 52,
           "redacted": false
         },
         {
@@ -29193,6 +29667,66 @@
           "path": "test.py",
           "sha256": "a288ac407d30609eeffd75e9756b18dd049f8b590e736b5d2e9bba2cf086851d",
           "bytes": 386,
+          "redacted": false
+        },
+        {
+          "path": "python_course/unit_06/ros2_ws/src/robot_status_py/resource/robot_status_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_01_ros2_engineering_basics/experiments/01_robot_heartbeat/ros2_ws/src/robot_basics_py/resource/robot_basics_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_02_topics_and_messages/experiments/01_sensor_status/ros2_ws/src/sensor_monitor_py/resource/sensor_monitor_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_03_services_and_actions/experiments/01_patrol_task/ros2_ws/src/patrol_communication_py/resource/patrol_communication_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_04_node_tools_and_tf/experiments/01_tf_toolchain/ros2_ws/src/robot_tools_py/resource/robot_tools_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_05_components_and_lifecycle/experiments/01_managed_monitor/ros2_ws/src/managed_monitor_py/resource/managed_monitor_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_06_executors_and_qos/experiments/01_executor_qos/ros2_ws/src/executor_qos_py/resource/executor_qos_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_07_urdf_and_rviz/experiments/01_xacro_rviz/ros2_ws/src/robot_description_py/resource/robot_description_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_08_gazebo_simulation/experiments/01_gazebo_lidar/ros2_ws/src/gazebo_patrol_py/resource/gazebo_patrol_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
+          "redacted": false
+        },
+        {
+          "path": "ros2_course/unit_09_patrol_robot_project/experiments/01_patrol_robot/ros2_ws/src/patrol_project_py/resource/patrol_project_py",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1,
           "redacted": false
         }
       ],
@@ -30006,6 +30540,12 @@
           "redacted": false
         },
         {
+          "path": "5. 轨迹规划 - 副本/so_arm100_dev/so-arm100-terminal.desktop",
+          "sha256": "d84905459f422819e1657f636f0bdd10d9718f8483b5758d16abaaa1401ee963",
+          "bytes": 398,
+          "redacted": false
+        },
+        {
           "path": "5. 轨迹规划 - 副本/so_arm100_dev/start_teleoperation.sh",
           "sha256": "06b09714621ee2d6e6b3b129d412ce2671ca6ed617326f9788b5438732bda8e9",
           "bytes": 951,
@@ -30243,6 +30783,18 @@
       "technology": "Python",
       "files": [
         {
+          "path": ".gitignore",
+          "sha256": "fb1af7e6648ebc3c20a9beab1f938cb23a4821c0ea528d7c87adaeb6d9d850a7",
+          "bytes": 205,
+          "redacted": false
+        },
+        {
+          "path": "STC8/.gitignore",
+          "sha256": "04e4b88367a2020a3f96cec88b130bd9eb1305141471145a8125df7887c525b4",
+          "bytes": 215,
+          "redacted": false
+        },
+        {
           "path": "STC8/.vscode/c_cpp_properties.json",
           "sha256": "651cc689d311d39cf2d95e306b7d4523e3ed282f481106cbf0eebb68ed7b2696",
           "bytes": 1334,
@@ -30360,6 +30912,12 @@
           "path": "STC8/Firmware/Source/serial_link.c",
           "sha256": "9f3a95d03661c890102a24e4ff835036a3ef92d790d9d25975d5713f7ee981aa",
           "bytes": 887,
+          "redacted": false
+        },
+        {
+          "path": "STC8/Firmware/Startup/STARTUP.A51",
+          "sha256": "3644d05071fcb29f96a6d9aae49aa8c01ea973ac4362bdcad2b05320bd6419a3",
+          "bytes": 6674,
           "redacted": false
         },
         {
@@ -30600,6 +31158,12 @@
           "path": "STC8/README.md",
           "sha256": "16c15bdd97602c6bd34864d709b4bad5b45b56205cca55b329efe5f23bac6068",
           "bytes": 3967,
+          "redacted": false
+        },
+        {
+          "path": "STC8/STC8.uvopt",
+          "sha256": "4a93740cfd697fb9e8abfaa10756fcea41f9225fef8ecc6fa449d9643ba5412c",
+          "bytes": 13914,
           "redacted": false
         },
         {
@@ -31305,6 +31869,30 @@
           "redacted": false
         },
         {
+          "path": "DAY6/Finger_assembly/assembled.SLDASM",
+          "sha256": "ba68494e24e062aaffd86463d176f09ea7776ac72945b27ca23dc1e636c1c4d5",
+          "bytes": 265694,
+          "redacted": false
+        },
+        {
+          "path": "DAY6/Finger_assembly/finger_assembly - gimbal.step.SLDPRT",
+          "sha256": "c869b4c873ee4dbf872b3ef43431ee9dd93757880f7d605f35f208fee4ff9a5b",
+          "bytes": 101622,
+          "redacted": false
+        },
+        {
+          "path": "DAY6/结构简图.SLDPRT",
+          "sha256": "17559050c5b796c77c249582c3b5254a8b693cdf46fa49c93ad46a8da86cf2f6",
+          "bytes": 56072,
+          "redacted": false
+        },
+        {
+          "path": "DAY6/零件7.SLDPRT",
+          "sha256": "05d8e2b1cd6829ff737dd5ddfdc4f5c1f5130f89b20e287b81d08aaac2d6cf0b",
+          "bytes": 71116,
+          "redacted": false
+        },
+        {
           "path": "DAY7/test_code/test_code.ino",
           "sha256": "30cbc0b61e534de935398d9699aa1baeb22d616eda96b5afb43c071d90ab1ebd",
           "bytes": 1652,
@@ -31635,6 +32223,54 @@
       "technology": "ROS、CAD",
       "files": [
         {
+          "path": ".gitignore",
+          "sha256": "c296cf5bfa410cdcb31b2ba0e8710c31e5e39122f6db14dc7ba4a01e7a35bb96",
+          "bytes": 116,
+          "redacted": false
+        },
+        {
+          "path": "3D/LampArm (Base-Elbow).3mf",
+          "sha256": "b99e65fd04f11d44229c30bfbaab641c423005c6edd6c53e8565889ceff3260e",
+          "bytes": 85286,
+          "redacted": false
+        },
+        {
+          "path": "3D/LampArm (Elbow-Wrist).3mf",
+          "sha256": "fb924cfb9cf3381de0240b8b921b009d6a411e343a5aae587101a9618264adfa",
+          "bytes": 84444,
+          "redacted": false
+        },
+        {
+          "path": "3D/LampArm (Pitch).3mf",
+          "sha256": "1e8fad08e3e7e4be425137a669557c51ae0b24b918808a9179b7f07ec4cbd0f0",
+          "bytes": 63094,
+          "redacted": false
+        },
+        {
+          "path": "3D/LampBase - Cover.3mf",
+          "sha256": "2607dd2ce987e283d8c83d25df86bc89f76dea37ba436ff9ab4c0c85edcd6cdc",
+          "bytes": 26968,
+          "redacted": false
+        },
+        {
+          "path": "3D/LampBase.3mf",
+          "sha256": "5a02c85fd3951b12a54fefcb8929a65af1116720289b96f167d6df0daea9f023",
+          "bytes": 115304,
+          "redacted": false
+        },
+        {
+          "path": "3D/LampHead - Diffuser.3mf",
+          "sha256": "5c40b574576941ef03f8e38a3f8d4ecbf79ff7840e9338568530f3b36a3dfe77",
+          "bytes": 6170,
+          "redacted": false
+        },
+        {
+          "path": "3D/LampHead.3mf",
+          "sha256": "ecbf3d73fc4dee50d8ac7cbfb66f703ba216f57ec7285bca4981cfb660ac3243",
+          "bytes": 87832,
+          "redacted": false
+        },
+        {
           "path": "CONTRIBUTORS.md",
           "sha256": "b454721221c56e4556dc14dfbaf26501c9d6c88c3d3591f646557a62390c3408",
           "bytes": 172,
@@ -31905,9 +32541,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/angle_joint.part",
+          "sha256": "63ce565781452334ae9ad11604b9c11195004c089d45d20cbc740a957f423def",
+          "bytes": 377,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/angle_joint.stl",
           "sha256": "4e01cf2e7018f6b3248b41b534c5b4973ddae9cdfdc86d5e7717cf0f5396853e",
           "bytes": 5284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/arm_length_10cm.part",
+          "sha256": "50c36ce02a3fe25f0527e0864b6b5b1a19941d9b21ab3318184729dcd5d6d44c",
+          "bytes": 381,
           "redacted": false
         },
         {
@@ -31917,9 +32565,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/arm_length_15cm.part",
+          "sha256": "96b1c3732f9eaa700f294db373776a392f719238026fa7135a8d16eacff20090",
+          "bytes": 381,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/arm_length_15cm.stl",
           "sha256": "bc25b8f566c3a0ba306347899ff5859c021a04620fd66a30f01a5a08aca81a6b",
           "bytes": 5284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/b3b_eh.part",
+          "sha256": "07753b42f5c83448b480c02897b830bb8b0e260b044c47e2a9e94b6c380ad7a6",
+          "bytes": 372,
           "redacted": false
         },
         {
@@ -31929,9 +32589,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/base.part",
+          "sha256": "5cf80817b06d81c7c931421438b346785d1b32c64e0bc356af657ec094c0f943",
+          "bytes": 370,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/base.stl",
           "sha256": "5482bdd7dcc7e59963aaa8c470ed8cabded16817a5b73afc5fb4c4ae260022f1",
           "bytes": 5284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/bts2_m2_6x8.part",
+          "sha256": "222db8d389525dacd87ca83b5a2cc2e50a7bc5f73a031ea94244d1fa909de3e4",
+          "bytes": 377,
           "redacted": false
         },
         {
@@ -31941,9 +32613,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/dc15_a01_case_b_dummy.part",
+          "sha256": "bc84c6960215bbbda7a0f47a3280eb3ce042b6141a6ad80ef0241da36291bd37",
+          "bytes": 387,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/dc15_a01_case_b_dummy.stl",
           "sha256": "a8498c62481603edd4fc5e2af0b71e0fcfe96af99b348d30bd4be68e70b55fc5",
           "bytes": 5284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/dc15_a01_case_f_dummy.part",
+          "sha256": "1514b0f8c282d19b0aa31c7eab577f28765762195420b0697c43cf30cacd433d",
+          "bytes": 387,
           "redacted": false
         },
         {
@@ -31953,9 +32637,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/dc15_a01_case_m_dummy.part",
+          "sha256": "a54b04015fbf2b7a0eaa2afa107a527347b078ead340f4817a0368d9421528c4",
+          "bytes": 387,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/dc15_a01_case_m_dummy.stl",
           "sha256": "3334edf8c5e50326d5c8af9944a5089c6943e70a93a153d54425fa818f28ab77",
           "bytes": 5284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/dc15_a01_horn_dummy.part",
+          "sha256": "63653e42a991e9f5195663d2dba4d41cf232909b393b5a01e27ea8e062114c7c",
+          "bytes": 385,
           "redacted": false
         },
         {
@@ -31965,9 +32661,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/dc15_a01_horn_idle2_dummy.part",
+          "sha256": "f322208363bfcd0b8a1735097d1c0ba8ad59e7a6b690249fe667c9e08948563d",
+          "bytes": 391,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/dc15_a01_horn_idle2_dummy.stl",
           "sha256": "0a7b41f3f12d846cb32c5d0d84de2d95499f66266dc0217d4c39f56632b39778",
           "bytes": 5284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/dc15_a01_idle_cap_dummy.part",
+          "sha256": "ec2876d6b15535f50dc9346988ca0f46151491cd3e4659025d9d78516f5af36f",
+          "bytes": 389,
           "redacted": false
         },
         {
@@ -31977,9 +32685,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/dc15_a01_led_cap2_dummy.part",
+          "sha256": "9752538f828b5a097690062032ffeea322ed03d165ffb8abf184b25c2ad37d38",
+          "bytes": 389,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/dc15_a01_led_cap2_dummy.stl",
           "sha256": "f84464555f9cffb751d5b0c6737d6088e5e3513ec1aa9a915843590a7e5efada",
           "bytes": 1684,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/diffuser.part",
+          "sha256": "04ab17016fcd22ea42cc1f46b2aa6bc96f2761e7f3116ced5cf222251185b704",
+          "bytes": 374,
           "redacted": false
         },
         {
@@ -31989,9 +32709,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/ge_27.part",
+          "sha256": "6b270dde75c71d75979cdf8e78b2d32d9053138200bae7e40f1b1ee4c7cb9f04",
+          "bytes": 371,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/ge_27.stl",
           "sha256": "3f2c4c5e722886296fe575a14040865a05e119573c00e2f8c7596c51793dda21",
           "bytes": 524284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/lamp_base.part",
+          "sha256": "366a11fc26cc66bd133caedd2d1b061cc8b8127f64465ee16cf202b877b36e80",
+          "bytes": 375,
           "redacted": false
         },
         {
@@ -32001,9 +32733,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/lamp_base_cover.part",
+          "sha256": "7dc16b080267b4c90cfcade16eb605f5a14ca577acbc789aa6edb29314bace32",
+          "bytes": 381,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/lamp_base_cover.stl",
           "sha256": "a22669766a884d4fcffd39add6c8c856c2b86bd83697fe8e040f3e665d16f757",
           "bytes": 120684,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/lamp_head.part",
+          "sha256": "fe09bbb3bf34be9836ad940099b0535ce32f290e84f8ed8797e0fe916dd9e44c",
+          "bytes": 375,
           "redacted": false
         },
         {
@@ -32013,9 +32757,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/lamparm__base_elbow.part",
+          "sha256": "82248d92b3e341e132b0567d442b5dd8739038e2d9c7e078424e81c479c22a66",
+          "bytes": 386,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/lamparm__base_elbow.stl",
           "sha256": "d20ba32e47e3e0cf5a18c7fb270d1b060af59260a549d7d0f74d0afbe4ffa7c6",
           "bytes": 385884,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/lamparm__elbow_wrist.part",
+          "sha256": "3a3cea14de9de13a1e0a8cb574fec21e02efe1ad18fda92ed38651b5f9aae7ff",
+          "bytes": 387,
           "redacted": false
         },
         {
@@ -32025,9 +32781,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/lamparm__wrist_head.part",
+          "sha256": "06b9cd2a61d63965e94fd97537c6e7d1c2c61ca73661dcf1d9dbaed6ae0dfd4c",
+          "bytes": 386,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/lamparm__wrist_head.stl",
           "sha256": "2e729d824db7120f11a7dad9b0d2cd595d0789bc5714cc6771169c03fec85d7d",
           "bytes": 300584,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/lamphead.part",
+          "sha256": "6abc9de1380a92beec4c28067ffa55475bef7d5b8ef54d17eac1119d3c12994e",
+          "bytes": 374,
           "redacted": false
         },
         {
@@ -32037,9 +32805,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/motor_1723_3.part",
+          "sha256": "1054bbb8a0e6472bad0b600e04b42439872c319036b2fbd2d4a069c9f02deb0d",
+          "bytes": 378,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/motor_1723_3.stl",
           "sha256": "8b5a44f167585da024d23444835919f42d1daa6cf56e4ca3b06b151bc05d21c2",
           "bytes": 524284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/pcb_chazuo_92.part",
+          "sha256": "d63c08fa99454a702f174f50848b9d2fcc044294f959d9d2d7175f21571e4c18",
+          "bytes": 379,
           "redacted": false
         },
         {
@@ -32049,9 +32829,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/sg_ziji_15.part",
+          "sha256": "8a8ebcb7bd8634914a15d94e9b3aa98077f3124ac580ab72493a7e73c3cef75e",
+          "bytes": 376,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/sg_ziji_15.stl",
           "sha256": "737ba35fbf9e1fc90f6901f5506922e1bd681c214848c5020a477dc546768be8",
           "bytes": 524284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/square_joint.part",
+          "sha256": "a4fd38b0410feaef5fa64fec570bdd886d474ee08a13c4b7cd84aa448c993a14",
+          "bytes": 378,
           "redacted": false
         },
         {
@@ -32061,9 +32853,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/xg_ziji_16.part",
+          "sha256": "5cf8cbca0f85d04979b05cb208cb8acc0dda5fe3d7fa61f534d73d878353018f",
+          "bytes": 376,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/xg_ziji_16.stl",
           "sha256": "56ac601a3ea4240a00623e406d155b645ed20d7ab22ef21ad7e29d70eb665ba1",
           "bytes": 524284,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/zk_122.part",
+          "sha256": "61d5a3f902c348570ff3a2f74378d3248e67cb6fd318273fc9e6fd4243189ad6",
+          "bytes": 372,
           "redacted": false
         },
         {
@@ -32073,9 +32877,21 @@
           "redacted": false
         },
         {
+          "path": "simulation/assets/金属舵盘_从动__v2.part",
+          "sha256": "744e50444c18046a575874aa4490a1233ea43f874f37528fdf0d061d1b768854",
+          "bytes": 417,
+          "redacted": false
+        },
+        {
           "path": "simulation/assets/金属舵盘_从动__v2.stl",
           "sha256": "1df52af8c7e581c4fed124332b3daf0588f414bbf296895c434bc2e0fd013256",
           "bytes": 124084,
+          "redacted": false
+        },
+        {
+          "path": "simulation/assets/金属舵盘_驱动__v2.part",
+          "sha256": "0879be743942ce11d07329ce8b175f59969efaa2147797c7726c3d5088eb8a76",
+          "bytes": 417,
           "redacted": false
         },
         {
@@ -32175,6 +32991,12 @@
           "path": ".github/workflows/release.yml",
           "sha256": "39b06c588aaf84b310d7282dcdca3a466109129eeb27efc3aeebd06915c42c43",
           "bytes": 6762,
+          "redacted": false
+        },
+        {
+          "path": ".gitignore",
+          "sha256": "117e85e5bc43c86c6700f92daa626856903a2d76cac03f7a6c5e609103632a9e",
+          "bytes": 892,
           "redacted": false
         },
         {
@@ -32286,6 +33108,12 @@
           "redacted": false
         },
         {
+          "path": "btd/systemd/btd.service",
+          "sha256": "fb64b20f44596d4c997db0ba81e69d180959d20c8d6847d32a26c56ed54058e9",
+          "bytes": 3899,
+          "redacted": false
+        },
+        {
           "path": "btd/systemd/sysusers.d/btd.conf",
           "sha256": "44b197606cd117f68c3478f3d97977571fbc538f5db423ae3526c41f413ac0cb",
           "bytes": 1230,
@@ -32358,6 +33186,12 @@
           "redacted": false
         },
         {
+          "path": "configd/systemd/configd.service",
+          "sha256": "130cbd29350c8ac13ad2609731d2db2f83fbcc6878ac25c916d0824cc7a7ba66",
+          "bytes": 5222,
+          "redacted": false
+        },
+        {
           "path": "configd/systemd/sysusers.d/README",
           "sha256": "64c2e5700a0681e26a320cb3564aea371e018c244203e959529ed98f0cd97ec3",
           "bytes": 378,
@@ -32367,6 +33201,12 @@
           "path": "deploy/README.md",
           "sha256": "47bc0d9a6afb3599f7d092f26bdafe7ac20018847b47a452e7d68469c0e520a8",
           "bytes": 25384,
+          "redacted": false
+        },
+        {
+          "path": "deploy/audio/aic3104-i2c3.dts",
+          "sha256": "5fab9e696f835c77f6dd1d923a910e49a8bf7572ba9bad51203f27af6730c696",
+          "bytes": 3039,
           "redacted": false
         },
         {
@@ -32406,6 +33246,12 @@
           "redacted": false
         },
         {
+          "path": "deploy/audio/i2c3-pihat.dts",
+          "sha256": "39c89da24a5a717aff1716a0c095af676828c3a3d8ebafb808f77c518965cb92",
+          "bytes": 2946,
+          "redacted": false
+        },
+        {
           "path": "deploy/dev-key/README.md",
           "sha256": "2c771414863112331cc18864ec95f54218596881b3fbfce6d7a5dbc59fa3aa86",
           "bytes": 1367,
@@ -32415,6 +33261,12 @@
           "path": "deploy/journald.conf.d/10-robot.conf",
           "sha256": "ea98c12f0c07cf715afbf2c7c4e88a0a75c54c04ea2790eba59fb6d0a9bb6600",
           "bytes": 2389,
+          "redacted": false
+        },
+        {
+          "path": "deploy/overlays/rk3568-npu-enable.dts",
+          "sha256": "0a1cb42659f3edc4e8326c2467c7c16cc7f90ee89af47e4819eb80349a186d59",
+          "bytes": 1375,
           "redacted": false
         },
         {
@@ -32706,6 +33558,12 @@
           "redacted": false
         },
         {
+          "path": "hooks/preinstall.in",
+          "sha256": "594c26355b10f0902278fe35cfdf9bd268a3c35a4a00f5d327b0aacc4b21eaa6",
+          "bytes": 10165,
+          "redacted": false
+        },
+        {
           "path": "kinematics/Cargo.toml",
           "sha256": "a62537e0a9e2c12a34d469569e46d084623b27084b6a7c9289f8c2245fac7fbc",
           "bytes": 869,
@@ -32844,6 +33702,12 @@
           "redacted": false
         },
         {
+          "path": "mediad/systemd/mediad.service",
+          "sha256": "b469b1e09f1aac4721a2372fd58dd753d61193b76bc53d922fc887ec4678573c",
+          "bytes": 8396,
+          "redacted": false
+        },
+        {
           "path": "mediad/systemd/sysusers.d/mediad.conf",
           "sha256": "8392279e34c3ecabfaa1952aedd6ef099fb0c8032915f3b4f358624b3a0a1d27",
           "bytes": 1068,
@@ -32883,6 +33747,12 @@
           "path": "padd/src/tap.rs",
           "sha256": "704009a691de8fd5ecbd9401f4a38a72fa7078ddffc3c78ede26fea9f2aa8662",
           "bytes": 31541,
+          "redacted": false
+        },
+        {
+          "path": "padd/systemd/padd.service",
+          "sha256": "6f94c1d8a45b4ab30c911654eb176db7bc28948f4f466b58518b73f3bbbabed0",
+          "bytes": 5187,
           "redacted": false
         },
         {
@@ -33054,6 +33924,12 @@
           "redacted": false
         },
         {
+          "path": "robotd/systemd/robotd.service",
+          "sha256": "6a27fe4da782adf0ba677d7605aa79b440500beffde8cbf76ee80d4f3eb0b737",
+          "bytes": 4425,
+          "redacted": false
+        },
+        {
           "path": "robotd/tests/updater_gate.rs",
           "sha256": "43b0221b0cffb6c181c5b182197d68a5971f218ac2f93d77e6d129019e54172a",
           "bytes": 20456,
@@ -33081,6 +33957,12 @@
           "path": "scripts/cross-sysroot.sh",
           "sha256": "24e92c4c69fc669e167437855853275fc1229cecece5b978eea57472a68dfeed",
           "bytes": 9772,
+          "redacted": false
+        },
+        {
+          "path": "scripts/dev-build.Dockerfile",
+          "sha256": "a18fd5087ca9e397ef8edfd7e8a67292fd428debd0bfd09fbe1e3067458041b1",
+          "bytes": 2111,
           "redacted": false
         },
         {
@@ -33162,6 +34044,12 @@
           "redacted": false
         },
         {
+          "path": "scripts/systemd-test.Dockerfile",
+          "sha256": "8858341bc74a87665766504680ecfbf3f071889dbf50418842d75500e0a1a2eb",
+          "bytes": 1092,
+          "redacted": false
+        },
+        {
           "path": "scripts/systemd-test.sh",
           "sha256": "12160ca379243d2b1b130daaa576ccab705dc814877a500448fce5f3d33b1d5c",
           "bytes": 19830,
@@ -33171,6 +34059,24 @@
           "path": "sounds/Cargo.toml",
           "sha256": "7440862f12528dd8b44e285239e84b8e566a8f98ed226329dd1e29c78dc74fdc",
           "bytes": 649,
+          "redacted": false
+        },
+        {
+          "path": "sounds/scores/duck_strut.mid",
+          "sha256": "221b8a64a9dfe9567909bca372bbeb00b1bf40a1bc96112f503a69651b32eed4",
+          "bytes": 2958,
+          "redacted": false
+        },
+        {
+          "path": "sounds/scores/outer_wilds.mid",
+          "sha256": "1d4852c1485699dc58147f5da90ac81c2143694958e3dfac1ca67514915133ff",
+          "bytes": 4994,
+          "redacted": false
+        },
+        {
+          "path": "sounds/scores/wistful.duckscore",
+          "sha256": "4baa780c5a90ca6bf92b1a0f20a0ef17dbaa826cbe20ed715484d5a9889d051a",
+          "bytes": 4171,
           "redacted": false
         },
         {
@@ -33303,6 +34209,12 @@
           "path": "tof/systemd/sysusers.d/tofd.conf",
           "sha256": "200df36d6b70a4baeed170dd2275df6d48a9177af2fa5c0834c7e33e080b9569",
           "bytes": 638,
+          "redacted": false
+        },
+        {
+          "path": "tof/systemd/tofd.service",
+          "sha256": "17082237e9394e64d0b79f3d6f97d84a2c0f2300bccd014c25d0e25b5f93b718",
+          "bytes": 1999,
           "redacted": false
         },
         {
@@ -33534,9 +34446,27 @@
           "redacted": false
         },
         {
+          "path": "updater/systemd/robot-boot-check.service",
+          "sha256": "5ba93ddf5be20823681863eb375d6cceb0b466e44443869d5ca88c6504a042c9",
+          "bytes": 1715,
+          "redacted": false
+        },
+        {
+          "path": "updater/systemd/robot-boot-check.timer",
+          "sha256": "a14654d9d2e421489e1aef68771dd1c897a4b7438e1abff14a289f44f6773e5f",
+          "bytes": 1448,
+          "redacted": false
+        },
+        {
           "path": "updater/systemd/sysusers.d/robot.conf",
           "sha256": "893c8a6d82c3563a0c97fb52a81a3a8c0d945012e405d0203aa40bd42d12d82c",
           "bytes": 573,
+          "redacted": false
+        },
+        {
+          "path": "updater/systemd/updaterd.service",
+          "sha256": "9ed725619dfa350b835a21296dd7e6a31214dd8aac68d1dc1ed6308ceb192c21",
+          "bytes": 4016,
           "redacted": false
         },
         {
@@ -33598,6 +34528,24 @@
           "sha256": "ebc31c945615cb2d40b86ee10d2d894aa9b44f404acc403b96cb0c44238f5c76",
           "bytes": 4872,
           "redacted": false
+        },
+        {
+          "path": "hooks/postinstall",
+          "sha256": "c5eb76d190f697457f149e8ea963aa018b2e51c6d93438dfee4512682cf4aa67",
+          "bytes": 7758,
+          "redacted": false
+        },
+        {
+          "path": "scripts/robot-boot-check",
+          "sha256": "1ac92f6c727d07e7f9f1c0556cd1b015e5efb9ae799509aa56e4af656a66d1a8",
+          "bytes": 5757,
+          "redacted": false
+        },
+        {
+          "path": "scripts/robot-rescue",
+          "sha256": "b78473d7f4be7796ad88714f49c76f72370c069d68e46bc3671c2cf8de698795",
+          "bytes": 9611,
+          "redacted": false
         }
       ],
       "duplicate_sources": []
@@ -33608,6 +34556,12 @@
       "source": "C盘文档/PlatformIO/Projects/1",
       "technology": "PlatformIO",
       "files": [
+        {
+          "path": ".gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
+        },
         {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "f555318b068c4d5e0d1092ae7f307aebf8376afc79101686451b84e7b0b08bfc",
@@ -33672,6 +34626,12 @@
       "technology": "PlatformIO",
       "files": [
         {
+          "path": ".gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
+        },
+        {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "053b5cd16c6f5ad386fae3afe51583f9703bd88fbdc8d47ebf62d0230769659e",
           "bytes": 64523,
@@ -33735,6 +34695,12 @@
       "technology": "PlatformIO",
       "files": [
         {
+          "path": ".gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
+        },
+        {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "17c69a8add0b4cefc5018ea06e108b7f2ce7f9fdc35aa021a59c4df4a62e1e6b",
           "bytes": 62795,
@@ -33791,6 +34757,12 @@
       "source": "C盘文档/PlatformIO/Projects/pm",
       "technology": "PlatformIO",
       "files": [
+        {
+          "path": ".gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
+        },
         {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "de1ce41a59b1792b73602068f34598ee146916abb7e74f39f78f562c8ae88666",
@@ -33855,6 +34827,12 @@
       "technology": "PlatformIO",
       "files": [
         {
+          "path": ".gitignore",
+          "sha256": "67cca8c6c85c4698d0b5592a07a40ef2c16e9270cbe2773c6798944272525125",
+          "bytes": 94,
+          "redacted": false
+        },
+        {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "3b961b8f4cefe85195be7c300e27771188eff8e23e3819fa43e0496129b7457e",
           "bytes": 64542,
@@ -33911,6 +34889,12 @@
       "source": "C盘文档/PlatformIO/Projects/test",
       "technology": "PlatformIO、Arduino",
       "files": [
+        {
+          "path": ".gitignore",
+          "sha256": "67cca8c6c85c4698d0b5592a07a40ef2c16e9270cbe2773c6798944272525125",
+          "bytes": 94,
+          "redacted": false
+        },
         {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "e482d2dcc406b2b695d08d8c8794eb789d08c52cca20ec41d9a9c4b3564c94d8",
@@ -34023,6 +35007,12 @@
       "technology": "PlatformIO",
       "files": [
         {
+          "path": ".gitignore",
+          "sha256": "d952abf002d5e1ec80c8ab1bfc9f38eb5b62fc310667d501cb2ce9f21c3effb2",
+          "bytes": 99,
+          "redacted": false
+        },
+        {
           "path": ".vscode/c_cpp_properties.json",
           "sha256": "82b1e2706d5c222b7dc6f010211bfba9c55b17d3fd7d0a579d828c2245ac3c3c",
           "bytes": 64578,
@@ -34101,6 +35091,12 @@
           "path": "arm_controller.spec",
           "sha256": "4863852d5e2047392ac76995092911e15b4bb855f87fa1b9b797f0f35de6c4bc",
           "bytes": 715,
+          "redacted": false
+        },
+        {
+          "path": "conda",
+          "sha256": "a7ffcef0c3da7531801933bdfbddf3b58b40a7a4a6d7c9096d8278d0e673343d",
+          "bytes": 64,
           "redacted": false
         }
       ],
@@ -34328,6 +35324,12 @@
       "source": "D盘/work/ROBO/robonexus",
       "technology": "Node.js / Web",
       "files": [
+        {
+          "path": ".gitignore",
+          "sha256": "fe718e7babb14f3cbad2d97f08889b9ce5215ed3fe0e43b2b8cfbfb3b9b844e8",
+          "bytes": 253,
+          "redacted": false
+        },
         {
           "path": ".vscode/extensions.json",
           "sha256": "70d56b550e796e3ea92922763ae03037a1a94596fda9d737982c75f6a20e88dd",
@@ -34626,6 +35628,12 @@
       "technology": "ESP-IDF / CMake、Python",
       "files": [
         {
+          "path": ".clang-format",
+          "sha256": "5b6cd6d73fb5aabc0f48478b08b55cbb7033f4852a469ec838eb233622c7c6b9",
+          "bytes": 3337,
+          "redacted": false
+        },
+        {
           "path": ".github/ISSUE_TEMPLATE/01_build_install_bug.yml",
           "sha256": "49958d4b8047a54284b48a846df4f05eab8ee0f99896b1d1f6c1b5f521b6a45f",
           "bytes": 3326,
@@ -34653,6 +35661,12 @@
           "path": ".github/workflows/build.yml",
           "sha256": "c702a9a4dda5d4a5c013e9e4f704a6008a16883c9253d0e6a897dd21bf40ec18",
           "bytes": 3293,
+          "redacted": false
+        },
+        {
+          "path": ".gitignore",
+          "sha256": "315a7d9c4773bf75f3167a466027ba8f72087084e3bc72faeaee9778ff6eb04e",
+          "bytes": 239,
           "redacted": false
         },
         {
@@ -41034,6 +42048,12 @@
           "redacted": false
         },
         {
+          "path": "main/boards/m5stack-tab5/sdkconfig.tab5",
+          "sha256": "5db61df7ebc29ab79a30b56a07e0d07477df5c8b9a605e57a7fe1ab490871fd5",
+          "bytes": 573,
+          "redacted": false
+        },
+        {
           "path": "main/boards/m5stack-tab5/tab5_audio_codec.cc",
           "sha256": "d8e2931c81c09d3a2123207263e038ca75f5e5bb55643671dc0c22f54b8890ea",
           "bytes": 8294,
@@ -42171,6 +43191,12 @@
           "path": "main/boards/waveshare/esp32-s3-touch-lcd-4.3c/esp32_s3_touch_lcd_4.3c.cc",
           "sha256": "56fe8a32f4a8c12a875761b94f7a5bba115cd62ecf81fbc8836b842dff0abf35",
           "bytes": 8352,
+          "redacted": false
+        },
+        {
+          "path": "main/boards/waveshare/esp32-s3-touch-lcd-4.3c/sdkconfig.4_3c",
+          "sha256": "2e8b3e220b75a9344cc5299b209d9b0410fbc70a683ffaa1a0a88da6ed1c9383",
+          "bytes": 102376,
           "redacted": false
         },
         {
@@ -43335,6 +44361,24 @@
       "technology": "ESP-IDF / CMake、Python",
       "files": [
         {
+          "path": ".clang-format",
+          "sha256": "5b6cd6d73fb5aabc0f48478b08b55cbb7033f4852a469ec838eb233622c7c6b9",
+          "bytes": 3337,
+          "redacted": false
+        },
+        {
+          "path": ".clangd",
+          "sha256": "b64f692298e718f35ed78bfdff2d4eccba2d5f8e7b995a119a7cfffba463b931",
+          "bytes": 39,
+          "redacted": false
+        },
+        {
+          "path": ".dockerignore",
+          "sha256": "f7b6a8a7e03ec72577ea98407aa335c716349a6f826f704d0d7f4c1f85ab3fb8",
+          "bytes": 176,
+          "redacted": false
+        },
+        {
           "path": ".github/ISSUE_TEMPLATE/01_build_flash_bug.yml",
           "sha256": "252f2f1e4cc87b77ef19087cbc1e0246e03f482f617989d3be5b4f930750034c",
           "bytes": 2679,
@@ -43380,6 +44424,12 @@
           "path": ".github/workflows/build.yml",
           "sha256": "ce1d9e2c4d6b8950726570482a4eb84a5e9e13e13e8c1d10f24abfbf45df50e8",
           "bytes": 3825,
+          "redacted": false
+        },
+        {
+          "path": ".gitignore",
+          "sha256": "315a7d9c4773bf75f3167a466027ba8f72087084e3bc72faeaee9778ff6eb04e",
+          "bytes": 239,
           "redacted": false
         },
         {
@@ -48825,6 +49875,18 @@
           "redacted": false
         },
         {
+          "path": "main/boards/espressif/esp-vocat/emoji/battery_connected.eaf",
+          "sha256": "831602f447a3265670b3f58f4acbcd1c7ec9cf8e951a940dafce56acaa0969f6",
+          "bytes": 98955,
+          "redacted": false
+        },
+        {
+          "path": "main/boards/espressif/esp-vocat/emoji/low_battery.eaf",
+          "sha256": "1d13df0e4191bb15cb98a416c86963bf583926bf77e464c02d9f8f406e6b62a0",
+          "bytes": 129314,
+          "redacted": false
+        },
+        {
           "path": "main/boards/espressif/esp-vocat/esp_vocat.cc",
           "sha256": "a66a211c8c5a065a81aa4ee9580af5f0905c5707ce531b1a5955df59bc830615",
           "bytes": 39541,
@@ -50148,6 +51210,12 @@
           "path": "main/boards/m5stack/tab5/m5stack_tab5.cc",
           "sha256": "2c35adf289887e77cc2ec054d161c3deddb5d9482366d78d6bf10018d073f886",
           "bytes": 21389,
+          "redacted": false
+        },
+        {
+          "path": "main/boards/m5stack/tab5/sdkconfig.tab5",
+          "sha256": "5db61df7ebc29ab79a30b56a07e0d07477df5c8b9a605e57a7fe1ab490871fd5",
+          "bytes": 573,
           "redacted": false
         },
         {
@@ -52929,6 +53997,12 @@
           "redacted": false
         },
         {
+          "path": "main/sdkconfig.rename",
+          "sha256": "442c4db7c385ace02a184b77c6b1cf9fac82ab73c7e296ba50d9b72e8e5af971",
+          "bytes": 361,
+          "redacted": false
+        },
+        {
           "path": "main/settings.cc",
           "sha256": "bf0ca7df6906c698a1d4ab5f1238bfb37347ea54a25b170eab9c9b45804032bd",
           "bytes": 2945,
@@ -54081,6 +55155,12 @@
           "redacted": false
         },
         {
+          "path": "src/openslam_gmapping/include/gmapping/gridfastslam/gridslamprocessor.hxx",
+          "sha256": "b04b4ee046648699e0bd4012897520b01d0aca523d7ab952041d54a96d53079a",
+          "bytes": 5766,
+          "redacted": false
+        },
+        {
           "path": "src/openslam_gmapping/include/gmapping/gridfastslam/motionmodel.h",
           "sha256": "729ea60f48fdec14df4521070d1168f2073fc5c0bc47a35eb9f51418124b04a3",
           "bytes": 552,
@@ -54435,6 +55515,12 @@
           "redacted": false
         },
         {
+          "path": "src/openslam_gmapping/utils/orientedboundingbox.hxx",
+          "sha256": "4ac0c7532891537f4748dec2c4df63c21fbfbb374d954036efd9780112e744ea",
+          "bytes": 3256,
+          "redacted": false
+        },
+        {
           "path": "src/openslam_gmapping/utils/printmemusage.cpp",
           "sha256": "8f09c3d86c7a1b3df96f3c457983032542f7c938df9d68cfc91e421659842ea0",
           "bytes": 440,
@@ -54762,6 +55848,12 @@
           "redacted": false
         },
         {
+          "path": "IoT-Based-Seedling-Control-System/.gitattributes.source",
+          "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+          "bytes": 66,
+          "redacted": false
+        },
+        {
           "path": "IoT-Based-Seedling-Control-System/Arduinos/Farmer/Farmer.ino",
           "sha256": "45ca43d4713d1f7a8e7db2d03999f159381adcb3bce77e3fdb898369bfee0ec2",
           "bytes": 12257,
@@ -54813,6 +55905,12 @@
           "path": "IoT-Based-Seedling-Control-System/手机控制/app.json",
           "sha256": "455929561d859eef5700ebe75224c3e2029480abe5857b7058a4c0d56f354b20",
           "bytes": 498,
+          "redacted": false
+        },
+        {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/app.wxss",
+          "sha256": "2a10971b43af27877f8b2179667f2ea51ae98b071dfbc08cdc6945f058f41e56",
+          "bytes": 194,
           "redacted": false
         },
         {
@@ -54906,6 +56004,18 @@
           "redacted": false
         },
         {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/index/index.wxml",
+          "sha256": "7a60c7f45feddd9daba9b7b3501eafd892f700ccffa69417e768e7afd66061ca",
+          "bytes": 7898,
+          "redacted": false
+        },
+        {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/index/index.wxss",
+          "sha256": "092e226d942da0a7ce1bab0072c0021c6802e436de84750ae9f602e351aa631f",
+          "bytes": 4491,
+          "redacted": false
+        },
+        {
           "path": "IoT-Based-Seedling-Control-System/手机控制/pages/mysql.js",
           "sha256": "5ca9b9e8d9499ae4e7b7d643907f22ed46e35fb8247ed5be12d1e71d9e176758",
           "bytes": 23023,
@@ -54924,6 +56034,18 @@
           "redacted": false
         },
         {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/operation_logs/operation_logs.wxml",
+          "sha256": "565e7682512003ac9a67520f50891cd6c1949f4bf0da011c8508a81c73283df7",
+          "bytes": 2312,
+          "redacted": false
+        },
+        {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/operation_logs/operation_logs.wxss",
+          "sha256": "0e0bf3dbc89c198f45c583c7dbeebf713484dc61c72e8c4cbc0f510dbeb93549",
+          "bytes": 5286,
+          "redacted": false
+        },
+        {
           "path": "IoT-Based-Seedling-Control-System/手机控制/pages/register/register.js",
           "sha256": "c4763306585af99de35a4cc9103e97da338062ca7efb3490a7d71b9a87f6c0c1",
           "bytes": 5033,
@@ -54936,6 +56058,18 @@
           "redacted": false
         },
         {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/register/register.wxml",
+          "sha256": "f985b7c5cceb11548b5563eaf822089eecd1f92587ae24a80d8223883b73e00c",
+          "bytes": 2215,
+          "redacted": true
+        },
+        {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/register/register.wxss",
+          "sha256": "b698b286ddcce4215825b205d88e90dd7b65c256e3cbef198010c066d5905d76",
+          "bytes": 2631,
+          "redacted": false
+        },
+        {
           "path": "IoT-Based-Seedling-Control-System/手机控制/pages/settings/settings.js",
           "sha256": "ed9b17eaf8da92fe745e9e28d8211a925917254e42563461ec75054195c0f52c",
           "bytes": 11195,
@@ -54945,6 +56079,18 @@
           "path": "IoT-Based-Seedling-Control-System/手机控制/pages/settings/settings.json",
           "sha256": "a654235a1e0e0ebba3301d0d36d102c3413b69c13982c360755a6684fc3f3039",
           "bytes": 222,
+          "redacted": false
+        },
+        {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/settings/settings.wxml",
+          "sha256": "81b83a4f60b5070531656cdab84a2f74e6b7b1d677b748a92f9ccc7a18111737",
+          "bytes": 2692,
+          "redacted": false
+        },
+        {
+          "path": "IoT-Based-Seedling-Control-System/手机控制/pages/settings/settings.wxss",
+          "sha256": "426619b46062df837bf1a345a951d6c759a17669d451dd6a70ecea7c9648179c",
+          "bytes": 3568,
           "redacted": false
         },
         {
@@ -55264,6 +56410,18 @@
           "sha256": "5d9172294dce3f3aa39be4f6486ab73d9ce149ae1bfd54c3b27e4d8c8d1a02d0",
           "bytes": 7472,
           "redacted": true
+        },
+        {
+          "path": "语言指令",
+          "sha256": "8a9520889b0911d440adb5cf4a3abdfe36ec7db2e5d490dbfa700f967e1ef841",
+          "bytes": 603,
+          "redacted": false
+        },
+        {
+          "path": "IoT-Based-Seedling-Control-System/语言指令",
+          "sha256": "257a1adef5b47faff0afb5bba34db1e9529c24f448d4dce6d048294f086265f4",
+          "bytes": 809,
+          "redacted": false
         }
       ],
       "duplicate_sources": []
@@ -55326,6 +56484,12 @@
           "path": "结构/FABRI_CREATOR/brazo-robotico-arduino-diy-con-control-de-smartphone-2023/Barra1.stl",
           "sha256": "490a04b74bac6aa020a65f03b903d0688612ca73de8f5ff0505a6e12782824ba",
           "bytes": 132484,
+          "redacted": false
+        },
+        {
+          "path": "结构/FABRI_CREATOR/brazo-robotico-arduino-diy-con-control-de-smartphone-2023/Barra2.3mf",
+          "sha256": "318dbca7d6230fd158bb6242ec0abfdcd5f82eef60e551083d683e39cd56de25",
+          "bytes": 62733,
           "redacted": false
         },
         {
@@ -55740,6 +56904,12 @@
           "redacted": false
         },
         {
+          "path": "NLP/NLP/spacemit_tts/melotts/text/cmudict.rep",
+          "sha256": "d127b5ce8b8e695732701e8efde04b9b0fa11991218b1fb9d21bd0c9264636aa",
+          "bytes": 3969309,
+          "redacted": false
+        },
+        {
           "path": "NLP/NLP/spacemit_tts/melotts/text/english.py",
           "sha256": "9f856683dde401a8e1ba18a106ff98e7077094cb4caab97f07008389d86fabac",
           "bytes": 6941,
@@ -55839,6 +57009,12 @@
           "path": "NLP/NLP/spacemit_tts/melotts/text/es_phonemizer/spanish_symbols.txt",
           "sha256": "819cb2054292ce8f3f3a5f138656216a2dd7a65c4960cc91e717b279eca6acef",
           "bytes": 54,
+          "redacted": false
+        },
+        {
+          "path": "NLP/NLP/spacemit_tts/melotts/text/es_phonemizer/test.ipynb",
+          "sha256": "16927525b3d487633ea5e260de0756854aeb33cdcc91c5ab8bbb1f5b7fbbe737",
+          "bytes": 5605,
           "redacted": false
         },
         {
@@ -56301,6 +57477,12 @@
           "redacted": false
         },
         {
+          "path": "NLP/spacemit_tts/melotts/text/cmudict.rep",
+          "sha256": "d127b5ce8b8e695732701e8efde04b9b0fa11991218b1fb9d21bd0c9264636aa",
+          "bytes": 3969309,
+          "redacted": false
+        },
+        {
           "path": "NLP/spacemit_tts/melotts/text/english.py",
           "sha256": "9f856683dde401a8e1ba18a106ff98e7077094cb4caab97f07008389d86fabac",
           "bytes": 6941,
@@ -56400,6 +57582,12 @@
           "path": "NLP/spacemit_tts/melotts/text/es_phonemizer/spanish_symbols.txt",
           "sha256": "819cb2054292ce8f3f3a5f138656216a2dd7a65c4960cc91e717b279eca6acef",
           "bytes": 54,
+          "redacted": false
+        },
+        {
+          "path": "NLP/spacemit_tts/melotts/text/es_phonemizer/test.ipynb",
+          "sha256": "16927525b3d487633ea5e260de0756854aeb33cdcc91c5ab8bbb1f5b7fbbe737",
+          "bytes": 5605,
           "redacted": false
         },
         {
@@ -56805,6 +57993,12 @@
           "redacted": false
         },
         {
+          "path": "spacemit_tts/melotts/text/cmudict.rep",
+          "sha256": "d127b5ce8b8e695732701e8efde04b9b0fa11991218b1fb9d21bd0c9264636aa",
+          "bytes": 3969309,
+          "redacted": false
+        },
+        {
           "path": "spacemit_tts/melotts/text/english.py",
           "sha256": "9f856683dde401a8e1ba18a106ff98e7077094cb4caab97f07008389d86fabac",
           "bytes": 6941,
@@ -56904,6 +58098,12 @@
           "path": "spacemit_tts/melotts/text/es_phonemizer/spanish_symbols.txt",
           "sha256": "819cb2054292ce8f3f3a5f138656216a2dd7a65c4960cc91e717b279eca6acef",
           "bytes": 54,
+          "redacted": false
+        },
+        {
+          "path": "spacemit_tts/melotts/text/es_phonemizer/test.ipynb",
+          "sha256": "16927525b3d487633ea5e260de0756854aeb33cdcc91c5ab8bbb1f5b7fbbe737",
+          "bytes": 5605,
           "redacted": false
         },
         {
@@ -57906,6 +59106,24 @@
           "redacted": false
         },
         {
+          "path": "spacemit_tts/melotts/text/cmudict(1).rep",
+          "sha256": "d127b5ce8b8e695732701e8efde04b9b0fa11991218b1fb9d21bd0c9264636aa",
+          "bytes": 3969309,
+          "redacted": false
+        },
+        {
+          "path": "spacemit_tts/melotts/text/cmudict(2).rep",
+          "sha256": "d127b5ce8b8e695732701e8efde04b9b0fa11991218b1fb9d21bd0c9264636aa",
+          "bytes": 3969309,
+          "redacted": false
+        },
+        {
+          "path": "spacemit_tts/melotts/text/cmudict.rep",
+          "sha256": "d127b5ce8b8e695732701e8efde04b9b0fa11991218b1fb9d21bd0c9264636aa",
+          "bytes": 3969309,
+          "redacted": false
+        },
+        {
           "path": "spacemit_tts/melotts/text/english(1).py",
           "sha256": "eb2d41e6612f9374196ff365b4b9e66c117e9a63daad53b63cebd791fcb151c2",
           "bytes": 7691,
@@ -58209,6 +59427,24 @@
           "path": "spacemit_tts/melotts/text/es_phonemizer/spanish_symbols.txt",
           "sha256": "819cb2054292ce8f3f3a5f138656216a2dd7a65c4960cc91e717b279eca6acef",
           "bytes": 54,
+          "redacted": false
+        },
+        {
+          "path": "spacemit_tts/melotts/text/es_phonemizer/test(1).ipynb",
+          "sha256": "16927525b3d487633ea5e260de0756854aeb33cdcc91c5ab8bbb1f5b7fbbe737",
+          "bytes": 5605,
+          "redacted": false
+        },
+        {
+          "path": "spacemit_tts/melotts/text/es_phonemizer/test(2).ipynb",
+          "sha256": "16927525b3d487633ea5e260de0756854aeb33cdcc91c5ab8bbb1f5b7fbbe737",
+          "bytes": 5605,
+          "redacted": false
+        },
+        {
+          "path": "spacemit_tts/melotts/text/es_phonemizer/test.ipynb",
+          "sha256": "16927525b3d487633ea5e260de0756854aeb33cdcc91c5ab8bbb1f5b7fbbe737",
+          "bytes": 5605,
           "redacted": false
         },
         {
@@ -58701,9 +59937,21 @@
           "redacted": false
         },
         {
+          "path": ".gitignore",
+          "sha256": "3bb85e16674566f91fa21a8d1507ca5edc6e60e08fc15465035cb3ccb09d67a8",
+          "bytes": 1717,
+          "redacted": false
+        },
+        {
           "path": "LICENSE",
           "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
           "bytes": 35149,
+          "redacted": false
+        },
+        {
+          "path": "MANIFEST.in",
+          "sha256": "e77c58690bdc394d9cb1871a0050853151612c7ec44facfd54240c1460e0a7a4",
+          "bytes": 128,
           "redacted": false
         },
         {
@@ -59433,6 +60681,12 @@
           "redacted": false
         },
         {
+          "path": "melotts/text/cmudict.rep",
+          "sha256": "d127b5ce8b8e695732701e8efde04b9b0fa11991218b1fb9d21bd0c9264636aa",
+          "bytes": 3969309,
+          "redacted": false
+        },
+        {
           "path": "melotts/text/english.py",
           "sha256": "eb2d41e6612f9374196ff365b4b9e66c117e9a63daad53b63cebd791fcb151c2",
           "bytes": 7691,
@@ -59532,6 +60786,12 @@
           "path": "melotts/text/es_phonemizer/spanish_symbols.txt",
           "sha256": "819cb2054292ce8f3f3a5f138656216a2dd7a65c4960cc91e717b279eca6acef",
           "bytes": 54,
+          "redacted": false
+        },
+        {
+          "path": "melotts/text/es_phonemizer/test.ipynb",
+          "sha256": "16927525b3d487633ea5e260de0756854aeb33cdcc91c5ab8bbb1f5b7fbbe737",
+          "bytes": 5605,
           "redacted": false
         },
         {

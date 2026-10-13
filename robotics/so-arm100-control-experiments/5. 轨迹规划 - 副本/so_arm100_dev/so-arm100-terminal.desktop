@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=SO-ARM100 Lerobot Terminal
+Comment=Open an activated lerobot terminal in the examples directory
+Exec=/bin/bash -lc "\"$HOME/Desktop/5. 轨迹规划/so_arm100_dev/open_lerobot_terminal.sh\""
+Path=/home/orangepi/Desktop/5. 轨迹规划/so_arm100_dev/examples
+Terminal=true
+StartupNotify=false
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=3

@@ -1,0 +1,65 @@
+<!-- operation_logs.wxml -->
+<view class="custom-header">
+  <view class="header-content">
+    <text class="header-title">智能灌溉系统</text>
+  </view>
+</view>
+
+<view class="logs-container">
+  <view class="logs-header">
+    <text class="title">操作日志</text>
+    <button bindtap="refreshLogs" class="refresh-button" type="primary" size="mini">
+      {{refreshing ? '刷新中...' : '刷新'}}
+    </button>
+  </view>
+  
+  <view class="logs-content">
+    <block wx:if="{{isAdmin}}">
+      <scroll-view scroll-y class="logs-list" wx:if="{{logs.length > 0}}" bindscrolltolower="loadMoreLogs">
+        <view class="log-item {{item.type}}" wx:for="{{logs}}" wx:key="id">
+             
+            <view class="log-detail-info">
+              <view wx:if="{{item.userName}}">
+                <text class="detail-label">操作用户: </text>
+                <text class="detail-value">{{item.userName}}</text>
+              </view>
+              <view>
+                <text class="detail-label">设备ID: </text>
+                <text class="detail-value">{{item.deviceId === 'null' ? '无' : item.deviceId}}</text>
+              </view>
+               <view>
+                <text class="detail-label">操作类型: </text>
+                <text class="detail-value">{{item.operationType}}</text>
+              </view>
+              <view >
+                <text class="detail-label">操作信息: </text>
+                <text class="detail-value error-text">{{item.operationResult}}</text>
+              </view>
+              <view>
+                <text class="detail-label">精确时间: </text>
+                <text class="log-operation">{{item.time}}</text>
+              </view>
+            </view>
+          </view>
+        <!-- 加载更多状态 -->
+        <view class="loading-more" wx:if="{{loadingMore}}">
+          <text>加载中...</text>
+        </view>
+      </scroll-view>
+      <view class="empty-state" wx:else>
+        <text>暂无操作日志</text>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="no-permission">
+        <text>您没有权限查看操作日志</text>
+      </view>
+    </block>
+  </view>
+  
+  <!-- 底部返回按钮 -->
+  <view class="bottom-button-container">
+    <button bindtap="goBack" class="back-button">返回</button>
+  </view>
+</view>
+ 

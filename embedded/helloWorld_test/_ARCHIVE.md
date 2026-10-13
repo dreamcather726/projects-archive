@@ -2,7 +2,7 @@
 
 - 来源：`C盘桌面/workspace/01_ESP32嵌入式/helloWorld_test`
 - 技术标志：PlatformIO、Arduino、Python
-- 收录文件：46
+- 收录文件：47
 - 整理日期：2026-10-13
 
 此目录保存源码、配置及选定资源，内部目录结构保持原样。原项目的 README、许可证及依赖声明优先作为运行依据。

@@ -1,0 +1,59 @@
+<!--register.wxml-->
+<view class="custom-header">
+  <view class="header-content">
+    <text class="header-title">智能灌溉系统</text>
+  </view>
+</view>
+<view class="register-container">
+  <view class="register-header">
+    <text class="title">育苗控制系统</text>
+    <text class="subtitle">用户注册</text>
+  </view>
+  
+  <view class="register-form">
+     <view class="form-item">
+      <text class="label">名字</text>
+      <input type="text" bindinput="onNameInput" placeholder="请输入名字" class="input" value="{{name}}" />
+    </view>
+
+
+      
+      <view class="form-item">
+      <text class="label">账号</text>
+      <input type="text" bindinput="onUsernameInput" placeholder="请输入账号" class="input" value="{{username}}" />
+    </view>
+    
+   
+    
+    <view class="form-item">
+      <text class="label">密码</text>
+      <input type="password" bindinput="onPasswordInput" placeholder="请输入密码" class="input" password="REDACTED_CONFIGURE_LOCALLY" value="{{password}}" />
+    </view>
+    
+    <view class="form-item">
+      <text class="label">确认密码</text>
+      <input type="password" bindinput="onConfirmPasswordInput" placeholder="请再次输入密码" class="input" password="REDACTED_CONFIGURE_LOCALLY" value="{{confirmPassword}}" />
+    </view>
+    
+   
+    
+    <view class="form-item" wx:if="{{userType === 'admin'}}">
+      <text class="label">授权码</text>
+      <input type="text" bindinput="onAuthCodeInput" placeholder="请输入管理员授权码" class="input" value="{{authCode}}" />
+    </view>
+     <view class="form-item user-type">
+      <text class="label">用户类型</text>
+      <view class="radio-group">
+        <radio-group bindchange="onUserTypeChange">
+          <label><radio value="user" checked="{{userType === 'user'}}" />普通用户</label>
+          <label><radio value="admin" checked="{{userType === 'admin'}}" />管理员</label>
+        </radio-group>
+      </view>
+    </view>
+    <button bindtap="register" class="register-button">{{registerButtonText}}</button>
+    
+    <view class="options">
+      <text bindtap="switchToLogin" class="login-link">已有账号？立即登录</text>
+    </view>
+  </view>
+</view>

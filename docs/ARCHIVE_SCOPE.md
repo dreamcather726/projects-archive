@@ -6,6 +6,8 @@
 
 不收录嵌套 Git 历史、虚拟环境、node_modules、SDK 安装目录、构建缓存、生成程序、压缩包、磁盘镜像、模型权重、视频和办公文档。单个文件大于 20 MiB 时也不收录。未纳入的本地资料仍在原位置，可按需求单独追加。
 
+包含小程序样式与页面、Notebook、C++ 头文件、构建模板、服务配置、ROS 包标志和选定 CAD 文件。原项目 `.gitattributes` 保存为 `.gitattributes.source`，保留内容，避免旧仓库的 LFS 过滤规则改变归档存储方式。
+
 未修改的上游工具仓库仅记录来源，不重复导入：
 
 - LeRobot：<https://github.com/huggingface/lerobot>
