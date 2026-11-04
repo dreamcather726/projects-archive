@@ -1,35 +1,59 @@
 # Robotics · Embedded · AI | 精选工程源码集合
 
-> **私人技术资产库，不是可直接售卖的发行包。** 截至 2026-11-05，本合集收录 **14 项高价值工程/实验项目**，采用编号 + 工程代号命名。每个项目目录都包含实际源码文件，不是 Git Submodule、快捷方式或仅外部链接。
+> **按技术含金量从高到低排列，共 14 个工程项目。** 这是私人源码资产库，不是可以直接售卖的发行包。每个目录包含实际源码，项目的原始归档与个人独立仓库保留不变。
 
-## 技术方向
+## 排名说明
 
-**嵌入式实时系统与通信**：01 AegisMotion、04 EdgeLink、08 BlueForge、10 MotionForge
+排序综合考虑 **技术实现深度（约 45%）、系统工程完整性（约 30%）、可复现和教学复用性（约 25%）**。评估依赖已检查的关键源码、测试目录和项目说明；目前未逐项目重新编译或实机验收。排名是主观工程判断，不代表售卖收入、版权归属或商业可发行状态。跨等级差异比同等级内部的细微顺序更重要。
 
-**机器人控制与仿真**：02 NexusMobile、03 KineArm、11 RoboSim、12 ServoLab
+等级：**S 核心代表作、A 高价值工程、B 专题实战项目、C 基础/待完善项目**。
 
-**AI 与计算机视觉**：06 HandPose、07 CogniFlow、09 DepthSight、14 DexterousLab
+> 2026-11-05 本次仅按排名**重编号精选目录**，没有修改各项目源码内容。目录链接会随编号调整，但 Git 仓库历史与源码对象不会丢失。
 
-**物联网与工程教学**：05 AgroSense、13 ROS2 Engineering Labs
+## 项目总览（从高到低）
 
-## 项目总览
+| 排名 | 工程项目 | 技术方向 | 原收录版本 | 等级 |
+|:---:|---|---|---|:---:|
+| 01 | [**AegisMotion RTOS**](./01-AegisMotion-RTOS/) | STM32F407 + FreeRTOS 实时麦克纳姆底盘 | 2026-10-13 历史快照 | S |
+| 02 | [**CogniFlow ROS2**](./02-CogniFlow-ROS2/) | 本地 AI 语音交互与机器人任务编排 | 2026-11-05 个人仓库复制快照 | S |
+| 03 | [**NexusMobile ROS2**](./03-NexusMobile-ROS2/) | ROS2 移动机器人多模块集成工程 | 2026-10-13 历史快照 | A |
+| 04 | [**KineArm Robotics**](./04-KineArm-Robotics/) | 机械臂运动学与控制实验 | 2026-10-13 历史快照 | A |
+| 05 | [**ServoLab SO-ARM**](./05-ServoLab-SOARM/) | 机械臂舵机校准、遥操作与轨迹规划实验 | 2026-10-13 历史快照 | A |
+| 06 | [**ROS2 Engineering Labs**](./06-ROS2-Engineering-Labs/) | ROS2 Humble 课堂实验与工程教学案例 | 2026-10-13 历史快照；较新课程见独立仓库 ros2-jiangyi | A |
+| 07 | [**BlueForge BLE**](./07-BlueForge-BLE/) | Windows BLE GATT 通信与诊断工具 | 2026-11-05 从个人仓库 main 复制（10 文件） | A |
+| 08 | [**DepthSight Vision**](./08-DepthSight-Vision/) | RGB 摄像头单目深度估计与可视化 | 2026-11-05 从个人仓库 main 复制（7 文件） | A |
+| 09 | [**MotionForge Servo**](./09-MotionForge-Servo/) | 多舵机控制与动作脚本编排工具 | 2026-11-05 从个人仓库 main 复制（8 文件，已排除 Python 缓存） | B |
+| 10 | [**AgroSense IoT**](./10-AgroSense-IoT/) | 农业物联网多节点控制系统 | 2026-10-13 历史快照 | B |
+| 11 | [**RoboSim Cockpit**](./11-RoboSim-Cockpit/) | ROS2 移动机器人遥测仿真与上位机面板 | 2026-10-13 历史快照 | B |
+| 12 | [**DexterousLab Hand**](./12-DexterousLab-Hand/) | 视觉手势与灵巧手控制系列实验 | 2026-10-13 历史快照 | B |
+| 13 | [**HandPose CV**](./13-HandPose-CV/) | 手部姿态视觉识别实验 | 2026-10-13 历史快照 | C |
+| 14 | [**EdgeLink ESP32**](./14-EdgeLink-ESP32/) | ESP32-S3 串口协议及基础驱动 | 2026-10-13 历史快照 | C |
 
-| 编号 | 工程代号 | 技术项目 | 收录版本 |
-|:---:|---|---|---|
-| 01 | [**AegisMotion RTOS**](./01-AegisMotion-RTOS/) | STM32F407 + FreeRTOS 实时麦克纳姆底盘 | 2026-10-13 历史快照 |
-| 02 | [**NexusMobile ROS2**](./02-NexusMobile-ROS2/) | ROS2 移动机器人多模块集成工程 | 2026-10-13 历史快照 |
-| 03 | [**KineArm Robotics**](./03-KineArm-Robotics/) | 机械臂运动学与控制实验 | 2026-10-13 历史快照 |
-| 04 | [**EdgeLink ESP32**](./04-EdgeLink-ESP32/) | ESP32-S3 串口协议及基础驱动 | 2026-10-13 历史快照 |
-| 05 | [**AgroSense IoT**](./05-AgroSense-IoT/) | 农业物联网多节点控制系统 | 2026-10-13 历史快照 |
-| 06 | [**HandPose CV**](./06-HandPose-CV/) | 手部姿态视觉识别实验 | 2026-10-13 历史快照 |
-| 07 | [**CogniFlow ROS2**](./07-CogniFlow-ROS2/) | 本地 AI 语音交互与机器人任务编排 | 2026-11-05 个人仓库复制快照 |
-| 08 | [**BlueForge BLE**](./08-BlueForge-BLE/) | Windows BLE GATT 通信与诊断工具 | 2026-11-05 从个人仓库 main 复制（10 文件） |
-| 09 | [**DepthSight Vision**](./09-DepthSight-Vision/) | RGB 摄像头单目深度估计与可视化 | 2026-11-05 从个人仓库 main 复制（7 文件） |
-| 10 | [**MotionForge Servo**](./10-MotionForge-Servo/) | 多舵机控制与动作脚本编排工具 | 2026-11-05 从个人仓库 main 复制（8 文件，已排除 Python 缓存） |
-| 11 | [**RoboSim Cockpit**](./11-RoboSim-Cockpit/) | ROS2 移动机器人遥测仿真与上位机面板 | 2026-10-13 历史快照 |
-| 12 | [**ServoLab SO-ARM**](./12-ServoLab-SOARM/) | 机械臂舵机校准、遥操作与轨迹规划实验 | 2026-10-13 历史快照 |
-| 13 | [**ROS2 Engineering Labs**](./13-ROS2-Engineering-Labs/) | ROS2 Humble 课堂实验与工程教学案例 | 2026-10-13 历史快照；较新课程见独立仓库 ros2-jiangyi |
-| 14 | [**DexterousLab Hand**](./14-DexterousLab-Hand/) | 视觉手势与灵巧手控制系列实验 | 2026-10-13 历史快照 |
+## 排名依据
+
+| 排名 | 项目 | 等级 | 主要理由 |
+|:---:|---|:---:|---|
+| 01 | [**AegisMotion RTOS**](./01-AegisMotion-RTOS/) | S | 实时任务、运动学、通信状态机与安全机制 |
+| 02 | [**CogniFlow ROS2**](./02-CogniFlow-ROS2/) | S | ASR + LLM + ROS2 任务编排与模拟执行 |
+| 03 | [**NexusMobile ROS2**](./03-NexusMobile-ROS2/) | A | 机器人软硬件多模块集成（尚需整体验收） |
+| 04 | [**KineArm Robotics**](./04-KineArm-Robotics/) | A | 机械臂运动学、仿真与控制实验 |
+| 05 | [**ServoLab SOARM**](./05-ServoLab-SOARM/) | A | 校准、遥操作与轨迹规划；需核对第三方来源 |
+| 06 | [**ROS2 Engineering Labs**](./06-ROS2-Engineering-Labs/) | A | ROS2 核心通信、仿真与系列实验教学 |
+| 07 | [**BlueForge BLE**](./07-BlueForge-BLE/) | A | BLE GATT 通信、异步 GUI 与测试 |
+| 08 | [**DepthSight Vision**](./08-DepthSight-Vision/) | A | 单目深度估计、CUDA/CPU 实测与测试 |
+| 09 | [**MotionForge Servo**](./09-MotionForge-Servo/) | B | 舵机 GUI、动作脚本与 ESP32 示例 |
+| 10 | [**AgroSense IoT**](./10-AgroSense-IoT/) | B | Arduino + 树莓派 + 云端多节点控制 |
+| 11 | [**RoboSim Cockpit**](./11-RoboSim-Cockpit/) | B | ROS2 遥测数据模拟与 Cockpit 框架 |
+| 12 | [**DexterousLab Hand**](./12-DexterousLab-Hand/) | B | 手势识别与灵巧手阶段实验 |
+| 13 | [**HandPose CV**](./13-HandPose-CV/) | C | 视觉推理实验，尚需性能与依赖验证 |
+| 14 | [**EdgeLink ESP32**](./14-EdgeLink-ESP32/) | C | ESP-IDF 基础驱动与串口协议，尚非完整系统 |
+
+## 技术方向导航
+
+- **实时控制、嵌入式与通信**：01 AegisMotion、07 BlueForge、09 MotionForge、14 EdgeLink
+- **机器人平台、仿真与机械臂**：03 NexusMobile、04 KineArm、05 ServoLab、11 RoboSim
+- **AI 与机器视觉**：02 CogniFlow、08 DepthSight、12 DexterousLab、13 HandPose
+- **工程课程与物联网**：06 ROS2 Engineering Labs、10 AgroSense
 
 ## 各项目的源码与技术说明
 
@@ -42,84 +66,85 @@
 - **个人仓库/更新参照**：https://github.com/dreamcather726/bugrtoscar
 - **商业化前提**：待权属及实车验收
 
-### 02 · NexusMobile ROS2
-
-- **工程名称**：ROS2 移动机器人多模块集成工程
-- **实际源码**：[`projects/02-NexusMobile-ROS2/`](./02-NexusMobile-ROS2/)
-- **关键技术**：ROS2、ESP32、串口、视觉控制实验
-- **来源**：`robotics/ROS-CAR`（2026-10-13 历史快照）
-- **个人仓库/更新参照**：https://github.com/dreamcather726/ROS-CAR
-- **商业化前提**：待源代码整理与硬件联调
-
-### 03 · KineArm Robotics
-
-- **工程名称**：机械臂运动学与控制实验
-- **实际源码**：[`projects/03-KineArm-Robotics/`](./03-KineArm-Robotics/)
-- **关键技术**：机械臂、Python 控制、PyBullet、运动学
-- **来源**：`robotics/JXB2.0`（2026-10-13 历史快照）
-- **个人仓库/更新参照**：https://github.com/dreamcather726/JXB2.0
-- **商业化前提**：需审查原有许可证及第三方源码
-
-### 04 · EdgeLink ESP32
-
-- **工程名称**：ESP32-S3 串口协议及基础驱动
-- **实际源码**：[`projects/04-EdgeLink-ESP32/`](./04-EdgeLink-ESP32/)
-- **关键技术**：ESP-IDF、CMake、CRC16、UART、PWM
-- **来源**：`embedded/esp32ROS2RTOS`（2026-10-13 历史快照）
-- **商业化前提**：功能仍属基础实验，非完整 ROS2 固件
-
-### 05 · AgroSense IoT
-
-- **工程名称**：农业物联网多节点控制系统
-- **实际源码**：[`projects/05-AgroSense-IoT/`](./05-AgroSense-IoT/)
-- **关键技术**：Arduino、树莓派、MQTT、云平台、远程控制
-- **来源**：`applications/iot-seedling-graduation`（2026-10-13 历史快照）
-- **个人仓库/更新参照**：https://github.com/dreamcather726/IoT-Based-Seedling-Control-System
-- **商业化前提**：必须复核密钥、云服务和毕业设计归属
-
-### 06 · HandPose CV
-
-- **工程名称**：手部姿态视觉识别实验
-- **实际源码**：[`projects/06-HandPose-CV/`](./06-HandPose-CV/)
-- **关键技术**：Python、计算机视觉、手部姿态推理
-- **来源**：`vision/handpose-x`（2026-10-13 历史快照）
-- **商业化前提**：待模型授权和性能验证
-
-### 07 · CogniFlow ROS2
+### 02 · CogniFlow ROS2
 
 - **工程名称**：本地 AI 语音交互与机器人任务编排
-- **实际源码**：[`projects/07-CogniFlow-ROS2/`](./07-CogniFlow-ROS2/)
+- **实际源码**：[`projects/02-CogniFlow-ROS2/`](./02-CogniFlow-ROS2/)
 - **关键技术**：FunASR、Ollama、ROS2 Action、PySide6、任务模拟器
 - **来源**：`个人独立仓库 ai-interaction-ui`（2026-11-05 个人仓库复制快照）
 - **个人仓库/更新参照**：https://github.com/dreamcather726/ai-interaction-ui
 - **商业化前提**：模拟链路已有源码；真实机器人需另行联调
 
-### 08 · BlueForge BLE
+### 03 · NexusMobile ROS2
+
+- **工程名称**：ROS2 移动机器人多模块集成工程
+- **实际源码**：[`projects/03-NexusMobile-ROS2/`](./03-NexusMobile-ROS2/)
+- **关键技术**：ROS2、ESP32、串口、视觉控制实验
+- **来源**：`robotics/ROS-CAR`（2026-10-13 历史快照）
+- **个人仓库/更新参照**：https://github.com/dreamcather726/ROS-CAR
+- **商业化前提**：待源代码整理与硬件联调
+
+### 04 · KineArm Robotics
+
+- **工程名称**：机械臂运动学与控制实验
+- **实际源码**：[`projects/04-KineArm-Robotics/`](./04-KineArm-Robotics/)
+- **关键技术**：机械臂、Python 控制、PyBullet、运动学
+- **来源**：`robotics/JXB2.0`（2026-10-13 历史快照）
+- **个人仓库/更新参照**：https://github.com/dreamcather726/JXB2.0
+- **商业化前提**：需审查原有许可证及第三方源码
+
+### 05 · ServoLab SO-ARM
+
+- **工程名称**：机械臂舵机校准、遥操作与轨迹规划实验
+- **实际源码**：[`projects/05-ServoLab-SOARM/`](./05-ServoLab-SOARM/)
+- **关键技术**：舵机 ID、标定、控制接口、遥操作、轨迹规划实验
+- **来源**：`robotics/so-arm100-control-experiments`（2026-10-13 历史快照）
+- **商业化前提**：可能含第三方内容；仅作私有研究归档，商用前审查许可证
+
+### 06 · ROS2 Engineering Labs
+
+- **工程名称**：ROS2 Humble 课堂实验与工程教学案例
+- **实际源码**：[`projects/06-ROS2-Engineering-Labs/`](./06-ROS2-Engineering-Labs/)
+- **关键技术**：ROS2 Topic/Service/Action、TF、QoS、URDF、Gazebo
+- **来源**：`courses/ros2-lessons`（2026-10-13 历史快照；较新课程见独立仓库 ros2-jiangyi）
+- **个人仓库/更新参照**：https://github.com/dreamcather726/ros2-jiangyi
+- **商业化前提**：商业发布前核对讲义版权、课件和引用材料
+
+### 07 · BlueForge BLE
 
 - **工程名称**：Windows BLE GATT 通信与诊断工具
-- **实际源码**：[`projects/08-BlueForge-BLE/`](./08-BlueForge-BLE/)
+- **实际源码**：[`projects/07-BlueForge-BLE/`](./07-BlueForge-BLE/)
 - **关键技术**：Bleak、Tkinter、异步通信、GATT 读写、通知订阅、单元测试
 - **来源**：`个人独立仓库 bluetooth`（2026-11-05 从个人仓库 main 复制（10 文件））
 - **个人仓库/更新参照**：https://github.com/dreamcather726/bluetooth
 - **商业化前提**：适合工具型产品；需跨设备兼容性测试
 
-### 09 · DepthSight Vision
+### 08 · DepthSight Vision
 
 - **工程名称**：RGB 摄像头单目深度估计与可视化
-- **实际源码**：[`projects/09-DepthSight-Vision/`](./09-DepthSight-Vision/)
+- **实际源码**：[`projects/08-DepthSight-Vision/`](./08-DepthSight-Vision/)
 - **关键技术**：YOLO26 Depth、PyTorch、OpenCV、CUDA/CPU、实测记录、单元测试
 - **来源**：`个人独立仓库 vision-interaction`（2026-11-05 从个人仓库 main 复制（7 文件））
 - **个人仓库/更新参照**：https://github.com/dreamcather726/vision-interaction
 - **商业化前提**：模型精度未校准；商业化先确认 Ultralytics 许可
 
-### 10 · MotionForge Servo
+### 09 · MotionForge Servo
 
 - **工程名称**：多舵机控制与动作脚本编排工具
-- **实际源码**：[`projects/10-MotionForge-Servo/`](./10-MotionForge-Servo/)
+- **实际源码**：[`projects/09-MotionForge-Servo/`](./09-MotionForge-Servo/)
 - **关键技术**：Python 串口 GUI、ESP32 舵机示例、动作脚本、单元测试
 - **来源**：`个人独立仓库 dog`（2026-11-05 从个人仓库 main 复制（8 文件，已排除 Python 缓存））
 - **个人仓库/更新参照**：https://github.com/dreamcather726/dog
 - **商业化前提**：可做工具与教学专题；先验证目标硬件
+
+### 10 · AgroSense IoT
+
+- **工程名称**：农业物联网多节点控制系统
+- **实际源码**：[`projects/10-AgroSense-IoT/`](./10-AgroSense-IoT/)
+- **关键技术**：Arduino、树莓派、MQTT、云平台、远程控制
+- **来源**：`applications/iot-seedling-graduation`（2026-10-13 历史快照）
+- **个人仓库/更新参照**：https://github.com/dreamcather726/IoT-Based-Seedling-Control-System
+- **商业化前提**：必须复核密钥、云服务和毕业设计归属
 
 ### 11 · RoboSim Cockpit
 
@@ -129,30 +154,29 @@
 - **来源**：`robotics/VMGUI`（2026-10-13 历史快照）
 - **商业化前提**：适合作为无实车验证课程；需构建和运行验收
 
-### 12 · ServoLab SO-ARM
-
-- **工程名称**：机械臂舵机校准、遥操作与轨迹规划实验
-- **实际源码**：[`projects/12-ServoLab-SOARM/`](./12-ServoLab-SOARM/)
-- **关键技术**：舵机 ID、标定、控制接口、遥操作、轨迹规划实验
-- **来源**：`robotics/so-arm100-control-experiments`（2026-10-13 历史快照）
-- **商业化前提**：可能含第三方内容；仅作私有研究归档，商用前审查许可证
-
-### 13 · ROS2 Engineering Labs
-
-- **工程名称**：ROS2 Humble 课堂实验与工程教学案例
-- **实际源码**：[`projects/13-ROS2-Engineering-Labs/`](./13-ROS2-Engineering-Labs/)
-- **关键技术**：ROS2 Topic/Service/Action、TF、QoS、URDF、Gazebo
-- **来源**：`courses/ros2-lessons`（2026-10-13 历史快照；较新课程见独立仓库 ros2-jiangyi）
-- **个人仓库/更新参照**：https://github.com/dreamcather726/ros2-jiangyi
-- **商业化前提**：商业发布前核对讲义版权、课件和引用材料
-
-### 14 · DexterousLab Hand
+### 12 · DexterousLab Hand
 
 - **工程名称**：视觉手势与灵巧手控制系列实验
-- **实际源码**：[`projects/14-DexterousLab-Hand/`](./14-DexterousLab-Hand/)
+- **实际源码**：[`projects/12-DexterousLab-Hand/`](./12-DexterousLab-Hand/)
 - **关键技术**：手部识别、Arduino/Python、课程阶段实验
 - **来源**：`courses/dexterous-hand-online`（2026-10-13 历史快照）
 - **商业化前提**：课程可能涉及团队成果；确认授权后才能出售
+
+### 13 · HandPose CV
+
+- **工程名称**：手部姿态视觉识别实验
+- **实际源码**：[`projects/13-HandPose-CV/`](./13-HandPose-CV/)
+- **关键技术**：Python、计算机视觉、手部姿态推理
+- **来源**：`vision/handpose-x`（2026-10-13 历史快照）
+- **商业化前提**：待模型授权和性能验证
+
+### 14 · EdgeLink ESP32
+
+- **工程名称**：ESP32-S3 串口协议及基础驱动
+- **实际源码**：[`projects/14-EdgeLink-ESP32/`](./14-EdgeLink-ESP32/)
+- **关键技术**：ESP-IDF、CMake、CRC16、UART、PWM
+- **来源**：`embedded/esp32ROS2RTOS`（2026-10-13 历史快照）
+- **商业化前提**：功能仍属基础实验，非完整 ROS2 固件
 
 ## 使用、版本与安全边界
 

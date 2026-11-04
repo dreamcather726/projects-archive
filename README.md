@@ -1,25 +1,25 @@
 # Projects Archive
 
-## Robotics · Embedded · AI | 精选工程项目集合
+## Robotics · Embedded · AI | 按含金量排序的精选工程集合
 
-[**查看全部 14 项精选工程源码 →**](projects/README.md)（含真实源码、关键技术、版本来源及商业授权前置审查）
+[**查看全部 14 项工程源码（按技术深度排序） →**](projects/README.md)。排名综合技术实现、系统完整度和可复现教学价值；不代表已取得商业使用权或全部项目已完成实机验证。
 
 - **[AegisMotion RTOS](projects/01-AegisMotion-RTOS/)** — STM32F407 + FreeRTOS 实时麦克纳姆底盘
-- **[NexusMobile ROS2](projects/02-NexusMobile-ROS2/)** — ROS2 移动机器人多模块集成工程
-- **[KineArm Robotics](projects/03-KineArm-Robotics/)** — 机械臂运动学与控制实验
-- **[EdgeLink ESP32](projects/04-EdgeLink-ESP32/)** — ESP32-S3 串口协议及基础驱动
-- **[AgroSense IoT](projects/05-AgroSense-IoT/)** — 农业物联网多节点控制系统
-- **[HandPose CV](projects/06-HandPose-CV/)** — 手部姿态视觉识别实验
-- **[CogniFlow ROS2](projects/07-CogniFlow-ROS2/)** — 本地 AI 语音交互与机器人任务编排
-- **[BlueForge BLE](projects/08-BlueForge-BLE/)** — Windows BLE GATT 通信与诊断工具
-- **[DepthSight Vision](projects/09-DepthSight-Vision/)** — RGB 摄像头单目深度估计与可视化
-- **[MotionForge Servo](projects/10-MotionForge-Servo/)** — 多舵机控制与动作脚本编排工具
+- **[CogniFlow ROS2](projects/02-CogniFlow-ROS2/)** — 本地 AI 语音交互与机器人任务编排
+- **[NexusMobile ROS2](projects/03-NexusMobile-ROS2/)** — ROS2 移动机器人多模块集成工程
+- **[KineArm Robotics](projects/04-KineArm-Robotics/)** — 机械臂运动学与控制实验
+- **[ServoLab SO-ARM](projects/05-ServoLab-SOARM/)** — 机械臂舵机校准、遥操作与轨迹规划实验
+- **[ROS2 Engineering Labs](projects/06-ROS2-Engineering-Labs/)** — ROS2 Humble 课堂实验与工程教学案例
+- **[BlueForge BLE](projects/07-BlueForge-BLE/)** — Windows BLE GATT 通信与诊断工具
+- **[DepthSight Vision](projects/08-DepthSight-Vision/)** — RGB 摄像头单目深度估计与可视化
+- **[MotionForge Servo](projects/09-MotionForge-Servo/)** — 多舵机控制与动作脚本编排工具
+- **[AgroSense IoT](projects/10-AgroSense-IoT/)** — 农业物联网多节点控制系统
 - **[RoboSim Cockpit](projects/11-RoboSim-Cockpit/)** — ROS2 移动机器人遥测仿真与上位机面板
-- **[ServoLab SO-ARM](projects/12-ServoLab-SOARM/)** — 机械臂舵机校准、遥操作与轨迹规划实验
-- **[ROS2 Engineering Labs](projects/13-ROS2-Engineering-Labs/)** — ROS2 Humble 课堂实验与工程教学案例
-- **[DexterousLab Hand](projects/14-DexterousLab-Hand/)** — 视觉手势与灵巧手控制系列实验
+- **[DexterousLab Hand](projects/12-DexterousLab-Hand/)** — 视觉手势与灵巧手控制系列实验
+- **[HandPose CV](projects/13-HandPose-CV/)** — 手部姿态视觉识别实验
+- **[EdgeLink ESP32](projects/14-EdgeLink-ESP32/)** — ESP32-S3 串口协议及基础驱动
 
-> 本仓库为私人资产库，**不是售卖发行包**。已有归档源码保留不变；08–10 复制个人独立仓库的源码快照，11–14 复用仓库内现有历史快照。组织仓库没有参与。商业发布前须完成 [商品化审核清单](projects/COMMERCIALIZATION_CHECKLIST.md)。
+> 本仓库为私有技术资产库。本次只调整精选项目的目录编号及说明文档，**源码内容、原始归档、个人独立仓库及组织仓库均保持不变**。商业发布前请查看 [商品化审核清单](projects/COMMERCIALIZATION_CHECKLIST.md)。
 
 个人项目源码归档，来自 C 盘和 D 盘的开发目录。整理于 **2026-10-13**。
 
