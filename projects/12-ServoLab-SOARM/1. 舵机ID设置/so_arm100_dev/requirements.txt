@@ -1,0 +1,10 @@
+# SO-ARM100机械臂开发依赖
+
+# 飞特舵机SDK（LeRobot使用的官方包）
+feetech-servo-sdk>=1.0.0
+
+# 串口通信
+pyserial>=3.5
+
+# 数据处理
+numpy>=1.21.0

@@ -1,0 +1,5 @@
+parameter_demo:
+  ros__parameters:
+    controller.max_speed: 0.6
+    enabled: true
+    robot_id: demo_01

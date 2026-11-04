@@ -1,0 +1,4 @@
+parameter_demo:
+  ros__parameters:
+    controller.max_speed: 0.8
+    enabled: true

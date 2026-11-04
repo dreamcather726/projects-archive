@@ -1,0 +1,6 @@
+int32 target_steps
+---
+int32 completed_steps
+string message
+---
+int32 current_step

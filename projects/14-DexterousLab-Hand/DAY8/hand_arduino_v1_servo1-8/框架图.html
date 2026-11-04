@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机械手程序框架图</title>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:"Microsoft YaHei",sans-serif;
+    }
+    body{
+        background:#f5f7fa;
+        padding:40px 20px;
+    }
+    .container{
+        max-width:1400px;
+        margin:0 auto;
+    }
+    .title{
+        text-align:center;
+        font-size:24px;
+        margin-bottom:40px;
+        color:#2c3e50;
+    }
+    .flow{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-wrap:wrap;
+        gap:12px;
+        margin-bottom:50px;
+    }
+    .box{
+        width:180px;
+        height:120px;
+        background:#fff;
+        border-radius:10px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+        padding:10px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        position:relative;
+    }
+    .box h4{
+        font-size:14px;
+        margin-bottom:4px;
+        color:#2c3e50;
+    }
+    .box p{
+        font-size:12px;
+        color:#7f8c8d;
+        line-height:1.4;
+    }
+    .arrow{
+        font-size:24px;
+        color:#666;
+        margin:0 4px;
+    }
+    .m1{border-top:4px solid #1890ff;}
+    .m2{border-top:4px solid #52c41a;}
+    .m3{border-top:4px solid #faad14;}
+    .m4{border-top:4px solid #f5222d;}
+    .m5{border-top:4px solid #722ed1;}
+    .m6{border-top:4px solid #eb2f96;}
+
+    .relation-title{
+        text-align:center;
+        font-size:16px;
+        color:#34495e;
+        margin-bottom:20px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="title">ESP32 机械手控制程序模块框架图</h2>
+
+    <div class="flow">
+        <div class="box m1">
+            <h4>模块1<br>开头声明</h4>
+            <p>库、常量、对象、数组</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="box m2">
+            <h4>模块2<br>工具函数</h4>
+            <p>角度转脉宽计算</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="box m3">
+            <h4>模块3<br>舵机控制</h4>
+            <p>单舵机 / 平滑移动</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="box m4">
+            <h4>模块4<br>手指逻辑</h4>
+            <p>单指 / 四指联动</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="box m5">
+            <h4>模块5<br>串口解析</h4>
+            <p>指令识别与分发</p>
+        </div>
+        <div class="arrow">→</div>
+
+        <div class="box m6">
+            <h4>模块6<br>主程序</h4>
+            <p>初始化 + 循环监听</p>
+        </div>
+    </div>
+
+    <p class="relation-title">执行逻辑：主程序监听 → 解析指令 → 手指动作 → 舵机驱动 → 工具计算 → 基础支撑</p>
+</div>
+
+</body>
+</html>

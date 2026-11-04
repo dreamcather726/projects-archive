@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>舵机闭环控制动画示意图</title>
+  <style>
+    :root { --bg:#0b1020; --panel:#121a33; --line:#3c4a7a; --text:#e8ecff; --muted:#aab3dd; --ok:#42d392; --warn:#ffcc66; --bad:#ff6b6b; --hi:#7aa2ff; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC", "Microsoft YaHei", Arial; }
+    .wrap { max-width:1100px; margin:0 auto; padding:18px 16px 24px; }
+    h1 { font-size:18px; margin:0 0 10px; font-weight:650; }
+    .sub { color:var(--muted); font-size:13px; margin:0 0 14px; line-height:1.5; }
+    .card { background:linear-gradient(180deg, rgba(18,26,51,.95), rgba(18,26,51,.75)); border:1px solid rgba(60,74,122,.6); border-radius:14px; padding:14px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    .pill { padding:8px 10px; border-radius:999px; border:1px solid rgba(60,74,122,.7); background:rgba(10,14,30,.55); font-size:12px; color:var(--muted); }
+    .pill b { color:var(--text); font-weight:650; }
+    .legend { display:flex; gap:10px; flex-wrap:wrap; }
+    .dot { width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:6px; transform:translateY(1px); }
+    .k { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+    svg { width:100%; height:auto; display:block; }
+    .label { font-size:13px; fill:var(--text); }
+    .small { font-size:12px; fill:var(--muted); }
+    .box { fill:rgba(10,14,30,.55); stroke:rgba(60,74,122,.85); stroke-width:1.2; rx:12; }
+    .boxHi { stroke:rgba(122,162,255,.95); filter:url(#glow); }
+    .arrow { stroke:rgba(170,179,221,.85); stroke-width:2; fill:none; marker-end:url(#arrowHead); }
+    .arrowHi { stroke:rgba(122,162,255,.95); filter:url(#glow); }
+    .wire { stroke:rgba(170,179,221,.7); stroke-width:2.2; fill:none; stroke-dasharray:6 6; }
+    .wireHi { stroke:rgba(122,162,255,.95); stroke-dasharray:3 6; filter:url(#glow); }
+    .currentF { stroke:rgba(66,211,146,.95); }
+    .currentR { stroke:rgba(255,107,107,.95); }
+    .lock { stroke:rgba(255,204,102,.95); }
+    .status { font-size:14px; fill:var(--text); }
+    .status2 { font-size:12px; fill:var(--muted); }
+    .pulse { opacity:.2; }
+    .pulse.on { opacity:1; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>舵机闭环控制（PWM → 解码 → 比较 → 电流切换 → 反馈 → 持续修正）动画示意图</h1>
+    <p class="sub">动画按“每个PWM周期一次闭环”的逻辑循环演示，并切换三种误差情况：当前&lt;目标（正向电流）、当前&gt;目标（反向电流）、相等锁位（极小电流/断电保持）。</p>
+
+    <div class="card">
+      <svg viewBox="0 0 1100 560" role="img" aria-label="舵机闭环控制动画示意图">
+        <defs>
+          <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="rgba(170,179,221,.9)"></path>
+          </marker>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2.2" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- 标题状态栏 -->
+        <text id="statusTitle" x="20" y="34" class="status">状态：初始化</text>
+        <text id="statusSub" x="20" y="56" class="status2">目标角度=--°，当前角度=--°，误差 e=目标-当前</text>
+
+        <!-- 左：控制器 -->
+        <rect id="bController" x="20" y="90" width="240" height="120" class="box"></rect>
+        <text x="40" y="125" class="label">控制器（Arduino等）</text>
+        <text x="40" y="150" class="small">步骤1：发送 PWM 脉冲</text>
+        <text x="40" y="175" class="small">脉宽 → 目标角度指令</text>
+
+        <!-- PWM 脉冲小图 -->
+        <g id="pwmPulse" class="pulse">
+          <rect x="40" y="190" width="200" height="8" fill="rgba(122,162,255,.25)"></rect>
+          <rect id="pulseHigh" x="40" y="182" width="80" height="16" fill="rgba(122,162,255,.75)"></rect>
+          <text x="40" y="214" class="small">PWM（固定周期，不同脉宽）</text>
+        </g>
+
+        <!-- 中：舵机控制电路 -->
+        <rect id="bBrain" x="320" y="90" width="320" height="210" class="box"></rect>
+        <text x="340" y="125" class="label">舵机控制电路（“大脑”）</text>
+        <text x="340" y="150" class="small">步骤2：PWM解码 → 目标角度</text>
+        <text x="340" y="175" class="small">读取电位器 → 当前角度</text>
+        <text x="340" y="200" class="small">步骤3：比较误差 e</text>
+        <text x="340" y="225" class="small">决定 H桥电流方向（核心）</text>
+
+        <!-- 目标/当前显示 -->
+        <rect x="340" y="245" width="280" height="40" rx="10" fill="rgba(255,255,255,.04)" stroke="rgba(60,74,122,.6)"></rect>
+        <text id="readout" x="355" y="270" class="label">目标=90°  当前=30°  e=+60°</text>
+
+        <!-- 右：执行机构 -->
+        <rect id="bAct" x="700" y="90" width="380" height="360" class="box"></rect>
+        <text x="720" y="125" class="label">执行机构</text>
+        <text x="720" y="150" class="small">H桥驱动 → 直流电机 → 齿轮箱 → 输出轴</text>
+        <text x="720" y="175" class="small">电位器反馈：输出轴角度</text>
+
+        <!-- H桥 -->
+        <rect id="bHBridge" x="720" y="200" width="160" height="70" class="box"></rect>
+        <text x="740" y="228" class="label">H桥/驱动</text>
+        <text id="hBridgeMode" x="740" y="252" class="small">电流：--</text>
+
+        <!-- 电机 -->
+        <rect id="bMotor" x="900" y="200" width="160" height="70" class="box"></rect>
+        <text x="920" y="228" class="label">直流电机</text>
+        <text id="motorDir" x="920" y="252" class="small">转向：--</text>
+
+        <!-- 输出轴圆盘 + 指针 -->
+        <g transform="translate(890, 350)">
+          <circle cx="0" cy="0" r="86" fill="rgba(255,255,255,.03)" stroke="rgba(60,74,122,.8)" stroke-width="1.2"></circle>
+          <circle cx="0" cy="0" r="4" fill="rgba(232,236,255,.85)"></circle>
+          <text x="-64" y="112" class="small">输出轴角度</text>
+
+          <!-- 目标角度刻度指示（固定） -->
+          <g id="targetNeedle" transform="rotate(0)">
+            <line x1="0" y1="0" x2="0" y2="-78" stroke="rgba(122,162,255,.85)" stroke-width="3"></line>
+            <circle cx="0" cy="-78" r="4" fill="rgba(122,162,255,.9)"></circle>
+          </g>
+          <text id="targetText" x="-22" y="-98" class="small">目标</text>
+
+          <!-- 当前角度指针（动画） -->
+          <g id="currentNeedle" transform="rotate(0)">
+            <line x1="0" y1="0" x2="0" y2="-70" stroke="rgba(66,211,146,.9)" stroke-width="4"></line>
+            <circle cx="0" cy="-70" r="4" fill="rgba(66,211,146,.95)"></circle>
+          </g>
+          <text id="currentText" x="-22" y="-82" class="small">当前</text>
+        </g>
+
+        <!-- 连线：PWM到舵机大脑 -->
+        <path id="wPwm" d="M260 150 C 285 150, 290 150, 320 150" class="wire"></path>
+        <text x="270" y="138" class="small">信号线</text>
+
+        <!-- 连线：大脑到H桥 -->
+        <path id="wCmd" d="M640 235 C 665 235, 675 235, 720 235" class="arrow"></path>
+        <text x="650" y="223" class="small">驱动指令</text>
+
+        <!-- 电流方向箭头：H桥到电机 -->
+        <path id="wCurrent" d="M880 235 C 888 235, 892 235, 900 235" class="arrow"></path>
+
+        <!-- 机械传递：电机到输出轴 -->
+        <path id="wMech" d="M980 270 C 980 300, 940 300, 910 310 C 880 320, 860 330, 850 340" class="arrow"></path>
+        <text x="940" y="305" class="small">齿轮箱传动</text>
+
+        <!-- 反馈：电位器到舵机大脑 -->
+        <path id="wFb" d="M820 430 C 760 500, 520 500, 480 300" class="arrow"></path>
+        <text x="560" y="492" class="small">电位器反馈（当前角度）</text>
+
+        <!-- 步骤高亮提示条 -->
+        <rect id="stepBar" x="20" y="500" width="1060" height="40" rx="12" fill="rgba(10,14,30,.55)" stroke="rgba(60,74,122,.6)"></rect>
+        <text id="stepText" x="40" y="526" class="label">步骤1：PWM 发送目标角度指令</text>
+      </svg>
+
+      <div class="row">
+        <div class="pill"><b>循环节拍</b>：视觉上每 1.2s 一个“闭环周期”</div>
+        <div class="pill"><b>闭环频率</b>：真实舵机通常约 20ms/次（此处为便于观看放慢）</div>
+      </div>
+      <div class="row legend">
+        <div class="k"><span class="dot" style="background: var(--hi)"></span>信息/指令高亮</div>
+        <div class="k"><span class="dot" style="background: var(--ok)"></span>正向电流/正转</div>
+        <div class="k"><span class="dot" style="background: var(--bad)"></span>反向电流/反转</div>
+        <div class="k"><span class="dot" style="background: var(--warn)"></span>锁位（小电流/断电保持）</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const el = (id) => document.getElementById(id);
+
+    const bController = el("bController");
+    const bBrain = el("bBrain");
+    const bAct = el("bAct");
+    const bHBridge = el("bHBridge");
+    const bMotor = el("bMotor");
+
+    const wPwm = el("wPwm");
+    const wCmd = el("wCmd");
+    const wCurrent = el("wCurrent");
+    const wFb = el("wFb");
+
+    const pwmPulse = el("pwmPulse");
+    const pulseHigh = el("pulseHigh");
+
+    const statusTitle = el("statusTitle");
+    const statusSub = el("statusSub");
+    const stepText = el("stepText");
+
+    const readout = el("readout");
+    const hBridgeMode = el("hBridgeMode");
+    const motorDir = el("motorDir");
+
+    const targetNeedle = el("targetNeedle");
+    const currentNeedle = el("currentNeedle");
+    const targetText = el("targetText");
+    const currentText = el("currentText");
+    const targetTextDefaultX = targetText.getAttribute("x");
+
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const deg2needle = (deg) => (deg - 90); // 0°指向左？这里让 90°指向上，做个简单映射
+
+    function clearHi() {
+      [bController, bBrain, bAct, bHBridge, bMotor].forEach(x => x.classList.remove("boxHi"));
+      [wPwm, wCmd, wCurrent, wFb].forEach(x => x.classList.remove("arrowHi","wireHi"));
+      pwmPulse.classList.remove("on");
+      wCurrent.classList.remove("currentF","currentR","lock");
+    }
+
+    function setNeedles(targetDeg, currentDeg) {
+      const t = deg2needle(targetDeg);
+      const c = deg2needle(currentDeg);
+      targetNeedle.setAttribute("transform", `rotate(${t})`);
+      currentNeedle.setAttribute("transform", `rotate(${c})`);
+    }
+
+    function setReadout(targetDeg, currentDeg) {
+      const e = targetDeg - currentDeg;
+      const sign = e > 0 ? "+" : (e < 0 ? "" : "");
+      readout.textContent = `目标=${targetDeg}°  当前=${currentDeg}°  e=${sign}${e}°`;
+      statusSub.textContent = `目标角度=${targetDeg}°，当前角度=${currentDeg}°，误差 e=目标-当前=${sign}${e}°`;
+    }
+
+    function setMode(mode) {
+      if (mode === "F") {
+        hBridgeMode.textContent = "电流：正向";
+        motorDir.textContent = "转向：正转";
+        wCurrent.classList.add("currentF");
+      } else if (mode === "R") {
+        hBridgeMode.textContent = "电流：反向";
+        motorDir.textContent = "转向：反转";
+        wCurrent.classList.add("currentR");
+      } else {
+        hBridgeMode.textContent = "电流：断开/极小保持";
+        motorDir.textContent = "转向：停止（锁位）";
+        wCurrent.classList.add("lock");
+      }
+    }
+
+    function setPWMWidthByTarget(targetDeg) {
+      // 把 0..180° 映射到 40..160 的宽度，只做视觉示意
+      const w = 40 + (targetDeg / 180) * 120;
+      pulseHigh.setAttribute("width", String(w));
+    }
+
+    // 三种演示场景：当前<目标、当前>目标、相等
+    const scenarios = [
+      { target: 140, current: 40 },  // e>0
+      { target: 40,  current: 150 }, // e<0
+      { target: 90,  current: 90 },  // e=0
+    ];
+
+    // 每个“闭环周期”的分步动画（视觉上放慢）
+    const phaseMs = 4000;
+    const steps = [
+      { t: 0.00, action: (s) => {
+          clearHi();
+          statusTitle.textContent = "步骤1：PWM 发送目标角度指令";
+          stepText.textContent = "步骤1：PWM 发送目标角度指令";
+          bController.classList.add("boxHi");
+          wPwm.classList.add("wireHi");
+          pwmPulse.classList.add("on");
+          setPWMWidthByTarget(s.target);
+          setReadout(s.target, s.current);
+          setNeedles(s.target, s.current);
+        }
+      },
+      { t: 0.28, action: (s) => {
+          clearHi();
+          statusTitle.textContent = "步骤2：舵机控制电路解读指令 + 读取当前角度";
+          stepText.textContent = "步骤2：解码PWM→目标角度；读取电位器→当前角度";
+          bBrain.classList.add("boxHi");
+          wPwm.classList.add("wireHi");
+          wFb.classList.add("arrowHi");
+          setReadout(s.target, s.current);
+          setNeedles(s.target, s.current);
+        }
+      },
+      { t: 0.55, action: (s) => {
+          clearHi();
+          statusTitle.textContent = "步骤3：比较误差，切换电机电流方向（核心）";
+          stepText.textContent = "步骤3：对比目标/当前 → 决定电流方向（正/反/锁位）";
+          bBrain.classList.add("boxHi");
+          bHBridge.classList.add("boxHi");
+          wCmd.classList.add("arrowHi");
+
+          const e = s.target - s.current;
+          if (e > 0) setMode("F");
+          else if (e < 0) setMode("R");
+          else setMode("L");
+          wCurrent.classList.add("arrowHi");
+        }
+      },
+      { t: 0.72, action: (s) => {
+          clearHi();
+          statusTitle.textContent = "步骤4：电机驱动输出轴运动 + 反馈闭环修正";
+          stepText.textContent = "步骤4：输出轴向目标角度靠拢；每个PWM周期重复一次闭环修正";
+          bAct.classList.add("boxHi");
+          bMotor.classList.add("boxHi");
+          wCurrent.classList.add("arrowHi");
+          wFb.classList.add("arrowHi");
+
+          const e0 = s.target - s.current;
+          let mode = "L";
+          if (e0 > 0) mode = "F";
+          else if (e0 < 0) mode = "R";
+          setMode(mode);
+
+          // 在本阶段把 current 向 target 推进一段（示意闭环拉回）
+          const delta = clamp(e0, -1, 1) * 30; // 每周期“修正”30°（仅示意）
+          const newCurrent = clamp(s.current + delta, 0, 180);
+          setReadout(s.target, Math.round(newCurrent));
+          setNeedles(s.target, newCurrent);
+        }
+      },
+    ];
+
+    let scenarioIndex = 0;
+    let timer = null;
+
+    function runOneCycle() {
+      const s = scenarios[scenarioIndex];
+      let i = 0;
+
+      function nextStep() {
+        if (i >= steps.length) {
+          scenarioIndex = (scenarioIndex + 1) % scenarios.length;
+          runOneCycle();
+          return;
+        }
+        const step = steps[i];
+        step.action(s);
+        i++;
+        const nowT = steps[i - 1].t;
+        const nextT = (i < steps.length ? steps[i].t : 1.0);
+        const wait = Math.max(60, Math.floor((nextT - nowT) * phaseMs));
+        timer = setTimeout(nextStep, wait);
+      }
+
+      nextStep();
+    }
+
+    runOneCycle();
+    window.addEventListener("visibilitychange", () => {
+      // 页面切走时暂停定时，避免后台狂跑
+      if (document.hidden && timer) clearTimeout(timer);
+      if (!document.hidden) runOneCycle();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数组形象化解释</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei", sans-serif;
+    }
+    body {
+        background: #f7f9fc;
+        padding: 40px 20px;
+    }
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .title {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+    .desc {
+        font-size: 16px;
+        color: #7f8c8d;
+        margin-bottom: 40px;
+    }
+
+    /* 数组盒子样式 */
+    .array-box {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+    .item {
+        width: 90px;
+        height: 90px;
+        background: #ffffff;
+        border: 2px solid #4a90e2;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        color: #333;
+    }
+    .item .index {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 4px;
+    }
+    .item .val {
+        font-size: 18px;
+        font-weight: bold;
+        color: #e74c3c;
+    }
+
+    /* 代码样式 */
+    .code {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 18px;
+        border-radius: 10px;
+        text-align: left;
+        font-family: "Consolas", monospace;
+        font-size: 15px;
+        line-height: 1.6;
+        margin: 20px 0;
+    }
+    .note {
+        font-size: 16px;
+        color: #2c3e50;
+        margin-top: 20px;
+        line-height: 1.7;
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h2 class="title">数组 = 一排连续的小盒子</h2>
+    <p class="desc">用来存储多个相同类型的数字，不用单独定义很多变量</p>
+
+    <!-- 数组可视化盒子 -->
+    <div class="array-box">
+        <div class="item">
+            <div class="index">盒子 0</div>
+            <div class="val">90</div>
+        </div>
+        <div class="item">
+            <div class="index">盒子 1</div>
+            <div class="val">90</div>
+        </div>
+        <div class="item">
+            <div class="index">盒子 2</div>
+            <div class="val">90</div>
+        </div>
+        <div class="item">
+            <div class="index">盒子 3</div>
+            <div class="val">90</div>
+        </div>
+        <div class="item">
+            <div class="index">盒子 4</div>
+            <div class="val">90</div>
+        </div>
+        <div class="item">
+            <div class="index">盒子 5</div>
+            <div class="val">90</div>
+        </div>
+        <div class="item">
+            <div class="index">盒子 6</div>
+            <div class="val">90</div>
+        </div>
+        <div class="item">
+            <div class="index">盒子 7</div>
+            <div class="val">90</div>
+        </div>
+    </div>
+
+    <!-- 代码格式 -->
+    <div class="code">
+        类型 数组名[数量] = {值1, 值2, 值3...};<br>
+        int servoAngles[8] = {90,90,90,90,90,90,90,90};
+    </div>
+
+    <!-- 说明文字 -->
+    <div class="note">
+        ✔ 一个数组 = <strong>8 个连续小盒子</strong><br>
+        ✔ 每个盒子存 <strong>1 个舵机角度</strong><br>
+        ✔ 不用定义 8 个单独变量，<strong>简洁、方便、整齐</strong>
+    </div>
+</div>
+</body>
+</html>

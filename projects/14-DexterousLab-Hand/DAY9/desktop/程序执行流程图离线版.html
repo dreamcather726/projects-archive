@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>程序执行流程图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .flowchart {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .flowchart svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .description {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .description h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .description p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f5e8;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        
+        .step h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>程序执行流程图</h1>
+    
+    <div class="container">
+        <div class="flowchart">
+            <svg width="1000" height="800" viewBox="0 0 1000 800">
+                <!-- 主流程 -->
+                <rect x="400" y="20" width="200" height="40" fill="#e8f5e8" stroke="#4CAF50" stroke-width="2" rx="5"/>
+                <text x="500" y="45" text-anchor="middle" fill="#333">程序启动</text>
+                <text x="500" y="60" text-anchor="middle" fill="#666" font-size="12">python main.py</text>
+                
+                <line x1="500" y1="60" x2="500" y2="90" stroke="#4CAF50" stroke-width="2"/>
+                
+                <rect x="400" y="90" width="200" height="40" fill="#e3f2fd" stroke="#2196F3" stroke-width="2" rx="5"/>
+                <text x="500" y="115" text-anchor="middle" fill="#333">导入库和模块</text>
+                
+                <line x1="500" y1="130" x2="500" y2="160" stroke="#2196F3" stroke-width="2"/>
+                
+                <rect x="400" y="160" width="200" height="40" fill="#fff3e0" stroke="#FF9800" stroke-width="2" rx="5"/>
+                <text x="500" y="185" text-anchor="middle" fill="#333">定义FingerControllerApp类</text>
+                
+                <line x1="500" y1="200" x2="500" y2="230" stroke="#FF9800" stroke-width="2"/>
+                
+                <rect x="400" y="230" width="200" height="40" fill="#f3e5f5" stroke="#9C27B0" stroke-width="2" rx="5"/>
+                <text x="500" y="255" text-anchor="middle" fill="#333">执行main函数</text>
+                
+                <line x1="500" y1="270" x2="500" y2="300" stroke="#9C27B0" stroke-width="2"/>
+                
+                <rect x="300" y="300" width="200" height="40" fill="#e0f7fa" stroke="#00BCD4" stroke-width="2" rx="5"/>
+                <text x="400" y="325" text-anchor="middle" fill="#333">创建QApplication实例</text>
+                
+                <line x1="400" y1="340" x2="400" y2="370" stroke="#00BCD4" stroke-width="2"/>
+                
+                <rect x="300" y="370" width="200" height="40" fill="#e8f5e8" stroke="#4CAF50" stroke-width="2" rx="5"/>
+                <text x="400" y="395" text-anchor="middle" fill="#333">创建FingerControllerApp实例</text>
+                
+                <line x1="400" y1="410" x2="400" y2="440" stroke="#4CAF50" stroke-width="2"/>
+                
+                <rect x="300" y="440" width="200" height="40" fill="#e3f2fd" stroke="#2196F3" stroke-width="2" rx="5"/>
+                <text x="400" y="465" text-anchor="middle" fill="#333">初始化FingerControllerApp</text>
+                
+                <line x1="400" y1="480" x2="400" y2="510" stroke="#2196F3" stroke-width="2"/>
+                
+                <rect x="300" y="510" width="200" height="40" fill="#fff3e0" stroke="#FF9800" stroke-width="2" rx="5"/>
+                <text x="400" y="535" text-anchor="middle" fill="#333">绑定信号</text>
+                
+                <line x1="400" y1="550" x2="400" y2="580" stroke="#FF9800" stroke-width="2"/>
+                
+                <rect x="300" y="580" width="200" height="40" fill="#f3e5f5" stroke="#9C27B0" stroke-width="2" rx="5"/>
+                <text x="400" y="605" text-anchor="middle" fill="#333">显示窗口</text>
+                
+                <line x1="400" y1="620" x2="400" y2="650" stroke="#9C27B0" stroke-width="2"/>
+                
+                <rect x="300" y="650" width="200" height="40" fill="#e0f7fa" stroke="#00BCD4" stroke-width="2" rx="5"/>
+                <text x="400" y="675" text-anchor="middle" fill="#333">执行应用程序主循环</text>
+                
+                <line x1="400" y1="690" x2="400" y2="720" stroke="#00BCD4" stroke-width="2"/>
+                
+                <rect x="300" y="720" width="200" height="40" fill="#e8f5e8" stroke="#4CAF50" stroke-width="2" rx="5"/>
+                <text x="400" y="745" text-anchor="middle" fill="#333">退出程序</text>
+                
+                <!-- 信号绑定子流程 -->
+                <rect x="600" y="510" width="300" height="100" fill="#f9f9f9" stroke="#ddd" stroke-width="2" rx="5"/>
+                <text x="750" y="530" text-anchor="middle" fill="#333" font-weight="bold">信号绑定</text>
+                <text x="750" y="555" text-anchor="middle" fill="#666" font-size="12">刷新按钮点击</text>
+                <text x="750" y="575" text-anchor="middle" fill="#666" font-size="12">连接按钮点击</text>
+                <text x="750" y="595" text-anchor="middle" fill="#666" font-size="12">滑块值变化</text>
+                <text x="750" y="615" text-anchor="middle" fill="#666" font-size="12">预设动作按钮点击</text>
+                
+                <line x1="400" y1="530" x2="600" y2="560" stroke="#FF9800" stroke-width="2"/>
+                
+                <!-- 用户操作子流程 -->
+                <rect x="600" y="650" width="300" height="100" fill="#f9f9f9" stroke="#ddd" stroke-width="2" rx="5"/>
+                <text x="750" y="670" text-anchor="middle" fill="#333" font-weight="bold">用户操作</text>
+                <text x="750" y="695" text-anchor="middle" fill="#666" font-size="12">点击按钮</text>
+                <text x="750" y="715" text-anchor="middle" fill="#666" font-size="12">滑动滑块</text>
+                <text x="750" y="735" text-anchor="middle" fill="#666" font-size="12">关闭窗口</text>
+                
+                <line x1="400" y1="670" x2="600" y2="700" stroke="#00BCD4" stroke-width="2"/>
+            </svg>
+        </div>
+        
+        <div class="description">
+            <h2>流程图说明</h2>
+            <p>这个流程图展示了程序从启动到退出的完整执行过程，包括以下几个主要部分：</p>
+            
+            <div class="step">
+                <h3>1. 程序启动</h3>
+                <p>用户执行 <code>python main.py</code> 命令启动程序</p>
+            </div>
+            
+            <div class="step">
+                <h3>2. 导入模块</h3>
+                <p>导入必要的系统模块和自定义模块，包括：</p>
+                <ul>
+                    <li>sys - 系统模块</li>
+                    <li>PyQt5.QtWidgets.QApplication - GUI应用程序类</li>
+                    <li>自定义模块：interaction_module, script_module, serial_module, ui_module</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>3. 类定义</h3>
+                <p>定义 <code>FingerControllerApp</code> 类，继承自 <code>FingerControllerUI</code></p>
+            </div>
+            
+            <div class="step">
+                <h3>4. main函数执行</h3>
+                <p>创建QApplication实例和FingerControllerApp实例</p>
+            </div>
+            
+            <div class="step">
+                <h3>5. 初始化过程</h3>
+                <p>初始化各个模块，包括：</p>
+                <ul>
+                    <li>调用父类初始化</li>
+                    <li>创建SerialPortClient实例</li>
+                    <li>创建ScriptService实例</li>
+                    <li>创建InteractionController实例</li>
+                    <li>绑定信号</li>
+                    <li>刷新串口列表</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>6. 信号绑定</h3>
+                <p>绑定界面控件的信号与相应的槽函数，包括：</p>
+                <ul>
+                    <li>刷新按钮点击 → 刷新串口列表</li>
+                    <li>连接按钮点击 → 连接/断开串口</li>
+                    <li>滑块值变化 → 更新手指角度并发送指令</li>
+                    <li>预设动作按钮点击 → 应用预设动作</li>
+                    <li>加载按钮点击 → 加载脚本文件</li>
+                    <li>保存按钮点击 → 保存脚本文件</li>
+                    <li>运行按钮点击 → 执行脚本</li>
+                    <li>停止按钮点击 → 停止脚本</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>7. 用户交互</h3>
+                <p>等待并处理用户的操作，包括点击按钮、滑动滑块、关闭窗口等</p>
+            </div>
+            
+            <div class="step">
+                <h3>8. 窗口关闭</h3>
+                <p>处理窗口关闭事件，进行清理工作，包括：</p>
+                <ul>
+                    <li>调用controller.close_cleanup()</li>
+                    <li>停止脚本线程</li>
+                    <li>关闭串口</li>
+                    <li>退出程序</li>
+                </ul>
+            </div>
+            
+            <h2>模块职责</h2>
+            <ul>
+                <li><strong>UI模块</strong>：负责创建和显示界面控件</li>
+                <li><strong>控制层</strong>：处理用户交互逻辑，协调各模块工作</li>
+                <li><strong>串口模块</strong>：负责与机械手通信</li>
+                <li><strong>脚本模块</strong>：负责执行脚本指令</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

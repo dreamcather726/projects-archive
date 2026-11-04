@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>程序执行流程图</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .mermaid {
+            text-align: center;
+        }
+        
+        .description {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .description h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .description p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>程序执行流程图</h1>
+    
+    <div class="container">
+        <div class="mermaid">
+            graph TD
+                A[程序启动<br>python main.py] --> B[导入库和模块]
+                B --> C[定义FingerControllerApp类]
+                C --> D[执行main函数]
+                D --> E[创建QApplication实例]
+                E --> F[创建FingerControllerApp实例]
+                F --> G[初始化FingerControllerApp]
+                G --> H[调用父类初始化]
+                H --> I[创建SerialPortClient实例]
+                I --> J[创建ScriptService实例]
+                J --> K[创建InteractionController实例]
+                K --> L[绑定信号]
+                L --> M[刷新串口列表]
+                M --> N[显示窗口]
+                N --> O[执行应用程序主循环]
+                O --> P[等待用户操作]
+                P --> Q[处理窗口关闭事件]
+                Q --> R[调用close_cleanup]
+                R --> S[停止脚本线程]
+                S --> T[关闭串口]
+                T --> U[退出程序]
+                
+                subgraph 信号绑定
+                    L1[刷新按钮点击] --> L2[连接按钮点击]
+                    L2 --> L3[滑块值变化]
+                    L3 --> L4[预设动作按钮点击]
+                    L4 --> L5[加载按钮点击]
+                    L5 --> L6[保存按钮点击]
+                    L6 --> L7[运行按钮点击]
+                    L7 --> L8[停止按钮点击]
+                    L8 --> L9[脚本服务日志信号]
+                    L9 --> L10[脚本服务完成信号]
+                end
+                
+                L --> L1
+                
+                subgraph 用户操作
+                    P1[点击按钮] --> P2[滑动滑块]
+                    P2 --> P3[关闭窗口]
+                end
+                
+                P --> P1
+                
+                style A fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+                style B fill:#e3f2fd,stroke:#2196F3,stroke-width:2px
+                style C fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+                style D fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+                style E fill:#e0f7fa,stroke:#00BCD4,stroke-width:2px
+                style F fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+                style G fill:#e3f2fd,stroke:#2196F3,stroke-width:2px
+                style H fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+                style I fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+                style J fill:#e0f7fa,stroke:#00BCD4,stroke-width:2px
+                style K fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+                style L fill:#e3f2fd,stroke:#2196F3,stroke-width:2px
+                style M fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+                style N fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+                style O fill:#e0f7fa,stroke:#00BCD4,stroke-width:2px
+                style P fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+                style Q fill:#e3f2fd,stroke:#2196F3,stroke-width:2px
+                style R fill:#fff3e0,stroke:#FF9800,stroke-width:2px
+                style S fill:#f3e5f5,stroke:#9C27B0,stroke-width:2px
+                style T fill:#e0f7fa,stroke:#00BCD4,stroke-width:2px
+                style U fill:#e8f5e8,stroke:#4CAF50,stroke-width:2px
+        </div>
+        
+        <div class="description">
+            <h2>流程图说明</h2>
+            <p>这个流程图展示了程序从启动到退出的完整执行过程，包括以下几个主要部分：</p>
+            <ul>
+                <li><strong>程序启动</strong>：用户执行 <code>python main.py</code> 命令启动程序</li>
+                <li><strong>导入模块</strong>：导入必要的系统模块和自定义模块</li>
+                <li><strong>类定义</strong>：定义 <code>FingerControllerApp</code> 类，继承自 <code>FingerControllerUI</code></li>
+                <li><strong>main函数执行</strong>：创建应用程序实例和主窗口实例</li>
+                <li><strong>初始化过程</strong>：初始化各个模块，包括串口客户端、脚本服务和交互控制器</li>
+                <li><strong>信号绑定</strong>：绑定界面控件的信号与相应的槽函数</li>
+                <li><strong>用户交互</strong>：等待并处理用户的操作</li>
+                <li><strong>窗口关闭</strong>：处理窗口关闭事件，进行清理工作</li>
+            </ul>
+            
+            <h2>模块职责</h2>
+            <ul>
+                <li><strong>UI模块</strong>：负责创建和显示界面控件</li>
+                <li><strong>控制层</strong>：处理用户交互逻辑，协调各模块工作</li>
+                <li><strong>串口模块</strong>：负责与机械手通信</li>
+                <li><strong>脚本模块</strong>：负责执行脚本指令</li>
+            </ul>
+            
+            <h2>信号与槽</h2>
+            <p>流程图中展示了主要的信号绑定关系，包括：</p>
+            <ul>
+                <li>刷新按钮点击 → 刷新串口列表</li>
+                <li>连接按钮点击 → 连接/断开串口</li>
+                <li>滑块值变化 → 更新手指角度并发送指令</li>
+                <li>预设动作按钮点击 → 应用预设动作</li>
+                <li>加载按钮点击 → 加载脚本文件</li>
+                <li>保存按钮点击 → 保存脚本文件</li>
+                <li>运行按钮点击 → 执行脚本</li>
+                <li>停止按钮点击 → 停止脚本</li>
+                <li>脚本服务日志信号 → 更新日志显示</li>
+                <li>脚本服务完成信号 → 处理脚本执行完成</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                nodeSpacing: 20,
+                rankSpacing: 30
+            }
+        });
+    </script>
+</body>
+</html>
