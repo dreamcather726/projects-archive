@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <!-- 背景和标题 -->
+  <rect width="800" height="1000" fill="#f9f9f9"/>
+  <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">物联网育苗控制系统操作流程图</text>
+  
+  <!-- 开始 -->
+  <circle cx="400" cy="100" r="40" fill="#4caf50" stroke="#388e3c" stroke-width="2"/>
+  <text x="400" y="105" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">开始</text>
+  
+  <!-- 系统初始化 -->
+  <rect x="300" y="180" width="200" height="60" rx="10" fill="#2196f3" stroke="#1976d2" stroke-width="2"/>
+  <text x="400" y="215" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">系统初始化</text>
+  
+  <!-- 连接箭头 - 开始到系统初始化 -->
+  <line x1="400" y1="140" x2="400" y2="180" stroke="#333" stroke-width="2"/>
+  <polygon points="395,180 400,170 405,180" fill="#333"/>
+  
+  <!-- 传感器数据采集 -->
+  <rect x="150" y="280" width="200" height="80" rx="10" fill="#ff9800" stroke="#f57c00" stroke-width="2"/>
+  <text x="250" y="310" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">传感器数据采集</text>
+  <text x="250" y="340" font-family="Arial" font-size="12" text-anchor="middle" fill="white">温度、湿度、光照、土壤湿度</text>
+  
+  <!-- 连接箭头 - 系统初始化到传感器数据采集 -->
+  <line x1="400" y1="240" x2="250" y2="280" stroke="#333" stroke-width="2"/>
+  <polygon points="255,285 250,295 245,285" fill="#333"/>
+  
+  <!-- LoRa数据传输 -->
+  <rect x="450" y="280" width="200" height="80" rx="10" fill="#9c27b0" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="550" y="310" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">LoRa数据传输</text>
+  <text x="550" y="340" font-family="Arial" font-size="12" text-anchor="middle" fill="white">Arduino → 树莓派</text>
+  
+  <!-- 连接箭头 - 传感器数据采集到LoRa数据传输 -->
+  <line x1="350" y1="320" x2="450" y2="320" stroke="#333" stroke-width="2"/>
+  <polygon points="450,315 460,320 450,325" fill="#333"/>
+  
+  <!-- 数据处理与存储 -->
+  <rect x="300" y="400" width="200" height="80" rx="10" fill="#00bcd4" stroke="#0097a7" stroke-width="2"/>
+  <text x="400" y="430" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">数据处理与存储</text>
+  <text x="400" y="460" font-family="Arial" font-size="12" text-anchor="middle" fill="white">树莓派中控平台</text>
+  
+  <!-- 连接箭头 - LoRa数据传输到数据处理 -->
+  <line x1="550" y1="360" x2="550" y2="400" stroke="#333" stroke-width="2"/>
+  <polygon points="545,400 550,390 555,400" fill="#333"/>
+  
+  <!-- 判断是否自动模式 -->
+  <rect x="300" y="520" width="200" height="60" rx="10" fill="#e91e63" stroke="#c2185b" stroke-width="2"/>
+  <text x="400" y="555" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">是否自动模式？</text>
+  
+  <!-- 连接箭头 - 数据处理到判断 -->
+  <line x1="400" y1="480" x2="400" y2="520" stroke="#333" stroke-width="2"/>
+  <polygon points="395,520 400,510 405,520" fill="#333"/>
+  
+  <!-- 自动控制路径 -->
+  <line x1="300" y="550" x2="200" y="550" stroke="#333" stroke-width="2"/>
+  <polygon points="200,545 210,550 200,555" fill="#333"/>
+  
+  <!-- 阈值比较 -->
+  <rect x="100" y="620" width="200" height="80" rx="10" fill="#607d8b" stroke="#455a64" stroke-width="2"/>
+  <text x="200" y="650" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">阈值比较</text>
+  <text x="200" y="680" font-family="Arial" font-size="12" text-anchor="middle" fill="white">温度 > 阈值 或 湿度 < 阈值</text>
+  
+  <!-- 连接箭头 - 判断到阈值比较 -->
+  <line x1="200" y="580" x2="200" y="620" stroke="#333" stroke-width="2"/>
+  <polygon points="195,620 200,610 205,620" fill="#333"/>
+  
+  <!-- 自动控制命令生成 -->
+  <rect x="100" y="740" width="200" height="80" rx="10" fill="#ff5722" stroke="#e64a19" stroke-width="2"/>
+  <text x="200" y="770" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">自动控制命令生成</text>
+  <text x="200" y="800" font-family="Arial" font-size="12" text-anchor="middle" fill="white">风扇开启/关闭、水泵开启/关闭</text>
+  
+  <!-- 连接箭头 - 阈值比较到自动控制命令 -->
+  <line x1="200" y="700" x2="200" y="740" stroke="#333" stroke-width="2"/>
+  <polygon points="195,740 200,730 205,740" fill="#333"/>
+  
+  <!-- 手动控制路径 -->
+  <line x1="500" y="550" x2="600" y="550" stroke="#333" stroke-width="2"/>
+  <polygon points="600,545 610,550 600,555" fill="#333"/>
+  
+  <!-- 微信小程序操作 -->
+  <rect x="500" y="620" width="200" height="80" rx="10" fill="#8bc34a" stroke="#689f38" stroke-width="2"/>
+  <text x="600" y="650" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">微信小程序操作</text>
+  <text x="600" y="680" font-family="Arial" font-size="12" text-anchor="middle" fill="white">用户手动控制设备</text>
+  
+  <!-- 连接箭头 - 判断到微信小程序 -->
+  <line x1="600" y="580" x2="600" y="620" stroke="#333" stroke-width="2"/>
+  <polygon points="595,620 600,610 605,620" fill="#333"/>
+  
+  <!-- MQTT通信 -->
+  <rect x="500" y="740" width="200" height="80" rx="10" fill="#ffeb3b" stroke="#fdd835" stroke-width="2"/>
+  <text x="600" y="770" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">MQTT通信</text>
+  <text x="600" y="800" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">微信小程序 → 树莓派</text>
+  
+  <!-- 连接箭头 - 微信小程序到MQTT -->
+  <line x1="600" y="700" x2="600" y="740" stroke="#333" stroke-width="2"/>
+  <polygon points="595,740 600,730 605,740" fill="#333"/>
+  
+  <!-- 命令下发 -->
+  <rect x="300" y="860" width="200" height="80" rx="10" fill="#795548" stroke="#5d4037" stroke-width="2"/>
+  <text x="400" y="890" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">命令下发</text>
+  <text x="400" y="920" font-family="Arial" font-size="12" text-anchor="middle" fill="white">LoRa无线传输到Arduino节点</text>
+  
+  <!-- 连接箭头 - 自动控制到命令下发 -->
+  <line x1="300" y="780" x2="300" y="860" stroke="#333" stroke-width="2"/>
+  <polygon points="295,860 300,850 305,860" fill="#333"/>
+  
+  <!-- 连接箭头 - 手动控制到命令下发 -->
+  <line x1="500" y="780" x2="500" y="860" stroke="#333" stroke-width="2"/>
+  <polygon points="495,860 500,850 505,860" fill="#333"/>
+  
+  <!-- 设备执行 -->
+  <circle cx="400" cy="980" r="40" fill="#f44336" stroke="#d32f2f" stroke-width="2"/>
+  <text x="400" y="985" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">设备执行</text>
+  
+  <!-- 连接箭头 - 命令下发到设备执行 -->
+  <line x1="400" y="940" x2="400" y="940" stroke="#333" stroke-width="2"/>
+  <polygon points="395,940 400,930 405,940" fill="#333"/>
+  
+  <!-- 循环箭头 - 从设备执行回到传感器数据采集 -->
+  <path d="M 400 980 Q 500 900, 500 300" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <polygon points="500,295 510,300 500,305" fill="#333"/>
+  
+  <!-- 图例 -->
+  <rect x="650" y="100" width="120" height="120" rx="5" fill="white" stroke="#333" stroke-width="1"/>
+  <text x="710" y="120" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">图例</text>
+  
+  <rect x="660" y="140" width="100" height="20" rx="5" fill="#2196f3"/>
+  <text x="710" y="153" font-family="Arial" font-size="10" text-anchor="middle" fill="white">处理步骤</text>
+  
+  <rect x="660" y="170" width="100" height="20" rx="5" fill="#e91e63"/>
+  <text x="710" y="183" font-family="Arial" font-size="10" text-anchor="middle" fill="white">判断条件</text>
+  
+  <line x1="660" y="200" x2="760" y="200" stroke="#333" stroke-width="2"/>
+  <polygon points="760,195 770,200 760,205" fill="#333"/>
+  <text x="675" y="215" font-family="Arial" font-size="10" text-anchor="start" fill="#333">流程方向</text>
+  
+  <path d="M 660 220 Q 700 220, 760 220" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="675" y="235" font-family="Arial" font-size="10" text-anchor="start" fill="#333">数据流向</text>
+</svg>

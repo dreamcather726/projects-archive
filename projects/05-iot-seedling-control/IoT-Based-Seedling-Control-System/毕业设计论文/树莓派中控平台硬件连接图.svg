@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- 背景和标题 -->
+  <rect width="800" height="600" fill="#f9f9f9"/>
+  <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">树莓派中控平台硬件连接图</text>
+  
+  <!-- 树莓派 -->
+  <rect x="300" y="150" width="200" height="150" rx="10" fill="#c5e1a5" stroke="#7cb342" stroke-width="2"/>
+  <text x="400" y="180" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">树莓派4B</text>
+  <text x="400" y="210" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">中央处理器</text>
+  
+  <!-- 树莓派接口 -->
+  <text x="250" y="250" font-family="Arial" font-size="12" text-anchor="end" fill="#333">GPIO</text>
+  <line x1="290" y1="250" x2="280" y2="250" stroke="#333" stroke-width="1"/>
+  
+  <text x="250" y="270" font-family="Arial" font-size="12" text-anchor="end" fill="#333">TX</text>
+  <line x1="290" y1="270" x2="280" y2="270" stroke="#333" stroke-width="1"/>
+  
+  <text x="250" y="290" font-family="Arial" font-size="12" text-anchor="end" fill="#333">RX</text>
+  <line x1="290" y1="290" x2="280" y2="290" stroke="#333" stroke-width="1"/>
+  
+  <text x="250" y="310" font-family="Arial" font-size="12" text-anchor="end" fill="#333">USB</text>
+  <line x1="290" y1="310" x2="280" y2="310" stroke="#333" stroke-width="1"/>
+  
+  <text x="550" y="250" font-family="Arial" font-size="12" text-anchor="start" fill="#333">HDMI</text>
+  <line x1="510" y1="250" x2="520" y2="250" stroke="#333" stroke-width="1"/>
+  
+  <text x="550" y="270" font-family="Arial" font-size="12" text-anchor="start" fill="#333">以太网</text>
+  <line x1="510" y1="270" x2="520" y2="270" stroke="#333" stroke-width="1"/>
+  
+  <text x="550" y="290" font-family="Arial" font-size="12" text-anchor="start" fill="#333">电源</text>
+  <line x1="510" y1="290" x2="520" y2="290" stroke="#333" stroke-width="1"/>
+  
+  <!-- LoRa模块 -->
+  <rect x="100" y="200" width="150" height="60" rx="10" fill="#ff8a65" stroke="#e64a19" stroke-width="2"/>
+  <text x="175" y="230" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">LoRa模块</text>
+  
+  <line x1="250" y1="230" x2="280" y2="270" stroke="#333" stroke-width="1"/>
+  <line x1="240" y1="230" x2="280" y2="290" stroke="#333" stroke-width="1"/>
+  
+  <!-- 语音识别模块 -->
+  <rect x="100" y="300" width="150" height="60" rx="10" fill="#b39ddb" stroke="#6d4c41" stroke-width="2"/>
+  <text x="175" y="330" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">语音识别模块</text>
+  
+  <line x1="250" y1="330" x2="280" y2="310" stroke="#333" stroke-width="1"/>
+  
+  <!-- 显示器 -->
+  <rect x="550" y="150" width="200" height="120" rx="10" fill="#90a4ae" stroke="#455a64" stroke-width="2"/>
+  <text x="650" y="180" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">7英寸触摸屏</text>
+  <rect x="570" y="200" width="160" height="60" rx="5" fill="#263238"/>
+  <text x="650" y="235" font-family="Arial" font-size="12" text-anchor="middle" fill="white">系统界面显示</text>
+  
+  <line x1="550" y1="210" x2="520" y2="250" stroke="#333" stroke-width="1"/>
+  
+  <!-- 无线路由器 -->
+  <rect x="300" y="350" width="200" height="60" rx="10" fill="#81d4fa" stroke="#0288d1" stroke-width="2"/>
+  <text x="400" y="380" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">无线路由器</text>
+  
+  <line x1="400" y1="350" x2="400" y2="300" stroke="#333" stroke-width="1"/>
+  
+  <!-- 华为云IoT平台 -->
+  <rect x="550" y="300" width="200" height="80" rx="10" fill="#ffcdd2" stroke="#c62828" stroke-width="2"/>
+  <text x="650" y="330" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">华为云IoT平台</text>
+  <text x="650" y="350" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">云服务</text>
+  <text x="650" y="370" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">远程数据存储与分析</text>
+  
+  <line x1="650" y1="300" x2="650" y2="270" stroke="#333" stroke-width="1"/>
+  
+  <!-- 微信小程序 -->
+  <rect x="550" y="420" width="200" height="80" rx="10" fill="#80cbc4" stroke="#00695c" stroke-width="2"/>
+  <text x="650" y="450" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">微信小程序</text>
+  <text x="650" y="470" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">远程监控与控制</text>
+  <text x="650" y="490" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">移动终端访问</text>
+  
+  <line x1="650" y1="420" x2="650" y2="380" stroke="#333" stroke-width="1"/>
+  
+  <!-- Arduino节点 -->
+  <rect x="100" y="400" width="150" height="80" rx="10" fill="#ffcc80" stroke="#ef6c00" stroke-width="2"/>
+  <text x="175" y="430" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">Arduino节点</text>
+  <text x="175" y="450" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">传感器数据采集</text>
+  <text x="175" y="470" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">设备控制执行</text>
+  
+  <line x1="175" y1="400" x2="175" y2="360" stroke="#333" stroke-width="1"/>
+  
+  <!-- 电源 -->
+  <rect x="300" y="450" width="200" height="60" rx="10" fill="#fff59d" stroke="#fbc02d" stroke-width="2"/>
+  <text x="400" y="480" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">12V电源适配器</text>
+  
+  <line x1="400" y1="450" x2="400" y2="410" stroke="#333" stroke-width="1"/>
+  
+  <!-- 连接线 -->
+  <!-- LoRa模块到Arduino节点的无线连接 -->
+  <path d="M 175 360 Q 175 380, 175 400" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="5,5"/>
+  <polygon points="170,400 175,390 180,400" fill="#333"/>
+  
+  <!-- 树莓派到显示器的HDMI连接 -->
+  <rect x="520" y="240" width="30" height="10" rx="2" fill="#2196f3"/>
+  <text x="535" y="247" font-family="Arial" font-size="8" text-anchor="middle" fill="white">HDMI</text>
+  
+  <!-- 树莓派到无线路由器的以太网连接 -->
+  <rect x="520" y="260" width="30" height="10" rx="2" fill="#4caf50"/>
+  <text x="535" y="267" font-family="Arial" font-size="8" text-anchor="middle" fill="white">LAN</text>
+  
+  <!-- 云连接 -->
+  <path d="M 650 270 Q 650 220, 650 170" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="5,5"/>
+  <polygon points="645,170 650,160 655,170" fill="#333"/>
+  
+  <!-- 图例 -->
+  <rect x="650" y="520" width="120" height="60" rx="5" fill="white" stroke="#333" stroke-width="1"/>
+  <text x="710" y="540" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">图例</text>
+  
+  <line x1="660" y1="560" x2="700" y2="560" stroke="#333" stroke-width="1"/>
+  <text x="750" y="565" font-family="Arial" font-size="10" text-anchor="end" fill="#333">有线连接</text>
+  
+  <line x1="660" y1="580" x2="700" y2="580" stroke="#333" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="750" y="585" font-family="Arial" font-size="10" text-anchor="end" fill="#333">无线连接</text>
+</svg>

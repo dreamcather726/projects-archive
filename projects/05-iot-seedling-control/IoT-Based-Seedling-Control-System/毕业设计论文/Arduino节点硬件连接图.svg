@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- 背景和标题 -->
+  <rect width="800" height="600" fill="#f9f9f9"/>
+  <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Arduino节点硬件连接图</text>
+  
+  <!-- Arduino开发板 -->
+  <rect x="300" y="200" width="200" height="150" rx="10" fill="#00979c" stroke="#006d75" stroke-width="2"/>
+  <text x="400" y="230" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">Arduino开发板</text>
+  
+  <!-- Arduino引脚 -->
+  <line x1="290" y1="250" x2="280" y2="250" stroke="#333" stroke-width="1"/>
+  <text x="260" y="255" font-family="Arial" font-size="10" text-anchor="end" fill="#333">D2</text>
+  
+  <line x1="290" y1="270" x2="280" y2="270" stroke="#333" stroke-width="1"/>
+  <text x="260" y="275" font-family="Arial" font-size="10" text-anchor="end" fill="#333">D3</text>
+  
+  <line x1="290" y1="290" x2="280" y2="290" stroke="#333" stroke-width="1"/>
+  <text x="260" y="295" font-family="Arial" font-size="10" text-anchor="end" fill="#333">D4</text>
+  
+  <line x1="290" y1="310" x2="280" y2="310" stroke="#333" stroke-width="1"/>
+  <text x="260" y="315" font-family="Arial" font-size="10" text-anchor="end" fill="#333">D5</text>
+  
+  <line x1="290" y1="330" x2="280" y2="330" stroke="#333" stroke-width="1"/>
+  <text x="260" y="335" font-family="Arial" font-size="10" text-anchor="end" fill="#333">A0</text>
+  
+  <line x1="290" y1="350" x2="280" y2="350" stroke="#333" stroke-width="1"/>
+  <text x="260" y="355" font-family="Arial" font-size="10" text-anchor="end" fill="#333">A1</text>
+  
+  <line x1="510" y1="250" x2="520" y2="250" stroke="#333" stroke-width="1"/>
+  <text x="540" y="255" font-family="Arial" font-size="10" text-anchor="start" fill="#333">5V</text>
+  
+  <line x1="510" y1="270" x2="520" y2="270" stroke="#333" stroke-width="1"/>
+  <text x="540" y="275" font-family="Arial" font-size="10" text-anchor="start" fill="#333">GND</text>
+  
+  <line x1="510" y1="290" x2="520" y2="290" stroke="#333" stroke-width="1"/>
+  <text x="540" y="295" font-family="Arial" font-size="10" text-anchor="start" fill="#333">TX</text>
+  
+  <line x1="510" y1="310" x2="520" y2="310" stroke="#333" stroke-width="1"/>
+  <text x="540" y="315" font-family="Arial" font-size="10" text-anchor="start" fill="#333">RX</text>
+  
+  <!-- 传感器模块 -->
+  <!-- 温湿度传感器 -->
+  <rect x="100" y="150" width="150" height="60" rx="10" fill="#ffb74d" stroke="#e65100" stroke-width="2"/>
+  <text x="175" y="170" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">DHT11/DHT22</text>
+  <text x="175" y="195" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">温湿度传感器</text>
+  
+  <line x1="250" y1="180" x2="280" y2="250" stroke="#333" stroke-width="1"/>
+  <line x1="250" y1="200" x2="280" y2="270" stroke="#333" stroke-width="1"/>
+  
+  <!-- 光照传感器 -->
+  <rect x="100" y="250" width="150" height="60" rx="10" fill="#aed581" stroke="#689f38" stroke-width="2"/>
+  <text x="175" y="270" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">光照传感器</text>
+  <text x="175" y="295" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">模拟信号输出</text>
+  
+  <line x1="250" y1="280" x2="280" y2="330" stroke="#333" stroke-width="1"/>
+  
+  <!-- 土壤湿度传感器 -->
+  <rect x="100" y="350" width="150" height="60" rx="10" fill="#4db6ac" stroke="#26a69a" stroke-width="2"/>
+  <text x="175" y="370" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">土壤湿度传感器</text>
+  <text x="175" y="395" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">模拟信号输出</text>
+  
+  <line x1="250" y1="380" x2="280" y2="350" stroke="#333" stroke-width="1"/>
+  
+  <!-- 执行设备 -->
+  <!-- 继电器模块 -->
+  <rect x="550" y="150" width="150" height="60" rx="10" fill="#ce93d8" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="625" y="170" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">继电器模块</text>
+  <text x="625" y="195" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">控制风扇和水泵</text>
+  
+  <line x1="550" y1="180" x2="520" y2="290" stroke="#333" stroke-width="1"/>
+  <line x1="550" y1="200" x2="520" y2="310" stroke="#333" stroke-width="1"/>
+  
+  <!-- 风扇 -->
+  <rect x="550" y="250" width="150" height="40" rx="10" fill="#90caf9" stroke="#1976d2" stroke-width="2"/>
+  <text x="625" y="275" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">风扇</text>
+  
+  <!-- 水泵 -->
+  <rect x="550" y="320" width="150" height="40" rx="10" fill="#90caf9" stroke="#1976d2" stroke-width="2"/>
+  <text x="625" y="345" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">水泵</text>
+  
+  <!-- LoRa模块 -->
+  <rect x="300" y="400" width="200" height="60" rx="10" fill="#ff8a65" stroke="#e64a19" stroke-width="2"/>
+  <text x="400" y="430" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="white">LoRa模块</text>
+  
+  <line x1="350" y1="400" x2="350" y2="350" stroke="#333" stroke-width="1"/>
+  <line x1="450" y1="400" x2="450" y2="350" stroke="#333" stroke-width="1"/>
+  
+  <!-- OLED显示屏 -->
+  <rect x="100" y="450" width="150" height="60" rx="10" fill="#b0bec5" stroke="#546e7a" stroke-width="2"/>
+  <text x="175" y="470" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">OLED显示屏</text>
+  <text x="175" y="495" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">I2C接口</text>
+  
+  <line x1="200" y1="450" x2="200" y2="400" stroke="#333" stroke-width="1"/>
+  <line x1="250" y1="450" x2="250" y2="400" stroke="#333" stroke-width="1"/>
+  
+  <!-- RGB灯带 -->
+  <rect x="550" y="400" width="150" height="60" rx="10" fill="#f06292" stroke="#ad1457" stroke-width="2"/>
+  <text x="625" y="430" font-family="Arial" font-size="16" text-anchor="middle" fill="white">RGB灯带</text>
+  
+  <line x1="625" y1="400" x2="625" y2="360" stroke="#333" stroke-width="1"/>
+  
+  <!-- 电源连接 -->
+  <rect x="300" y="500" width="200" height="60" rx="10" fill="#fff59d" stroke="#fbc02d" stroke-width="2"/>
+  <text x="400" y="530" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">5V电源</text>
+  
+  <line x1="350" y1="500" x2="350" y2="460" stroke="#333" stroke-width="1"/>
+  <line x1="450" y1="500" x2="450" y2="460" stroke="#333" stroke-width="1"/>
+  
+  <!-- 电源连接到传感器 -->
+  <line x1="380" y1="500" x2="175" y2="210" stroke="#f44336" stroke-width="1"/>
+  <line x1="420" y1="500" x2="175" y2="310" stroke="#2196f3" stroke-width="1"/>
+  
+  <!-- 图例 -->
+  <rect x="650" y="500" width="120" height="80" rx="5" fill="white" stroke="#333" stroke-width="1"/>
+  <text x="710" y="520" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#333">图例</text>
+  
+  <line x1="660" y1="540" x2="700" y2="540" stroke="#333" stroke-width="1"/>
+  <text x="750" y="545" font-family="Arial" font-size="10" text-anchor="end" fill="#333">信号线</text>
+  
+  <line x1="660" y1="560" x2="700" y2="560" stroke="#f44336" stroke-width="1"/>
+  <text x="750" y="565" font-family="Arial" font-size="10" text-anchor="end" fill="#333">5V</text>
+  
+  <line x1="660" y1="580" x2="700" y2="580" stroke="#2196f3" stroke-width="1"/>
+  <text x="750" y="585" font-family="Arial" font-size="10" text-anchor="end" fill="#333">GND</text>
+</svg>

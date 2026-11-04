@@ -1,0 +1,14 @@
+{
+  "name": "seedling-control-system",
+  "version": "1.0.0",
+  "description": "物联网育苗控制系统后端",
+  "main": "pages/mysql.js",
+  "scripts": {
+    "start": "node pages/mysql.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql": "^2.18.1",
+    "body-parser": "^1.20.2"
+  }
+}

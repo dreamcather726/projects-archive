@@ -1,0 +1,159 @@
+/* register.wxss - 注册页面样式 */
+page {
+  height: 100vh;
+  background-image: url(https://imgs.699pic.com/images/600/026/512.jpg!detail.v1);
+  background-size: cover;
+  background-position: center;
+  background-color: #f8f8f8;
+}
+
+/* 自定义顶部导航栏 */
+.custom-header {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding-top: 60rpx; /* 适配刘海屏 */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 40rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.register-container {
+  min-height: 100vh;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 60rpx;
+  margin-top: 20rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  display: block;
+}
+
+.subtitle {
+  font-size: 32rpx;
+  color: #666;
+  display: block;
+}
+
+.register-form {
+  width: 100%;
+  max-width: 500rpx;
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-item {
+  margin-bottom: 40rpx;
+}
+
+.label {
+  display: block;
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  height: 80rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  font-size: 32rpx;
+}
+
+.register-button {
+  width: 100%;
+  height: 90rpx;
+  background-color: #07c160;
+  color: white;
+  font-size: 36rpx;
+  border-radius: 10rpx;
+  margin-top: 20rpx;
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-button::after {
+  border: none;
+  border-radius: 10rpx;
+}
+
+.options {
+  text-align: center;
+}
+
+.login-link {
+  font-size: 28rpx;
+  color: #07c160;
+}
+
+/* 适配不同屏幕尺寸 */
+@media screen and (min-width: 375px) {
+  .register-container {
+    padding: 40rpx;
+  }
+}
+
+@media screen and (min-width: 414px) {
+  .register-form {
+    max-width: 550rpx;
+  }
+}
+
+/* 用户类型单选框样式 */
+.user-type .radio-group {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10rpx;
+}
+
+.user-type label {
+ 
+  align-items: center;
+  font-size: 28rpx;
+  color: #333;
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
+  margin-right: 40rpx;
+}
+
+.user-type radio {
+  margin-right: 10rpx;
+}
+
+.user-type label:active {
+  background-color: #f0f0f0;
+}

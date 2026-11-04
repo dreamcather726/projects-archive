@@ -1,0 +1,8 @@
+/Objects/
+/Listings/
+/*.log
+/*.uvguix.*
+/*.uvoptx
+__pycache__/
+*.pyc
+/Tests/build/

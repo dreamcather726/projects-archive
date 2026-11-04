@@ -1,0 +1,217 @@
+/* settings.wxss - 设置页面样式 */
+page {
+  height: 100vh;
+  background-image: url(https://imgs.699pic.com/images/600/026/512.jpg!detail.v1);
+  background-size: cover;
+  background-position: center;
+}
+
+/* 自定义顶部导航栏 */
+.custom-header {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding-top: 60rpx; /* 适配刘海屏 */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 40rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 页面其他样式 */
+
+.scrollarea {
+  height: 100vh;
+ 
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 20px;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+.settings-section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.setting-subsection {
+  margin-bottom: 30rpx;
+  padding: 20rpx;
+  background: #fff;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.subsection-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 2rpx solid #eee;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 20rpx 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.setting-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 16px;
+  color: #333;
+  min-width: 100px;
+}
+
+.setting-input-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-left: 20px;
+}
+
+.setting-input {
+  flex: 1;
+  text-align: right;
+  font-size: 16px;
+  color: #333;
+  padding: 5px 0;
+}
+
+.unit {
+  margin-left: 5px;
+  font-size: 16px;
+  color: #666;
+  min-width: 30px;
+}
+
+.actions-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.primary-button {
+  background-color: #07c160;
+  color: white;
+  border-radius: 8px;
+  font-size: 18px;
+  margin: 0;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.primary-button::after {
+  border-radius: 8px;
+}
+
+.secondary-button {
+  background-color: red;
+  color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px 0;
+  font-size: 18px;
+  width: 100%;
+}
+
+.permission-hint {
+  padding: 30rpx;
+  background-color: #f8f8f8;
+  border-radius: 10rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.permission-hint text {
+  color: #999;
+  font-size: 28rpx;
+}
+
+.secondary-button::after {
+  border-radius: 8px;
+  border: none;
+}
+
+/* Token管理样式 */
+.token-section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.token-info {
+  padding: 15px 0;
+  margin-bottom: 20px;
+}
+
+.token-status {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.token-value {
+  display: block;
+  font-size: 14px;
+  color: #07c160;
+  background-color: #f8f8f8;
+  padding: 8px 12px;
+  border-radius: 5px;
+  word-break: break-all;
+  font-family: monospace;
+}
+
+.token-button {
+  background-color: #07c160;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  margin: 0;
+  padding: 12px 0;
+  width: 100%;
+}
+
+.token-button::after {
+  border-radius: 8px;
+}

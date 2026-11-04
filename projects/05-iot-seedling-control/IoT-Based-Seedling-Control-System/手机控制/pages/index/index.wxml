@@ -1,0 +1,154 @@
+<!--index.wxml-->
+<view class="custom-header">
+  <view class="header-content">
+    <text class="header-title">智能灌溉系统</text>
+  </view>
+</view>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 设备状态卡片 -->
+    <view class="device-section">
+      <!-- 设备1 -->
+      <view class="device-card">
+        <view class="device-header">
+          <view class="device-title-container">
+            <image class="device-icon" src="/images/device.png" mode="aspectFit"></image>
+            <text class="device-title">设备 1</text>
+          </view>
+          <view class="auto-mode-switch">
+            <image class="status-icon" src="{{deviceData[0] && deviceData[0].autoMode ? '/images/auto_on.png' : '/images/auto_off.png'}}" mode="aspectFit"></image>
+            <text>自动模式</text>
+            <block wx:if="{{userType === 'admin'}}">
+              <button bindtap="toggleAutoMode" data-device-id="1" class="control-button">开关</button>
+            </block>
+          </view>
+        </view>
+        
+        <!-- 传感器数据 -->
+        <view class="sensor-grid">
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/temp.png" mode="aspectFit"></image>
+            <text class="sensor-label">温度</text>
+            <text class="sensor-value">{{deviceData[0] && deviceData[0].temperature ? deviceData[0].temperature : '--'}}°C</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/hum.png" mode="aspectFit"></image>
+            <text class="sensor-label">湿度</text>
+            <text class="sensor-value">{{deviceData[0] && deviceData[0].humidity ? deviceData[0].humidity : '--'}}%</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/light.png" mode="aspectFit"></image>
+            <text class="sensor-label">光照</text>
+            <text class="sensor-value">{{deviceData[0] && deviceData[0].light ? deviceData[0].light : '--'}}</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/soilhum.png" mode="aspectFit"></image>
+            <text class="sensor-label">土壤湿度</text>
+            <text class="sensor-value">{{deviceData[0] && deviceData[0].soilHumidity !== null && deviceData[0].soilHumidity !== undefined ? deviceData[0].soilHumidity : '--'}}%</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="{{deviceData[0] && deviceData[0].waterPump ? '/images/pump_on.png' : '/images/pump_off.png'}}" mode="aspectFit"></image>
+            <text class="sensor-label">水泵</text>
+            <block wx:if="{{userType === 'admin'}}">
+              <button bindtap="togglePump" data-device-id="1" class="control-button">开关</button>
+            </block>
+            <block wx:else>
+              <text class="sensor-status">{{deviceData[0] && deviceData[0].waterPump ? '开启' : '关闭'}}</text>
+            </block>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="{{deviceData[0] && deviceData[0].fan ? '/images/fan_on.png' : '/images/fan_off.png'}}" mode="aspectFit"></image>
+            <text class="sensor-label">风扇</text>
+            <block wx:if="{{userType === 'admin'}}">
+              <button bindtap="toggleFan" data-device-id="1" class="control-button">开关</button>
+            </block>
+            <block wx:else>
+              <text class="sensor-status">{{deviceData[0] && deviceData[0].fan ? '开启' : '关闭'}}</text>
+            </block>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 设备2 -->
+      <view class="device-card">
+        <view class="device-header">
+          <view class="device-title-container">
+            <image class="device-icon" src="/images/device.png" mode="aspectFit"></image>
+            <text class="device-title">设备 2</text>
+          </view>
+          <view class="auto-mode-switch">
+            <image class="status-icon" src="{{deviceData[1] && deviceData[1].autoMode ? '/images/auto_on.png' : '/images/auto_off.png'}}" mode="aspectFit"></image>
+            <text>自动模式</text>
+            <block wx:if="{{userType === 'admin'}}">
+              <button bindtap="toggleAutoMode" data-device-id="2" class="control-button">开关</button>
+            </block>
+          </view>
+        </view>
+        
+        <!-- 传感器数据 -->
+        <view class="sensor-grid">
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/temp.png" mode="aspectFit"></image>
+            <text class="sensor-label">温度</text>
+            <text class="sensor-value">{{deviceData[1] && deviceData[1].temperature ? deviceData[1].temperature : '--'}}°C</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/hum.png" mode="aspectFit"></image>
+            <text class="sensor-label">湿度</text>
+            <text class="sensor-value">{{deviceData[1] && deviceData[1].humidity ? deviceData[1].humidity : '--'}}%</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/light.png" mode="aspectFit"></image>  
+            <text class="sensor-label">光照</text>
+            <text class="sensor-value">{{deviceData[1] && deviceData[1].light ? deviceData[1].light : '--'}}</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="/images/soilhum.png" mode="aspectFit"></image>  
+            <text class="sensor-label">土壤湿度</text>
+            <text class="sensor-value">{{deviceData[1] && deviceData[1].soilHumidity !== null && deviceData[1].soilHumidity !== undefined ? deviceData[1].soilHumidity : '--'}}%</text>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="{{deviceData[1] && deviceData[1].waterPump ? '/images/pump_on.png' : '/images/pump_off.png'}}" mode="aspectFit"></image>
+            <text class="sensor-label">水泵</text>
+            <block wx:if="{{userType === 'admin'}}">
+              <button bindtap="togglePump" data-device-id="2" class="control-button">开关</button>
+            </block>
+            <block wx:else>
+              <text class="sensor-status">{{deviceData[1] && deviceData[1].waterPump ? '开启' : '关闭'}}</text>
+            </block>
+          </view>
+          <view class="sensor-item">
+            <image class="sensor-icon" src="{{deviceData[1] && deviceData[1].fan ? '/images/fan_on.png' : '/images/fan_off.png'}}" mode="aspectFit"></image>
+            <text class="sensor-label">风扇</text>
+            <block wx:if="{{userType === 'admin'}}">
+              <button bindtap="toggleFan" data-device-id="2" class="control-button">开关</button>
+            </block>
+            <block wx:else>
+              <text class="sensor-status">{{deviceData[1] && deviceData[1].fan ? '开启' : '关闭'}}</text>
+            </block>
+          </view>
+        </view>
+
+       
+      </view>
+    </view>
+    
+    <!-- 设置按钮 -->
+    <view class="settings-section">
+      <block wx:if="{{userType === 'admin'}}">
+        <button bindtap="navigateToSettings" class="settings-button">系统设置</button>
+        <button bindtap="navigateToLogs" class="settings-button">查看日志</button>
+      </block>
+      <block wx:else>
+        <button bindtap="navigateToSettings" class="settings-button">阈值查看</button>
+      </block>
+      
+      <button bindtap="navigateToLogin" class="navigateToLogin-button">退出</button>
+    </view>
+    
+    <!-- 状态信息 -->
+    <view class="status-info">
+      <text>最后更新时间: {{lastUpdateTime || '未更新'}}</text>
+    </view>
+  </view>
+</scroll-view>
