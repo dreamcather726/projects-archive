@@ -1,72 +1,68 @@
-# 个人工程项目集合
+# Robotics & Embedded Systems | Engineering Portfolio
 
-这里的每个 `projects/编号-项目名/` 都包含可浏览、可克隆的**实际源码文件**，不是仅有说明文档或 Git 子模块链接。
+**机器人系统 · 嵌入式实时控制 · 机器人运动学 · 计算机视觉 · 物联网**
 
-该目录是从本仓库已存在、已筛选的归档源码中复用 Git 树对象整理而来：**没有搬动或删除原目录，没有访问或修改任何组织仓库，也没有改动个人独立仓库。**
+这里是个人精选工程源代码集合。项目采用「编号 + 工程代号 + 技术领域」命名，并在下方附真实技术说明，便于长期管理、作品展示与专业检索。目录名称是作品品牌名，不代表额外实现了源码中尚不存在的功能。
 
-> **重要：** 本次收录的是 `projects-archive` 已保存的历史快照（原归档日期 2026-10-13），不能视为各个人仓库 2026-11-05 的最新代码。新入口和归档原目录今后不会自动同步；更新某个项目时须单独审查并提交。
+> 本目录全部源码来自本仓库已经筛选的 **2026-10-13 历史归档快照**。这里不是独立个人仓库最新版的自动镜像，不能据此声称已完成编译、实机验收或商业许可审核。只重命名精选源码目录与入口文档；原始归档、个人独立仓库及组织仓库均未更改。
 
-## 项目入口
+## 精选工程 / Featured Projects
 
-| 编号 | 项目 | 归档源码位置 |
-| --- | --- | --- |
-| 1 | [STM32F407ZGT6 + FreeRTOS 麦克纳姆底盘](./01-stm32f407-freertos-mecanum/) | `embedded/bugrtoscar/otherWork/STM32F407ZGT6` |
-| 2 | [ROS-CAR 机器人开发工程](./02-ros-car/) | `robotics/ROS-CAR` |
-| 3 | [JXB2.0 机械臂开发工程](./03-jxb-robot-arm/) | `robotics/JXB2.0` |
-| 4 | [ESP32 ROS2 RTOS 嵌入式实验](./04-esp32-ros2-rtos/) | `embedded/esp32ROS2RTOS` |
-| 5 | [物联网智能育苗控制系统](./05-iot-seedling-control/) | `applications/iot-seedling-graduation` |
-| 6 | [手部姿态视觉实验](./06-handpose-vision/) | `vision/handpose-x` |
+| No. | 工程代号 | 专业项目名称 |
+|:---:|---|---|
+| 01 | [**AegisMotion RTOS**](./01-AegisMotion-RTOS/) | STM32F407 实时麦克纳姆底盘控制系统 |
+| 02 | [**NexusMobile ROS2**](./02-NexusMobile-ROS2/) | ROS2 移动机器人软硬件集成工程 |
+| 03 | [**KineArm Robotics**](./03-KineArm-Robotics/) | 机器人机械臂运动学与控制实验平台 |
+| 04 | [**EdgeLink ESP32**](./04-EdgeLink-ESP32/) | ESP32-S3 嵌入式串口协议与外设控制工程 |
+| 05 | [**AgroSense IoT**](./05-AgroSense-IoT/) | 智能农业多节点感知与远程控制系统 |
+| 06 | [**HandPose CV**](./06-HandPose-CV/) | 计算机视觉手部姿态估计实验工程 |
 
-## 项目说明
+## 工程说明 / Technical Overview
 
-### STM32F407ZGT6 + FreeRTOS 麦克纳姆底盘
+### AegisMotion RTOS · STM32F407 实时麦克纳姆底盘控制系统
 
-- 项目源码：[`projects/01-stm32f407-freertos-mecanum/`](./01-stm32f407-freertos-mecanum/)
-- 归档原始位置：[`embedded/bugrtoscar/otherWork/STM32F407ZGT6`](../embedded/bugrtoscar/otherWork/STM32F407ZGT6/)
-- 内容概要：Keil 工程、FreeRTOS、四轮控制、IMU、上位机工具
-- 个人源码仓库（可检查是否有较新版本）：https://github.com/dreamcather726/bugrtoscar
+- **源码入口：** [`projects/01-AegisMotion-RTOS/`](./01-AegisMotion-RTOS/)
+- **技术要点：** FreeRTOS 静态任务调度、四轮逆运动学、Emm_V5 串口驱动、JY61P IMU、通信超时与紧急停车
+- **历史归档：** [`embedded/bugrtoscar/otherWork/STM32F407ZGT6/`](../embedded/bugrtoscar/otherWork/STM32F407ZGT6/)
+- **个人独立仓库：** https://github.com/dreamcather726/bugrtoscar（可能有更近期版本）
 
-### ROS-CAR 机器人开发工程
+### NexusMobile ROS2 · ROS2 移动机器人软硬件集成工程
 
-- 项目源码：[`projects/02-ros-car/`](./02-ros-car/)
-- 归档原始位置：[`robotics/ROS-CAR`](../robotics/ROS-CAR/)
-- 内容概要：ROS、ESP32 和机器人系统工程资料
-- 个人源码仓库（可检查是否有较新版本）：https://github.com/dreamcather726/ROS-CAR
+- **源码入口：** [`projects/02-NexusMobile-ROS2/`](./02-NexusMobile-ROS2/)
+- **技术要点：** ROS 相关程序、ESP32S3 固件与机器人系统工程资料；各功能集成情况需实机验证
+- **历史归档：** [`robotics/ROS-CAR/`](../robotics/ROS-CAR/)
+- **个人独立仓库：** https://github.com/dreamcather726/ROS-CAR（可能有更近期版本）
 
-### JXB2.0 机械臂开发工程
+### KineArm Robotics · 机器人机械臂运动学与控制实验平台
 
-- 项目源码：[`projects/03-jxb-robot-arm/`](./03-jxb-robot-arm/)
-- 归档原始位置：[`robotics/JXB2.0`](../robotics/JXB2.0/)
-- 内容概要：机械臂控制、Python、ROS 与相关实验
-- 个人源码仓库（可检查是否有较新版本）：https://github.com/dreamcather726/JXB2.0
+- **源码入口：** [`projects/03-KineArm-Robotics/`](./03-KineArm-Robotics/)
+- **技术要点：** 机械臂控制、运动学相关实现及 Python / ROS 实验
+- **历史归档：** [`robotics/JXB2.0/`](../robotics/JXB2.0/)
+- **个人独立仓库：** https://github.com/dreamcather726/JXB2.0（可能有更近期版本）
 
-### ESP32 ROS2 RTOS 嵌入式实验
+### EdgeLink ESP32 · ESP32-S3 嵌入式串口协议与外设控制工程
 
-- 项目源码：[`projects/04-esp32-ros2-rtos/`](./04-esp32-ros2-rtos/)
-- 归档原始位置：[`embedded/esp32ROS2RTOS`](../embedded/esp32ROS2RTOS/)
-- 内容概要：ESP-IDF / CMake 嵌入式工程
+- **源码入口：** [`projects/04-EdgeLink-ESP32/`](./04-EdgeLink-ESP32/)
+- **技术要点：** ESP-IDF / CMake、UART 二进制协议、CRC16、PWM 和 LED 基础模块；不宣称已实现 ROS2 完整通信
+- **历史归档：** [`embedded/esp32ROS2RTOS/`](../embedded/esp32ROS2RTOS/)
 
-### 物联网智能育苗控制系统
+### AgroSense IoT · 智能农业多节点感知与远程控制系统
 
-- 项目源码：[`projects/05-iot-seedling-control/`](./05-iot-seedling-control/)
-- 归档原始位置：[`applications/iot-seedling-graduation`](../applications/iot-seedling-graduation/)
-- 内容概要：物联网控制与毕业设计项目源码
-- 个人源码仓库（可检查是否有较新版本）：https://github.com/dreamcather726/IoT-Based-Seedling-Control-System
+- **源码入口：** [`projects/05-AgroSense-IoT/`](./05-AgroSense-IoT/)
+- **技术要点：** Arduino 传感节点、树莓派中控、MQTT / 云平台通信与远程监控相关源码
+- **历史归档：** [`applications/iot-seedling-graduation/`](../applications/iot-seedling-graduation/)
+- **个人独立仓库：** https://github.com/dreamcather726/IoT-Based-Seedling-Control-System（可能有更近期版本）
 
-### 手部姿态视觉实验
+### HandPose CV · 计算机视觉手部姿态估计实验工程
 
-- 项目源码：[`projects/06-handpose-vision/`](./06-handpose-vision/)
-- 归档原始位置：[`vision/handpose-x`](../vision/handpose-x/)
-- 内容概要：Python 视觉与手部姿态处理实验
+- **源码入口：** [`projects/06-HandPose-CV/`](./06-HandPose-CV/)
+- **技术要点：** Python 手部姿态推理相关模块与模型组件；准确率和实时性能尚未验收
+- **历史归档：** [`vision/handpose-x/`](../vision/handpose-x/)
 
-## 保护原则
+## 版本与资产保护
 
-1. **仅收录个人账号下或本私有归档已有且明确选择的项目源码**；组织账号下的仓库不参与。
-2. 保留源码原路径、原有独立仓库及其完整 Git 历史，不删除、不强制推送、不覆盖。
-3. 原归档做过敏感内容筛查与占位替换，见 [归档范围和检查记录](../docs/ARCHIVE_SCOPE.md)；新增或更新源码仍需重新检查凭据、密钥、个人数据和大文件。
-4. 此处用于个人备份和工程展示。商用、开源或在闲鱼售卖前，需核对每个项目的作者归属、雇主知识产权、第三方许可证和依赖许可。
-5. 本目录中重复呈现的源码与 [原归档](../docs/PROJECTS.md)共享现有 Git 对象，并不是自动更新的镜像。不要直接改两个位置后假定它们会同步。
-
-## 其他已归档项目
-
-原仓库还有多项嵌入式、机器人、视觉、AI、课程和工具代码，仍可在 [全部 65 个项目或版本目录](../docs/PROJECTS.md) 中查找。未逐一确认归属或独立来源的项目暂不复制到本精选目录。
+1. 源码本体保留原有目录结构，精选入口采用 Git 树对象复用归档代码；本次只变更精选目录名称与说明文档。
+2. 原有归档目录、个人独立仓库、历史提交全部保留；**组织仓库不在整理范围内**。
+3. 刚整理的项目入口是历史快照，今后不会自动同步，更新时需单独核对个人源仓库版本、文件差异、凭据和许可证。
+4. 已归档源码曾做过敏感数据筛查与占位处理，详见 [归档检查说明](../docs/ARCHIVE_SCOPE.md)；商业发布前还需核对著作权归属和第三方许可证。
+5. 完整历史归档项目见 [项目目录（65 个项目/版本目录）](../docs/PROJECTS.md)。

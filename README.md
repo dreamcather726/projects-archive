@@ -1,11 +1,17 @@
 # Projects Archive
 
-## 精选个人工程项目
+## Robotics & Embedded Systems · 个人工程源码作品集
 
-已建立按编号整理的 [**工程项目集合（projects/）**](projects/README.md)，包含 6 项源码快照：STM32F407 FreeRTOS 麦克纳姆小车、ROS-CAR、JXB2.0、ESP32 ROS2 RTOS、物联网智能育苗、手部姿态视觉实验。**原始 65 项归档和各独立仓库均保留不变，组织仓库未涉及。**
+[**进入精选工程项目 / Featured Projects**](projects/README.md)：
 
-> 精选目录来源于 2026-10-13 的历史归档；不是各个个人源码仓库的最新代码，后续更新需单独核验和同步。
+- **AegisMotion RTOS** — STM32F407 实时麦克纳姆底盘控制系统
+- **NexusMobile ROS2** — ROS2 移动机器人软硬件集成工程
+- **KineArm Robotics** — 机器人机械臂运动学与控制实验平台
+- **EdgeLink ESP32** — ESP32-S3 嵌入式串口协议与外设控制工程
+- **AgroSense IoT** — 智能农业多节点感知与远程控制系统
+- **HandPose CV** — 计算机视觉手部姿态估计实验工程
 
+> 本仓库为私有归档。精选工程源码是 2026-10-13 的历史快照，原归档目录、独立个人仓库和组织仓库保持不变。
 
 个人项目源码归档，来自 C 盘和 D 盘的开发目录。整理于 **2026-10-13**。
 
