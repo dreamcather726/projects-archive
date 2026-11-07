@@ -426,3 +426,135 @@ PY
 这页最后可以总结：
 
 > **底盘驱动要把指令传对、把反馈读懂、把运动估计解释清楚，并管理设备状态。协议黑盒提供了实现边界，正确使用它仍需完整的接口约定。**
+
+---
+
+## 第 6 页｜ROS2 核心概念
+
+这页你可以把它讲成：
+
+> **上一章讲清了驱动的职责，现在看它怎样在 ROS 2 中实现。我们带着三个问题进入这一章：节点之间怎样交换数据，传输策略怎样选，以及速度、里程计和 IMU 消息分别表达什么。把这三个问题连起来，就能开始读懂驱动节点的接口。**
+
+### 讲解与例子
+
+这是第二章的引入页，围绕图片中的三个问题复习核心概念，具体编程细节留到对应知识点展开。
+
+**第一个问题：节点之间如何通信，话题和服务有什么区别？**
+
+节点是承担某项职责的运行对象，一个节点可以同时发布、订阅话题，也可以提供或调用服务。
+
+话题采用发布与订阅模式，适合持续更新的数据。例如控制节点发布速度要求，底盘驱动订阅；驱动持续发布运动状态，其他节点按需要订阅。话题本身不为每条指令提供请求与响应式的执行结果。
+
+服务采用请求与响应模式，适合一次查询或触发操作，例如读取某项设备状态、执行一次复位。是否提供这些服务由具体驱动决定。客户端可以同步等待，也可以异步处理响应，因此不能把“服务”直接等同于“必须阻塞调用”。
+
+**第二个问题：为什么课件建议速度指令用 reliable，传感器数据用 best effort？**
+
+Reliable 在通信层支持可靠交付和必要的重传；best effort 允许样本丢失，不要求补齐每个样本。对于持续产生新测量的传感器，有时可以接受少量丢帧，优先处理较新的状态。
+
+但这是常见的选型思路，需要结合实际系统判断。速度指令通常也会周期性更新，过期的控制要求不应一直执行；传感器丢失过多也会影响估计。使用 reliable 不能证明电机已执行，使用 best effort 也不能免除对数据连续性的检查。
+
+实际配置要兼顾发布与订阅端是否匹配、时延、队列深度及断流处理。驱动与下位机还需按约定处理指令超时。相关概念见 [ROS 2 Humble 官方 QoS 文档](https://github.com/ros2/ros2_documentation/blob/humble/source/Concepts/Intermediate/About-Quality-of-Service-Settings.rst)。
+
+**第三个问题：Twist、Odometry、Imu 中分别装了什么？**
+
+| 消息类型 | 主要内容 | 与底盘驱动的关系 |
+| --- | --- | --- |
+| `geometry_msgs/msg/Twist` | 三维线速度 `linear` 与角速度 `angular` | 常用于表达速度要求；线速度用 m/s，角速度用 rad/s，参考系需由接口约定 |
+| `nav_msgs/msg/Odometry` | 时间、坐标系、估计位姿与速度，以及相应协方差 | 提供运动估计；pose 在 `header.frame_id` 中表达，twist 在 `child_frame_id` 中表达 |
+| `sensor_msgs/msg/Imu` | 时间与坐标系、姿态四元数、角速度、线加速度及各自协方差 | 传递惯性测量或设备提供的姿态估计；角速度用 rad/s，加速度用 m/s² |
+
+Twist 本身没有 Header，不能仅凭消息内容知道它属于哪个时刻或坐标系。Imu 也不保证每台设备都提供有效姿态；缺失的数据应按消息定义标记，不能把默认值当作测量结果。
+
+本页先建立“速度要求、运动估计、惯性信息”三者的区别。定时器用于周期性触发工作，回调由执行器调度；订阅、采样与发布如何配合，需要结合后续代码理解。
+
+### 板书
+
+```text
+话题：发布/订阅，适合持续更新的数据
+服务：请求/响应，适合一次操作
+QoS：怎样交付数据，双方能否匹配
+
+Twist：要求怎样运动
+Odometry：估计运动到了哪里、当前怎样运动
+Imu：惯性测量与可用的姿态估计
+```
+
+### 命令行实验：用官方 turtlesim 区分话题与服务
+
+**实验目标：**在同一个官方示例中观察持续话题和一次服务调用，再查看三种底盘常用消息的定义。这里不启动实体底盘，也不把海龟位姿当作真实里程计。
+
+来源：[Humble 官方服务教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.rst)。消息字段可对照官方 [Odometry 定义](https://github.com/ros2/common_interfaces/blob/humble/nav_msgs/msg/Odometry.msg)与 [Imu 定义](https://github.com/ros2/common_interfaces/blob/humble/sensor_msgs/msg/Imu.msg)。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble，图形显示可用。以下命令在 Ubuntu Bash 中执行，目录不限。缺包时先安装：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-turtlesim ros-humble-geometry-msgs \
+  ros-humble-nav-msgs ros-humble-sensor-msgs ros-humble-std-srvs
+```
+
+准备 A、B、C 三个终端，每个终端先执行：
+
+```bash
+source /opt/ros/humble/setup.bash
+echo "${ROS_DOMAIN_ID:-0}"
+```
+
+各终端的 Domain ID 应一致。若第 4 页的同一套 turtlesim 仍在运行，可直接复用；否则按下面步骤启动，避免重复运行同名节点。
+
+**A：启动仿真节点。**
+
+```bash
+ros2 run turtlesim turtlesim_node
+```
+
+**B：启动键盘控制，保持焦点在 B，按方向键移动海龟并画出轨迹。**
+
+```bash
+ros2 run turtlesim turtle_teleop_key
+```
+
+**C：观察话题接口和一条状态消息。**
+
+```bash
+ros2 topic info /turtle1/cmd_vel --verbose
+ros2 topic echo /turtle1/pose --once
+```
+
+预期第一条命令显示速度话题的类型、端点与 QoS；第二条命令收到一条仿真位姿后退出。记录查询到的 reliability，说明 QoS 配置属于具体端点。
+
+**C：查看并调用一次清除轨迹服务。调用前停止在 B 按键。**
+
+```bash
+ros2 service type /clear
+ros2 interface show std_srvs/srv/Empty
+ros2 service call /clear std_srvs/srv/Empty "{}"
+```
+
+预期 `/clear` 的类型为 `std_srvs/srv/Empty`，请求与响应均没有业务字段。调用后已有轨迹清除，海龟位置不因该服务而复位。空响应仍是一次请求与响应通信，不等于“没有服务响应”。
+
+**C：查看本页三种消息的字段。**
+
+```bash
+ros2 interface show geometry_msgs/msg/Twist
+ros2 interface show nav_msgs/msg/Odometry
+ros2 interface show sensor_msgs/msg/Imu
+```
+
+**验收：**学生能够解释话题观察与服务调用的区别，指出 Twist 的两类速度向量、Odometry 的两个坐标系字段，以及 Imu 的角速度和加速度字段。查看接口定义不需要对应话题正在发布；本实验没有产生真实 `/odom` 或 `/imu` 数据。
+
+**排查与结束：**服务找不到时检查 A 是否运行及名称是否正确；轨迹看起来没有变化时确认调用前已有轨迹且 B 没有继续画线；找不到消息类型时检查依赖与环境加载。结束时 B 按 `q`，A 按 `Ctrl+C`。
+
+### 课堂提问
+
+> 已经收到一条 Twist，能否据此填写“机器人已前进 1 m”？
+
+参考答案：不能。Twist 表达速度，若用于 `cmd_vel` 则表示运动要求；位移需要反馈或运动估计支持，还涉及时间与坐标系。
+
+> 将所有话题都改成 reliable，就能解决通信和控制问题吗？
+
+参考答案：不能。还需检查端点匹配、数据时效、队列与系统负载，并分别验证设备通信和执行结果。
+
+这页最后可以总结：
+
+> **读驱动接口时，先判断通信模式，再检查传输策略，最后核对消息的字段、单位与参考系。**
