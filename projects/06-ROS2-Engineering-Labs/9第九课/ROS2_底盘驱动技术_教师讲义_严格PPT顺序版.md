@@ -2237,3 +2237,192 @@ B 重新启动查询。预期与第②步的旋转相同，四元数数值相同
 这页最后可以总结：
 
 > **欧拉角便于表达意图，四元数便于处理旋转；统一轴、顺序和单位，再比较实际朝向，才能正确完成转换与插值。**
+
+---
+
+## 第 17 页｜为什么需要统一的 TF 系统
+
+这页你可以把它讲成：
+
+> **一台机器人有驱动、定位、导航、传感器和可视化等多个模块。如果每个模块都抄一份安装参数、写一套旋转与时间处理，修改一次传感器位置就可能要改很多地方。TF 把坐标关系按统一约定发布出来，由需要它的模块按参考系和时间查询，让关系的维护者与使用者各自负责清楚的一部分工作。**
+
+### 讲解与例子
+
+**1. 先让学生设想：三个模块各自保存一份传感器安装参数。**
+
+例如，避障模块把传感器前移量写为 0.10 m，可视化模块写为 0.12 m，建图模块还沿用更换支架前的安装角。同一个观测点送进三个模块，得到的位置就可能不同。即使每份公式本身都正确，参数不同也会造成不一致。
+
+| PPT 中的问题 | 具体表现 | 统一 TF 后的分工 |
+| --- | --- | --- |
+| 重复实现与维护 | 每个节点自行写旋转、求逆、链式组合和边界处理 | 消费端使用经过验证的 tf2 接口处理变换 |
+| 参数或约定不一致 | 安装位置、轴向、单位、旋转顺序各写一份 | 为每条关系明确维护来源，并统一发布给消费者 |
+| 时间处理复杂 | 直接拿最新姿态转换旧传感器数据，或各自保存历史 | 按数据时间查询 TF 缓存，在可用范围内完成插值 |
+
+统一系统降低了重复实现和维护的成本，但不会自动发现安装角写错、单位填错或标定不准确。所有消费者都得到一致的错误参数，结果仍然会一致地出错。
+
+**2. “统一变换服务”首先是统一接口，不必是一台中心服务器。**
+
+常见用法是：发布者把动态与静态关系分别广播到 `/tf`、`/tf_static`；消费者用 TransformListener 接收，再写入自己的 Buffer。应用随后查询本地 Buffer，而不是每次都向某个中心节点发起 ROS Service 请求。
+
+只要坐标系之间存在完整路径，并且相关数据已收到、查询时间有效，tf2 就能沿链组合或求逆。不需要为每个使用者再发布一条直接连接，也不需要应用自己硬编码完整的矩阵乘积。
+
+所以 PPT 的“任意两坐标系”要带上条件：坐标系存在、路径连通、动态边在该时刻有可用数据。只创建一个空 Buffer，或者只填写消息的 `frame_id`，并不能完成查询。
+
+依据：Humble 官方 [tf2 概念说明](https://github.com/ros2/ros2_documentation/blob/humble/source/Concepts/Intermediate/About-Tf2.rst)及 [Python 监听者教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Listener-Py.rst)。
+
+**3. 统一时间查询，仍需要准确的时间戳与时钟基准。**
+
+一帧传感器消息记录的是时刻 t 的观测，通常应使用 t 时刻的坐标关系转换。tf2 帮助消费者保存和查询带时间的变换，在有效范围内插值；它不会让相机、IMU 和编码器自动在同一时刻采样，也不会自行修正多机时钟偏差。
+
+PPT 提到 Cartographer 等算法依赖这种能力，可以解释为算法处理带时间的数据时需要对应的坐标关系；不能理解成只要有 TF，所有传感器数据就已经完成同步。时间戳来源、时钟同步与消息配对，仍需要相应的驱动、系统或算法处理。
+
+上一页讨论的外推错误也仍然存在：如果某条动态边没有 t 时刻的可用数据，树即使连通，查询也可能失败。不能通过把旧消息时间改成现在来代替正确的时间处理。
+
+**4. “谁的数据谁广播”，落到工程上是每条关系有明确的负责者。**
+
+本课可以把驱动提供的里程计关系 `odom → base_footprint` 作为例子：需要车体在 odom 中位置的模块消费这条关系，不再各自重新积分一份轮速来拼出不同的 TF。
+
+若项目改为由融合估计节点发布这条关系，就应调整驱动的 TF 发布配置，避免二者同时维护同一子坐标系。传感器的固定安装关系同样应从明确的模型或标定配置提供，不要同时在多个 launch 文件中各写一份。
+
+这里减少的是重复的数据来源和重复实现，不代表整个系统只计算一次。每个消费者仍可能维护缓存、做链式查询，并将自己的点或位姿转换到目标参考系；统一 TF 不会让这些必要运算消失。
+
+### 板书
+
+```text
+状态 / 安装关系的负责者
+        ↓ 广播 /tf、/tf_static
+各消费者的 TransformListener → 各自的 Buffer → 应用查询与数据转换
+
+减少重复实现：复用 tf2 的组合、求逆与时间查询
+减少参数分叉：每条关系明确来源，消费者按约定使用
+查询条件：有 frame + 有路径 + 有数据 + 时间有效
+
+统一接口 ≠ 默认中心服务器
+时间查询 ≠ 自动同步采样；一致参数 ≠ 参数必然正确
+```
+
+### 实验：发布者只给出两条关系，消费者完成跨链转换
+
+**实验目标：**通过两条 TF 把传感器坐标中的一个点转换到世界参考，再反向还原，体会消费者无需硬编码安装参数与矩阵计算。
+
+来源：Humble 官方 [静态 TF 工具教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Static-Broadcaster-Py.rst)、上述监听者教程，以及 [Buffer 数据转换接口](https://github.com/ros2/geometry2/blob/humble/tf2_ros_py/tf2_ros/buffer_interface.py)。发布端采用官方工具；消费端是按官方接口编写的最小课堂练习，**不是官方完整示例程序**。
+
+本实验建立一个固定场景 `lab_world → lab_base → lab_sensor`。数值是课堂示意，不是实机标定；用静态关系方便观察几何结果，不把真实底盘的运动关系改成静态 TF。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble，无需图形桌面。使用 Ubuntu Bash：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-tf2-ros ros-humble-tf2-ros-py \
+  ros-humble-tf2-geometry-msgs ros-humble-geometry-msgs
+```
+
+结束此前的发布进程。打开终端 A、B、C，**三个终端都执行**以下设置；若 99 已用于其他实验，统一换用空闲 Domain ID。
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=99
+export ROS_LOCALHOST_ONLY=1
+```
+
+**① 终端 A 发布世界参考到车体参考的关系。**
+
+```bash
+ros2 run tf2_ros static_transform_publisher \
+  --x 1.0 --y 2.0 --z 0.0 \
+  --roll 0.0 --pitch 0.0 --yaw 1.5707963267948966 \
+  --frame-id lab_world --child-frame-id lab_base
+```
+
+**② 终端 B 发布车体参考到传感器参考的关系。**
+
+```bash
+ros2 run tf2_ros static_transform_publisher \
+  --x 0.5 --y 0.0 --z 0.1 \
+  --roll 0.0 --pitch 0.0 --yaw 0.0 \
+  --frame-id lab_base --child-frame-id lab_sensor
+```
+
+A、B 均保持运行。传感器原点在车体系中前移 0.5 m、上移 0.1 m；车体相对 lab_world 左转 90°，所以传感器原点在 lab_world 中位于约 `(1, 2.5, 0.1)`。
+
+**③ 终端 C 先核对跨链关系。**
+
+```bash
+ros2 run tf2_ros tf2_echo lab_world lab_sensor
+```
+
+预期平移约为 `[1, 2.5, 0.1]`，旋转为正 90° 偏航。观察后按 `Ctrl+C`，再运行下面的消费端。它处理的是一个构造的几何点，不是真实传感器测量。
+
+```bash
+python3 - <<'PY'
+import time
+import rclpy
+import tf2_geometry_msgs  # Register PointStamped transformations.
+from geometry_msgs.msg import PointStamped
+from rclpy.node import Node
+from rclpy.time import Time
+from tf2_ros import Buffer, TransformListener
+
+rclpy.init()
+node = Node('lesson_tf_consumer')
+listener = None
+try:
+    buffer = Buffer()
+    listener = TransformListener(buffer, node)
+    point = PointStamped()
+    point.header.frame_id = 'lab_sensor'
+    point.header.stamp = node.get_clock().now().to_msg()
+    point.point.x = 1.0
+    query_time = Time.from_msg(point.header.stamp)
+
+    deadline = time.monotonic() + 5.0
+    while not buffer.can_transform('lab_world', 'lab_sensor', query_time):
+        if time.monotonic() >= deadline:
+            raise RuntimeError('TF unavailable: check both publishers and terminal environment')
+        rclpy.spin_once(node, timeout_sec=0.1)
+
+    world_point = buffer.transform(point, 'lab_world')
+    restored = buffer.transform(world_point, 'lab_sensor')
+    for label, value in [('world', world_point), ('restored', restored)]:
+        p = value.point
+        print(f'{label}: frame={value.header.frame_id}, '
+              f'point=({p.x:.3f}, {p.y:.3f}, {p.z:.3f})')
+finally:
+    if listener is not None:
+        listener.unregister()
+    node.destroy_node()
+    rclpy.shutdown()
+PY
+```
+
+**预期结果：**世界参考中的点约为 `(1, 3.5, 0.1)`，还原到传感器参考后约为 `(1, 0, 0)`，末位可能有浮点误差或负零显示。消费端只声明源坐标系、数据时间与目标坐标系，没有复制前移量、安装高度或 yaw 参数。
+
+可以先手算验证：传感器中的点 `(1, 0, 0)` 加上安装平移，在车体系中为 `(1.5, 0, 0.1)`；再随车体系左转 90°并加上世界系中的车体位置，就得到 `(1, 3.5, 0.1)`。TF 完成同样的链式变换，反向转换则还原输入点。
+
+代码中的 `spin_once` 用于执行监听回调，把收到的 TF 写入 Buffer；只等待而不处理回调，缓存可能始终为空。`import tf2_geometry_msgs` 则注册 PointStamped 的官方转换支持，依据是 [tf2_geometry_msgs 的类型转换实现](https://github.com/ros2/geometry2/blob/humble/tf2_geometry_msgs/src/tf2_geometry_msgs/tf2_geometry_msgs.py)。修改 `frame_id` 字符串本身不会完成坐标转换。
+
+**④ 保持发布者运行，再执行一次消费端。**
+
+新进程会创建自己的 Buffer，通过监听获得相同的安装关系，预期得到相同几何结果。重跑只用于观察独立消费端获取统一关系，不证明不同节点在任意网络条件下都拥有完全相同的缓存内容。
+
+**验收：**记录跨链 TF、世界系中的点与还原结果；指出几何参数由谁提供、消费端如何获得它们，以及为什么不需要再发布 `lab_world → lab_sensor` 这条直接连接。说明本实验的静态场景没有验证动态传感器时间同步。
+
+**排查与结束：**超时先查 A、B 是否运行、frame 名称及各终端环境，再查路径是否完整；缺少消息类型转换支持时，检查依赖和 `tf2_geometry_msgs` 导入。结果不符时核对父子方向、单位及重复发布者，不能只改 frame 标签。消费端会自行结束，最后 B、A 依次按 `Ctrl+C` 退出。
+
+### 课堂提问
+
+> TF 统一了坐标变换，为什么每个消费者仍可能各有一个 Buffer？
+
+参考答案：统一的是发布约定和查询接口，常见实现通过广播让各消费者建立本地缓存，不要求所有查询都经过中心服务器。
+
+> 只要 TF 树连通，带任意时间戳的数据都能转换吗？
+
+参考答案：不能。相关动态边还必须在请求时刻有可用数据，监听者也必须已经收到它们；TF 不会自动补齐缺失历史或同步采样。
+
+> 所有模块使用同一组 TF 后，为什么仍需要检查安装标定？
+
+参考答案：共享关系能减少参数分叉，但不能保证关系本身正确。错误参数也会被一致地使用，仍需核对实际安装与标定。
+
+这页最后可以总结：
+
+> **统一 TF，让关系有明确来源，让消费者按坐标系和时间查询；减少各写一套的维护问题，同时保留对参数、时钟和数据有效性的检查。**
