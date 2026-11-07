@@ -1048,3 +1048,204 @@ PY
 这页最后可以总结：
 
 > **标准消息提供了共同结构，驱动还必须正确填写单位、坐标、时间与有效性，才能让下游正确使用数据。**
+
+---
+
+## 第 10 页｜定时器回调机制与命令行工具
+
+这页你可以把它讲成：
+
+> **驱动节点需要反复做几件事：收串口数据、更新里程计、发布 IMU、发布电池状态。定时器决定这些工作多久有一次执行机会，Executor 负责执行已经就绪的回调。写好周期只是第一步，还要确认回调不会互相拖慢，再用命令行观察节点、消息和坐标变换是否正常。**
+
+### 讲解与例子
+
+**1. 先把频率换算成周期。**
+
+| 定时器 | PPT 设定频率 | 对应周期 | 本项目中的工作 |
+| --- | --- | --- | --- |
+| communication | 200 Hz | 5 ms | 读取串口字节，解析协议帧 |
+| odom | 50 Hz | 20 ms | 请求速度数据、推算位姿、发布 TF |
+| imu | 50 Hz | 20 ms | 请求并发布 IMU 数据 |
+| battery | 10 Hz | 100 ms | 请求并发布电池数据 |
+
+公式是 `周期 T = 1 / 频率 f`。上表是课件描述的设计配置，实际频率应通过运行结果核对，不能把表格当作已经测量过的数据。
+
+请求下位机与收到回复之间存在通信延迟。因此，“每 20 ms 发起一次请求”不等于“每次回调开始时都已有一帧新数据”。实现还应区分最新有效反馈、尚未返回的请求与超时数据；不能把旧值重新发布就算作完成了一次新采样。
+
+**2. 定时器到期表示回调就绪，不保证立即执行。**
+
+本页按项目使用单线程 Executor 的情况讲解。同一执行器一次只执行一个回调；若串口回调仍未返回，里程计、IMU、订阅等就绪回调都需要等待。这里的“互不打断”指该执行器不会在一个普通回调中途切换去执行另一个回调，不表示操作系统不能抢占线程，也不表示所有回调严格按先来后到执行。
+
+例如，communication 的周期只有 5 ms，若其中一次串口读取等待了 30 ms，这段时间内其他回调也不能由这个单线程执行器执行。后果可能是发布间隔变长、数据变旧、接收缓存积压；不能假定执行器随后会逐次补跑所有错过的周期。
+
+对应关系可查阅官方 [Executor 概念说明](https://github.com/ros2/ros2_documentation/blob/humble/source/Concepts/Intermediate/About-Executors.rst)。
+
+**3. 串口回调要及时返回，200 Hz 也不是越高越好。**
+
+串口字节可能分批到达，一次读取不一定正好是一帧。回调应把已读字节交给接收缓存，解析完整帧，并保留尚未收全的部分。避免在回调中长时间 `sleep`、无限等待整帧或执行耗时计算。
+
+200 Hz 轮询可以缩短读取间隔，降低数据长期积压的风险，但不会提高 UART 的波特率，也不能单靠这个数字保证缓存不溢出。还需要看输入数据量、缓存容量与每次处理耗时。例如，5 ms 周期却配置可能等待 10 ms 的阻塞读取，就应检查它对其他回调的影响。
+
+需要推算里程计时，应使用实际有效时间间隔，而不是无论回调是否延迟都固定乘以 0.02 s。使用多线程也要同时考虑回调组与共享串口、缓存的访问保护，不能只把执行器换掉就认为问题解决了。
+
+**4. 用工具按“节点 → 话题 → 数据 → 频率 → TF”检查。**
+
+| 命令 | 可以检查什么 | 解释时的边界 |
+| --- | --- | --- |
+| `ros2 node list` | 当前可发现的节点 | 节点存在不代表回调运行正常 |
+| `ros2 topic list` | 当前可发现的话题 | 有话题名称不代表正在收到数据 |
+| `ros2 topic echo /odom` | 里程计消息内容 | 还要检查时间戳、坐标系与数值变化 |
+| `ros2 topic hz /imu` | 工具接收到消息的频率 | 受 QoS、负载与传输影响，不等于传感器内部采样率 |
+| `ros2 topic pub ... --once` | 发布一条指定消息 | 不能据此确认底盘执行，也不规定运动时长或距离 |
+| `rqt_graph` | 节点与话题的连接 | 展示计算图，不展示完整 TF 坐标关系 |
+| `ros2 run tf2_tools view_frames` | 收集 TF 并生成坐标树报告 | 没有 TF 发布者时不会凭空产生坐标关系 |
+| `ros2 run tf2_ros tf2_echo odom base_footprint` | 查看车体系相对 odom 的变换 | 两个 frame 名称必须与实际发布的一致 |
+
+PPT 的 `/cmd_vel` 示例表达车体 x 方向速度 0.2 m/s。`--once` 只限制发布次数，后续是否保持、超时停止，取决于接收端设计；真实底盘需要明确的指令超时与停止机制。本页用官方仿真话题练习发布命令。
+
+### 板书
+
+```text
+200 Hz → 5 ms；50 Hz → 20 ms；10 Hz → 100 ms
+
+定时器到期 → 回调就绪 → Executor 选择执行 → 回调返回
+单线程：一个回调阻塞，会推迟其他回调
+设定周期 ≠ 实际执行间隔 ≠ 工具接收间隔
+
+计算图：节点与话题的连接
+TF 树：坐标系之间的变换关系
+```
+
+### 实验一：观察官方 talker 的定时发布
+
+**实验目标：**把定时器周期、回调发布和命令行测频对应起来。
+
+来源：Humble 官方 [demo_nodes_py talker 源码](https://github.com/ros2/demos/blob/humble/demo_nodes_py/demo_nodes_py/topics/talker.py)。该例设置 1.0 s 周期，在定时器回调中发布 `/chatter`；它用于观察机制，不模拟项目的 200 Hz 串口通信。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble。以下使用 Ubuntu Bash；第二个实验还需要可用的图形桌面。安装依赖：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-demo-nodes-py ros-humble-turtlesim \
+  ros-humble-turtle-tf2-py ros-humble-tf2-ros ros-humble-tf2-tools \
+  ros-humble-rqt-graph
+```
+
+本页两个实验使用三个终端 A、B、C。**每个终端先执行下面三行**，让实验进程使用相同的本机通信环境；若 99 已用于其他实验，统一换成另一个空闲 Domain ID。
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=99
+export ROS_LOCALHOST_ONLY=1
+```
+
+**① 终端 A 启动官方节点。**
+
+```bash
+ros2 run demo_nodes_py talker
+```
+
+**② 终端 B 查看节点与消息。**
+
+```bash
+ros2 node list
+ros2 topic list
+ros2 topic echo /chatter --once
+```
+
+预期发现 `/talker` 和 `/chatter`，收到一条包含 `Hello World` 及计数值的字符串消息。
+
+**③ 终端 C 连续观察约 10 秒。**
+
+```bash
+ros2 topic hz /chatter
+```
+
+预期接收频率接近 1 Hz，通常会有小幅波动。结合官方源码中的定时器设置，说明“每秒执行一次发布回调”的含义；不要要求测量结果精确等于 1.000 Hz，也不要由此推断项目四个定时器都能达到设定频率。
+
+**验收与结束：**记录设定周期、实测平均频率，说明二者为何不必完全一致。C 按 `Ctrl+C` 结束测频，A 按 `Ctrl+C` 停止 talker，再开始下一个实验。
+
+### 实验二：用官方海龟示例观察计算图与 TF 树
+
+**实验目标：**完成一次节点发现、话题检查、消息发布与 TF 观察，区分计算图和坐标树。
+
+来源：Humble 官方 [tf2 入门示例](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Introduction-To-Tf2.rst)及 [话题命令行教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.rst)。沿用上述终端环境；该示例的 frame 是 `world`、`turtle1`、`turtle2`，不是实际底盘的 `odom` 与 `base_footprint`。
+
+**① 终端 A 启动官方 TF 示例。**
+
+```bash
+ros2 launch turtle_tf2_py turtle_tf2_demo.launch.py
+```
+
+预期出现海龟窗口与两只海龟，示例中的跟随节点会控制第二只海龟追踪第一只。
+
+**② 终端 B 检查计算图，再观察消息。**
+
+```bash
+ros2 node list
+ros2 topic list
+ros2 run rqt_graph rqt_graph
+```
+
+在图中找到海龟相关节点与话题，注意界面过滤选项可能隐藏部分连接。观察后关闭图窗口或按 `Ctrl+C`，继续执行：
+
+```bash
+ros2 topic echo /turtle1/pose --once
+ros2 topic hz /turtle1/pose
+```
+
+测频约 10 秒后按 `Ctrl+C`，记录实际接收频率。这里测的是官方仿真位姿话题，不是项目的 50 Hz `/odom`。
+
+**③ 终端 C 向第一只海龟发布一条速度命令。**
+
+```bash
+ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist \
+  '{linear: {x: 0.2}, angular: {z: 0.0}}' --once
+```
+
+观察第一只海龟的运动和第二只海龟的跟随。海龟仿真采用自己的速度超时处理，不能把它的运动持续时间当作真实底盘的约定。随后显式发送零速度：
+
+```bash
+ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist \
+  '{linear: {x: 0.0}, angular: {z: 0.0}}' --once
+```
+
+**④ 终端 B 查看变换，终端 C 生成坐标树。**
+
+终端 B：
+
+```bash
+ros2 run tf2_ros tf2_echo world turtle1
+```
+
+预期连续显示 `turtle1` 相对于 `world` 的平移与旋转。终端 C 在可写的实验目录中执行：
+
+```bash
+mkdir -p ~/ros2_timer_tf_lab
+cd ~/ros2_timer_tf_lab
+ros2 run tf2_tools view_frames
+```
+
+等待工具收集约 5 秒 TF，按终端提示打开生成的 PDF。预期能看到 `world` 与两只海龟坐标系的关系。对照刚才的 rqt_graph，指出“话题连接”与“坐标变换连接”的区别。
+
+**验收：**保留一份测频记录和 TF 树报告；能指出一条节点与话题连接、一条父子坐标关系，并说明要在真实项目中使用 `tf2_echo odom base_footprint`，必须先有节点发布对应 TF。
+
+**排查与结束：**节点相互不可见时，先核对每个终端的 Humble 环境、Domain ID 和本机通信设置；有话题但 echo 或 hz 没有数据时，检查发布者是否仍在运行，再用 `ros2 topic info <话题名> --verbose` 查看类型与 QoS。TF 提示找不到 frame 时，先检查名称、示例进程与 `/tf` 数据；生成报告失败时检查当前目录写权限和工具依赖。结束时 B 停止 tf2_echo，A 停止 launch，关闭图形窗口。
+
+### 课堂提问
+
+> 定时器设置为 200 Hz，为什么实际可能达不到每秒执行 200 次？
+
+参考答案：5 ms 只是设定周期。回调耗时、其他回调占用线程、系统调度与通信等待都会影响实际执行；需要测量，不能把到期视为立即执行。
+
+> 串口回调里等 100 ms，为什么 50 Hz 的里程计也会受影响？
+
+参考答案：同一单线程执行器在这段等待期间不能执行其他回调，里程计即使已经就绪也要等待。串口等待应有合适的边界，并与缓存和超时处理一起设计。
+
+> rqt_graph 已经看到节点连接，为什么还要运行 tf2_echo？
+
+参考答案：节点连接只能说明通信关系；tf2_echo 用于检查指定坐标系之间能否获得变换及其数值。两种工具回答的问题不同。
+
+这页最后可以总结：
+
+> **定时器提供执行节奏，回调耗时决定节奏能否维持；命令行工具帮助我们从“配置看起来正确”走到“运行结果可以检查”。**
