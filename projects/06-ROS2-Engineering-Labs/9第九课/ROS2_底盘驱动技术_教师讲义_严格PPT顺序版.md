@@ -2061,3 +2061,179 @@ ros2 run tf2_ros static_transform_publisher \
 这页最后可以总结：
 
 > **位置说明原点在哪里，四元数说明朝向怎样；核对参考系、分量顺序、弧度和单位模，才能把位姿消息读成正确的空间含义。**
+
+---
+
+## 第 16 页｜欧拉角 vs 四元数
+
+这页你可以把它讲成：
+
+> **欧拉角便于人理解，四元数便于程序表达和组合旋转。两者描述的是同一个朝向，但转换前必须统一旋转约定。不能把“绕哪三根轴”当成全部信息，还要说明轴是否随物体转动、旋转顺序怎样。遇到万向节锁或角度跳变时，也要先判断是表示方式的问题，还是真实姿态发生了变化。**
+
+### 讲解与例子
+
+**1. 先明确本页的旋转约定，再比较两种表示。**
+
+本课使用与 tf2 `setRPY(roll, pitch, yaw)` 一致的固定轴 RPY：roll 绕 x，pitch 绕 y，yaw 绕 z，输入单位为 rad。采用列向量描述时，对应旋转矩阵写作：
+
+```text
+R = Rz(yaw) · Ry(pitch) · Rx(roll)
+```
+
+矩阵作用于向量时，右侧先作用，所以这对应依次绕固定的 x、y、z 轴旋转；它也等价于按 z、y、x 顺序绕随动轴进行内禀旋转。PPT 的“ZYX 顺序”需要连同这个约定一起讲，不能只看三个字母就把函数参数改成 `(yaw, pitch, roll)`。
+
+旋转顺序通常不可交换。可以让学生拿一本书，分别尝试先绕固定 x 轴转、再绕固定 y 轴转，然后交换顺序，对比书的最终朝向。这里只比较朝向，不要求移动书的参考原点。
+
+依据：Humble 官方 [四元数基础教程中的固定轴 RPY 说明](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Quaternion-Fundamentals.rst)，以及 [tf2 Quaternion 的 setRPY 实现](https://github.com/ros2/geometry2/blob/humble/tf2/include/tf2/LinearMath/Quaternion.hpp)。
+
+**2. 万向节锁影响的是欧拉角表示，不是机器人突然失去运动能力。**
+
+| 对比项 | 本页采用的欧拉角 RPY | 单位四元数 |
+| --- | --- | --- |
+| 直观性 | 便于说明侧倾、俯仰和偏航 | 四个分量难以直接读出朝向 |
+| 约束与约定 | 必须明确轴、顺序和角度单位 | 必须明确分量顺序、单位模与旋转含义 |
+| 奇异性 | pitch=±90° 时，roll 与 yaw 不能独立、唯一确定 | 表示旋转时没有这类欧拉角奇异性 |
+| 旋转组合 | 不能直接把三组角度逐项相加 | 可以按明确的顺序做四元数乘法 |
+| 插值 | 逐项平均可能走错路径或跨越角度边界 | 可用 SLERP 等旋转插值方法 |
+
+PPT 中“roll 与 yaw 轴重合、丢失自由度”可以用嵌套转轴帮助理解；在数学上，更准确地说是该姿态附近的三个角不再提供独立的参数方向。刚体仍可在三维空间旋转，只是这套角度表示退化了。
+
+例如，按本页约定，`(roll, pitch, yaw) = (0°, 90°, 0°)` 与 `(30°, 90°, 30°)` 表示同一个旋转。把四元数再转换回欧拉角时，软件只能选择某一组等价角度；不应要求它原样返回输入的三个数。相关说明可参阅 [SciPy 官方欧拉角文档](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.as_euler.html)。
+
+**3. 看懂转换公式中的半角、符号与输出顺序。**
+
+令 `r=roll`、`p=pitch`、`ψ=yaw`，均为弧度，先计算：
+
+```text
+cr = cos(r/2)    sr = sin(r/2)
+cp = cos(p/2)    sp = sin(p/2)
+cy = cos(ψ/2)    sy = sin(ψ/2)
+```
+
+与 PPT 等价的四元数公式，按 ROS 消息的 `[qx, qy, qz, qw]` 顺序整理为：
+
+```text
+qx = cy·cp·sr - sy·sp·cr
+qy = sy·cp·sr + cy·sp·cr
+qz = sy·cp·cr - cy·sp·sr
+qw = cy·cp·cr + sy·sp·sr
+```
+
+PPT 把 w 写在公式第一行，不表示 ROS 消息的分量顺序改成了 `[w, x, y, z]`。另外，式中的 `cy、sy` 来自 yaw，`qy` 却是四元数的 y 分量，两种“y”不要混淆。
+
+令 r=p=0，就会退化为上一页的纯偏航公式 `[0, 0, sin(ψ/2), cos(ψ/2)]`，可以作为检查符号与半角的简单办法。包含三轴旋转时，例如 `(30°, 20°, 40°)`，结果约为：
+
+```text
+[qx, qy, qz, qw] = [0.182148, 0.244792, 0.283114, 0.909255]
+```
+
+开发中优先使用经过验证的库接口，例如 C++ 的 `setRPY(roll, pitch, yaw)`，再按消息字段转换；不要凭名字把不同的 Euler 接口当作同一种约定。检查单位模有助于发现错误，但不能代替核对顺序、参考系和单位。
+
+**4. “插值平滑”也需要选对方法与等价表示。**
+
+纯偏航从 +179° 到 -179°，两者实际只差约 2°；若直接平均两个角度会得到 0°，可能绕远路。这个角度边界问题与 pitch=±90° 的万向节锁不是同一个问题。
+
+SLERP 可以在两端姿态之间沿最短旋转路径插值，但要正确处理 q 与 -q 的等价性，不能直接逐分量平均。两关键帧之间的旋转插值，也不自动保证多段轨迹的角速度、加速度连续或满足机器人运动约束。相关行为参考 [SciPy 官方 SLERP 说明](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Slerp.html)。
+
+本页的开发习惯可以概括为：用 RPY 或坐标轴理解与检查朝向，程序中按接口约定使用单位四元数处理旋转。效率取决于具体运算，不能简单认为任何场景下四元数计算都一定更快。
+
+### 板书
+
+```text
+固定轴 RPY：roll(X)、pitch(Y)、yaw(Z)，输入 rad
+R = Rz(yaw) · Ry(pitch) · Rx(roll)
+setRPY 的参数顺序仍是 roll、pitch、yaw
+
+pitch=±90°：欧拉角表示退化，刚体旋转能力没有消失
+q 与 -q：同一旋转；转换回 RPY 不保证恢复原输入
+
+人读方向，程序按约定计算：查轴与顺序 → 查单位 → 查分量 → 查单位模
+```
+
+### 实验：用官方 TF 工具核对转换与万向节锁
+
+**实验目标：**验证一个三轴旋转的四元数，并观察两组不同欧拉角如何表示同一奇异姿态。
+
+来源：Humble 官方 [static_transform_publisher 的 RPY 输入示例](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Static-Broadcaster-Py.rst)及上述四元数教程。使用官方可执行工具，角度与 frame 名称是课堂设置；用静态 TF 展示固定朝向，不模拟实机运动。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble，无需图形桌面。使用 Ubuntu Bash 安装依赖：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-tf2-ros
+```
+
+结束此前的发布进程。打开终端 A、B，**两个终端都执行**以下设置；若 99 已用于其他实验，统一换用空闲 Domain ID。
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=99
+export ROS_LOCALHOST_ONLY=1
+```
+
+**① 终端 A 输入 roll=30°、pitch=20°、yaw=40°。**
+
+先将三个角分别换为弧度：
+
+```bash
+ros2 run tf2_ros static_transform_publisher \
+  --x 0.0 --y 0.0 --z 0.0 \
+  --roll 0.5235987755982988 --pitch 0.3490658503988659 --yaw 0.6981317007977318 \
+  --frame-id lesson_world --child-frame-id lesson_body
+```
+
+终端 B 查询：
+
+```bash
+ros2 run tf2_ros tf2_echo lesson_world lesson_body
+```
+
+预期四元数约为 `[0.182, 0.245, 0.283, 0.909]`；非奇异情况下，RPY 输出应对应约 30°、20°、40°。输出通常经过小数位舍入，不要直接用屏幕上的三个小数位要求单位模精确等于 1。
+
+**② 观察 pitch=90° 的第一组输入。**
+
+先在 B、A 中依次按 `Ctrl+C`，停止旧查询和发布。A 改为：
+
+```bash
+ros2 run tf2_ros static_transform_publisher \
+  --x 0.0 --y 0.0 --z 0.0 \
+  --roll 0.0 --pitch 1.5707963267948966 --yaw 0.0 \
+  --frame-id lesson_world --child-frame-id lesson_body
+```
+
+B 重新执行第①步的查询，记录四元数。预期约为 `[0, 0.707107, 0, 0.707107]`；在奇异姿态附近，RPY 的具体输出分支受实现和数值误差影响，重点记录四元数表示的朝向。
+
+**③ 换成另一组表示同一姿态的输入。**
+
+再次停止 B、A，A 改为 roll=30°、pitch=90°、yaw=30°：
+
+```bash
+ros2 run tf2_ros static_transform_publisher \
+  --x 0.0 --y 0.0 --z 0.0 \
+  --roll 0.5235987755982988 --pitch 1.5707963267948966 --yaw 0.5235987755982988 \
+  --frame-id lesson_world --child-frame-id lesson_body
+```
+
+B 重新启动查询。预期与第②步的旋转相同，四元数数值相同或在浮点误差范围内等价，也允许整体符号相反。若转换回 RPY 时没有得到 `(30°, 90°, 30°)`，不能据此判断四元数转换失败。
+
+**验收：**对照公式核对第①步的三轴旋转；记录第②、③步的四元数并解释其等价性；说明这与上一页纯 yaw 的半角公式有何联系，以及为什么奇异点不能只用“输入输出三个角相同”作为验收条件。
+
+**排查与结束：**先核对固定轴约定、参数顺序、弧度单位和查询方向；每轮都重启查询，并确认只有一个发布者维护该关系，避免静态缓存与重复发布干扰。涉及旋转比较时应考虑 q 与 -q 的等价性和浮点误差。结束时 B、A 依次按 `Ctrl+C` 退出。
+
+### 课堂提问
+
+> PPT 写 ZYX，为什么函数仍然调用 setRPY(roll, pitch, yaw)？
+
+参考答案：旋转矩阵乘积、固定轴或随动轴的描述顺序，与函数签名是不同层面的约定。本页固定轴 RPY 对应 `Rz·Ry·Rx`，函数参数按 roll、pitch、yaw 传入。
+
+> 四元数没有万向节锁，为什么转回欧拉角仍可能出现不稳定或不唯一的角度？
+
+参考答案：转换回去仍然使用欧拉角参数化，它在奇异姿态处的限制没有消失；应比较旋转本身，而非要求恢复唯一的三角组合。
+
+> +179° 与 -179° 直接平均得到 0°，为什么可能不适合姿态插值？
+
+参考答案：数值平均忽略了角度的周期性，两个端点实际相邻。需要按正确的旋转路径插值，不能把角度当作普通无界标量处理。
+
+这页最后可以总结：
+
+> **欧拉角便于表达意图，四元数便于处理旋转；统一轴、顺序和单位，再比较实际朝向，才能正确完成转换与插值。**
