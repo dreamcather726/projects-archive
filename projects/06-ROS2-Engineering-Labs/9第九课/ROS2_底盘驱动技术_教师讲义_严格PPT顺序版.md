@@ -3554,3 +3554,172 @@ ros2 run tf2_ros static_transform_publisher \
 这页最后可以总结：
 
 > **里程计负责连续地描述局部运动，外部观测提供新的环境或位置约束；通过清楚的参考系与发布职责衔接二者，才能在持续运动中限制长期漂移。**
+
+---
+
+## 第 24 页｜里程计与协方差
+
+这页你可以把它讲成：
+
+> **上一章我们算出了位置和速度，这一章要把它们变成下游能够正确使用的里程计消息。只告诉算法“我在这里”还不够，还要说明这个位置属于哪个坐标系、对应什么时刻，以及估计有多大不确定性。协方差就是传递不确定性的一种方式。读懂它，才能区分“这个量是零”和“这个量我根本没有测到”，也才能判断定位融合为什么过度相信或忽略一份数据。**
+
+### 讲解与例子
+
+**1. 先提出本章的三个问题，不在导入页展开全部推导。**
+
+| PPT 中的问题 | 本章要建立的认识 | 本页先记住什么 |
+| --- | --- | --- |
+| Odometry 消息里装了什么 | 时间与参考系、位姿、速度以及各自的不确定性 | 一条消息不仅是 x、y 和速度 |
+| 协方差怎样告诉下游“我有多可信” | 各分量的误差尺度与误差之间的关联 | 方差是有单位的数，不是可信度百分比 |
+| 为什么未观测的量不能随手填零方差 | 区分状态数值、对该数值的把握，以及是否参与融合 | 大方差是建模选择，`1e6` 不是通用规定 |
+
+可以先问学生：“两个里程计都说 x = 1.00 m，一个通常偏几厘米，一个可能偏几十厘米，你会把它们当成一样的信息吗？”回答之后再引出协方差，不必先从 36 个数组元素开始背。
+
+**2. Odometry 同时交代数值、时空参考和不确定性。**
+
+根据 Humble [Odometry 官方定义](https://github.com/ros2/common_interfaces/blob/humble/nav_msgs/msg/Odometry.msg)，本项目可以先按四部分阅读：
+
+```text
+header：数据时间戳；frame_id 指定 pose 的参考系，例如 odom
+child_frame_id：例如 base_footprint；twist 在该坐标系中表达
+pose：位置 + 姿态，以及 6×6 协方差
+twist：线速度 + 角速度，以及另一份 6×6 协方差
+```
+
+消息名中的 Odometry 表示运动估计，不是对真实位置的保证。位姿和速度属于不同参考时，协方差也必须与各自所描述的变量及参考一致，不能把同一组数字不加判断地复制过去。
+
+四元数有四个分量，但 pose 的协方差不是 7×7。[PoseWithCovariance 官方定义](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/PoseWithCovariance.msg)规定它描述三个平移分量与绕固定轴的三个旋转分量。这里先认识“六个误差方向”；矩阵布局和索引放到后续对应页面展开。
+
+**3. “可信”先用方差建立直觉，不能当作准确率。**
+
+在同一坐标轴、同一米制单位下，假设两份 x 估计都为 1.00 m：
+
+| 课堂假设 | x 方差 | 对应标准差 σ = √方差 |
+| --- | --- | --- |
+| A | 0.0025 m² | 0.05 m |
+| B | 0.25 m² | 0.50 m |
+
+在误差模型合理且估计可靠的前提下，A 声明的不确定性比 B 小。下游融合算法可以据此分配不同影响，但具体效果还取决于预测的不确定性、相关性及算法配置；不能只看一个数字就确定最终权重。
+
+这两组是教学假设，不是底盘实测结果。方差小不证明实际误差小，发布者也可能低估自己的误差。把方差改小不会改善传感器；反而可能让下游过度相信错误数据。协方差的非对角项描述误差之间的关联，填零表示采用无相关性的模型假设，不自动证明误差真正独立。
+
+**4. 数值为零、零方差、没有测量，是三种不同含义。**
+
+例如消息里 `pose.pose.position.z = 0.0`，可能只是平面驱动没有估计高度而保留了默认值。它本身不能说明“机器人高度被精确测为零”。
+
+在协方差的数学含义中，z 的方差为零意味着模型认为该方向没有不确定性，不能拿来表示“未知”。接收程序可能对零值另作处理，因此还要读消费者的约定；不要假定所有软件都会以同样方式接受、忽略或修补零方差。
+
+PPT 中的 `1e6` 可理解为用很大的方差表达该分量不可靠的一种做法。若它位于位置方差上，单位是 m²，其标准差为 1000 m；它是有限的大数，不是“禁止融合”的专用标志，也不是 ROS 消息格式强制的数值。当前截图不足以确认本项目驱动实际填写了哪些分量、是否确实采用这一数值，后续还要对照代码与配置。
+
+尤其要区分：**本传感器没有观测 z**，与**系统根据适用的平面运动假设约束 z**。后者是有条件的模型信息，不是传感器突然测到了高度；不能因为机器人主要在地面运行，就把所有未测量量都填成零方差。
+
+Humble [robot_localization 数据准备说明](https://github.com/cra-ros-pkg/robot_localization/blob/humble-devel/doc/preparing_sensor_data.rst)明确建议通过配置选择不使用的变量，而不是靠夸大协方差来排除它们。其[配置文档](https://github.com/cra-ros-pkg/robot_localization/blob/humble-devel/doc/configuring_robot_localization.rst)还提供 `two_d_mode` 处理适用的平面运动假设。课堂上因此应把 PPT 的问题解释为“未知为何不等于零不确定性”，而不是要求所有系统统一填写 `1e6`。
+
+**5. 本章后续要把设计值与实测依据接起来。**
+
+本页先交代学习路线：读消息结构 → 理解方差和协方差 → 按可观测量及下游配置设计 → 用重复实验与误差记录检查合理性。静止数据可以观察部分噪声，却不能代替行驶中的打滑、累计漂移和航向误差评估。
+
+提醒学生保留一个问题：“这些数字是谁给出的，依据是什么？”不能因为消息已经填满，就认定不确定性已经经过标定；也不能把本章的课堂示例当作项目推荐参数。
+
+### 板书
+
+```text
+本章三问：装了什么？有多不确定？没测到的量怎样处理？
+
+Odometry = 时间 / 坐标系 + pose / 协方差 + twist / 协方差
+pose 在 header.frame_id；twist 在 child_frame_id
+
+同样 x = 1.00 m：方差 0.0025 m² → σ = 0.05 m
+                 方差 0.25 m²   → σ = 0.50 m
+
+状态值为 0 ≠ 方差为 0 ≠ 没有观测
+1e6 是大方差示例；忽略哪些量，应核对下游融合配置
+```
+
+### 导入实验：用官方消息接口区分“数值相同”与“不确定性相同”
+
+**实验目标：**查看官方 Odometry 结构，构造两份位置相同而方差不同的消息，观察不确定性并不会从位置数值中自动产生。
+
+来源：上述 Humble 官方消息定义，以及 ROS 2 官方[话题教程中的接口查看步骤](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.rst#6-ros2-interface-show)。使用官方 `ros2 interface show` 和生成的 Python 消息类；下面两份消息的构造与对比是课堂改编，不是官方完整融合示例。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble 与 `nav_msgs`、`geometry_msgs`、`ros2interface`。无需底盘、图形桌面或正在运行的节点；使用系统 `python3`，在 Ubuntu Bash 中执行：
+
+```bash
+source /opt/ros/humble/setup.bash
+ros2 interface show nav_msgs/msg/Odometry
+ros2 interface show geometry_msgs/msg/PoseWithCovariance
+```
+
+**① 在输出中找到四个字段。**
+
+记录 `header`、`child_frame_id`、`pose`、`twist`；检查 pose 内部既有 quaternion，又有长度为 36 的 covariance。说明“姿态四元数四个数”为什么不意味着协方差有七行七列。
+
+**② 构造两份只在 z 方差上不同的课堂消息。**
+
+下面代码只在当前进程中检查消息对象，不发布话题、不运行滤波器。零方差那份是为了演示容易发生的误填，不是建议用于实际系统。时间戳未设置为采样时间，其余未赋值字段仍为默认值；这两份对象不能直接作为完整有效的实机数据发布。
+
+```bash
+python3 - <<'PY'
+from copy import deepcopy
+from math import sqrt
+from nav_msgs.msg import Odometry
+
+large = Odometry()
+large.header.frame_id = 'odom'
+large.child_frame_id = 'base_footprint'
+large.pose.pose.position.x = 1.0
+large.pose.pose.position.z = 0.0
+large.pose.pose.orientation.w = 1.0
+
+# Classroom values, not calibrated sensor parameters.
+# Order: x, y, z, rotation about X, rotation about Y, rotation about Z.
+diagonal = [0.0025, 0.0025, 1e6, 1e6, 1e6, 0.01]
+covariance = [0.0] * 36
+for i, variance in enumerate(diagonal):
+    covariance[6 * i + i] = variance
+large.pose.covariance = covariance
+
+zero = deepcopy(large)
+zero.pose.covariance[14] = 0.0  # row 2, column 2: z variance
+
+for label, msg in [('large_variance', large), ('zero_variance', zero)]:
+    variance = msg.pose.covariance[14]
+    print(f'{label}: z={msg.pose.pose.position.z:.1f} m, '
+          f'variance_z={variance:g} m^2, sigma_z={sqrt(variance):g} m')
+
+assert len(large.pose.covariance) == 36
+assert large.pose.pose.position.z == zero.pose.pose.position.z
+assert large.pose.covariance[14] != zero.pose.covariance[14]
+PY
+```
+
+**③ 记录并解释结果。**
+
+```text
+large_variance: z=0.0 m, variance_z=1e+06 m^2, sigma_z=1000 m
+zero_variance: z=0.0 m, variance_z=0 m^2, sigma_z=0 m
+```
+
+两份消息的 z 都是 0，但对它的不确定性声明相差很大。代码只是把人为指定的方差写进数组，不会因为创建了 Odometry 对象就自动知道真实误差；打印出的标准差也是这些假设的结果。
+
+**验收：**提交两行输出，指出位置值有没有变化、哪一项方差改变；解释为什么“没有高度观测”不能由零方差代替表达，并回答为什么本实验没有证明 `1e6` 适合项目、也没有证明滤波器一定忽略了 z。
+
+**排查与结束：**找不到接口或无法导入 `nav_msgs` 时，先确认已 source Humble、依赖已安装且使用系统 Python；数组长度必须为 36，z 的对角项为从零计数的索引 14。脚本结束自动退出，不产生文件或后台进程。本页只验证消息结构和数字含义，融合效果与实测协方差需后续实验评估。
+
+### 课堂提问
+
+> 两条里程计的位置、速度都相同，是否就包含完全相同的信息？
+
+参考答案：不一定。时间、参考系及协方差还可能不同；不确定性不同会影响下游对这些数值的使用。
+
+> 把 x 的方差从 0.25 改成 0.0025，是否就把传感器精度提高了十倍？
+
+参考答案：没有改变传感器或估计方法，只把声明的标准差从 0.50 m 改成 0.05 m。需要实测依据，否则可能造成过度自信。
+
+> 不想让 robot_localization 使用某个变量，是否只要写 `1e6`？
+
+参考答案：不应这样代替配置。应在对应传感器的融合配置中选择变量，并按需要检查平面模式；大方差没有统一的“禁用”含义。
+
+这页最后可以总结：
+
+> **里程计既报告估计值，也交代时空参考和不确定性；数值为零不代表误差为零，没有观测更不等于完全确定，协方差与下游配置必须一起理解。**
