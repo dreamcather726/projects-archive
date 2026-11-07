@@ -1683,3 +1683,204 @@ ros2 run tf2_tools view_frames
 这页最后可以总结：
 
 > **动态 TF 连接运动估计，静态 TF 连接安装几何；读懂每条边的方向、单位和来源，再用逐段与跨段查询验证整条链。**
+
+---
+
+## 第 14 页｜静态 TF 与动态 TF
+
+这页你可以把它讲成：
+
+> **静态 TF 表示固定的相对关系，动态 TF 表示某个时刻的相对关系。区别不只在发布快慢，更在时间含义。处理一帧传感器数据时，我们需要知道数据产生那个时刻的坐标关系；即使 TF 树已经连通，如果查询时间不在可用范围内，变换仍然可能失败。**
+
+### 讲解与例子
+
+**1. 用“是否随时间变化”分类，再看发布方式。**
+
+| 对比项 | 静态 TF | 动态 TF |
+| --- | --- | --- |
+| 含义 | 固定的安装或几何关系 | 随时间变化的位姿关系 |
+| 常用发布方式 | `static_transform_publisher`、静态广播接口；固定关节也可由 robot_state_publisher 提供 | 动态广播接口，由驱动、状态估计、建图或定位等节点提供 |
+| 主要话题 | `/tf_static` | `/tf` |
+| 时间语义 | 已接收的静态关系按固定关系使用，无需逐时刻采样 | 查询要匹配缓存中的时间范围，必要时插值 |
+| 本项目示例 | `base_footprint → base_link`、`base_link → imu` | `odom → base_footprint`，以及定位组件提供的 `map → odom` |
+
+PPT 的“一次发布／低频”应解释为固定关系不必持续按运动频率重发，而不是把动态 TF 降低频率就变成静态 TF。ROS 2 的静态 TF 使用 transient local 持久性，使后加入且采用匹配 QoS 的监听者能获得保留的数据；发布者仍应保持运行。已有监听者还可能保留自己的静态缓存。
+
+本项目里程计 TF 的目标是 50 Hz；`map → odom` 的更新频率由建图、定位组件及其配置决定，不应一并说成 50 Hz。“各驱动节点”也不能概括所有动态 TF 发布者，AMCL 等定位组件同样可以提供动态关系。
+
+来源：官方 [静态 TF 教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Static-Broadcaster-Py.rst)及 [静态 TF QoS 定义](https://github.com/ros2/geometry2/blob/humble/tf2_ros/include/tf2_ros/qos.hpp)。
+
+**2. “时间戳一致”首先指同一状态的时间含义一致。**
+
+如果某次计算得到机器人在时刻 t 的位姿，并同时发布 Odometry 和对应的 `odom → base_footprint` TF，两者应使用同一份状态对应的时间戳。不要把位姿标成采样时间 t，却把同一位姿的 TF 随手标成稍后的发布时刻。
+
+这不要求里程计、IMU、相机等所有消息都写同一个时间戳。不同传感器可以在不同时间采样，关键是时间戳准确表达各自数据的有效时刻，并处在一致的时间基准上。硬件没有采样时间时，也应明确采用的接收时间近似及其延迟限制。
+
+例如，MCU 的“开机后毫秒数”不能未经换算就当作 ROS 的绝对时间；仿真、回放中还要核对 `use_sim_time` 与 `/clock`，多机系统要核对时钟同步。增加发布频率不能解决两个时间基准不一致的问题。
+
+PPT 提到项目曾修复时间戳问题，可以作为工程经验提醒；仅凭这一页无法确认当时的代码、错误原因和修复结果，课堂上不补写未经核对的项目修复细节。
+
+**3. 插值需要前后样本，外推错误表示查询越过了可用范围。**
+
+假设同一条动态关系在 10.00 s、10.02 s 各有一个样本。查询 10.01 s 时，可以在两者之间插值；查询 10.03 s 时，当前缓存没有更晚的样本，不能自动推算未来。如果请求比最早保留的样本还早，也会发生向过去外推错误。
+
+PPT 的“在相邻变换之间线性插值”需要说得更准确：tf2 对平移做线性插值，对旋转做四元数球面插值（SLERP），不能直接把四元数四个分量各自随意线性平均。查询跨越多条动态边时，各边也都需要在该时刻有可用关系。
+
+可用时间范围取决于**当前监听者已经收到并保留的数据**。因此刚启动时样本不足、传输延迟、过旧数据和时钟偏差，都可能导致查询失败；错误时间戳也可能产生看似平滑但时间含义错误的结果，不一定马上报错。
+
+依据：Humble 官方 [TF 时间查询教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Learning-About-Tf2-And-Time-Cpp.rst)及 [tf2 时间缓存与插值实现](https://github.com/ros2/geometry2/blob/humble/tf2/src/cache.cpp)。
+
+**4. 排查时区分“没有坐标系”和“没有这个时刻的变换”。**
+
+| 现象 | 优先检查 | 处理方向 |
+| --- | --- | --- |
+| frame 不存在或两系不连通 | 名称、发布进程、TF 树 | 修正名称或补上应有的发布者 |
+| 向未来外推 | 请求时间是否晚于最新 TF；是否存在传输延迟或时钟偏差 | 核对时间基准；对正常延迟采用有界等待，并保证监听回调能继续接收数据 |
+| 向过去外推 | 数据是否过旧；监听者是否刚启动；缓存是否覆盖该时刻 | 检查处理延迟、启动顺序与合理的缓存长度 |
+| 能查询但叠图错位、跳变 | 时间戳与位姿是否对应；是否重复发布；定位是否在修正 | 对照原始时间与发布者逐项排查，不能只归因于插值 |
+
+查询最新可用变换有时适合实时观察，但不能无条件代替按传感器消息时间查询。等待超时只提供接收迟到数据的机会，不会修正错误时间戳，也不会生成缺失历史。不要把旧数据全部重新盖成“现在”来掩盖问题。
+
+来源：官方 [TF 调试教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Debugging-Tf2-Problems.rst)。
+
+### 板书
+
+```text
+静态：固定关系，/tf_static；动态：带时间的状态，/tf
+同一状态：Odometry 与对应 TF 使用一致的有效时间
+
+已有样本：10.00 s ── 10.01 s ── 10.02 s
+                       ↑ 可插值          10.03 s → 当前缺少未来样本
+平移：线性插值；旋转：四元数 SLERP
+
+先查：frame 与连接 → 请求时间 → 缓存范围 → 时钟基准
+最新可用 ≠ 数据采样时刻；等待 ≠ 外推或修正时间戳
+```
+
+### 实验一：观察官方动态 TF 示例中的时间信息
+
+**实验目标：**区分动态变换的样本时间、查询工具的刷新频率和传输延迟。
+
+来源：Humble 官方 [海龟 TF 示例](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Introduction-To-Tf2.rst)及上述 TF 调试教程。无需修改官方示例源码。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，ROS 2 Humble；本实验需要图形桌面，实验二不需要。使用 Ubuntu Bash 安装依赖：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-turtlesim ros-humble-turtle-tf2-py \
+  ros-humble-tf2-ros ros-humble-tf2-ros-py ros-humble-geometry-msgs
+```
+
+结束前一页的手工发布进程。打开终端 A、B，**两个终端都执行**以下设置；若 99 已用于其他实验，统一换用空闲 Domain ID。
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=99
+export ROS_LOCALHOST_ONLY=1
+```
+
+终端 A 启动官方场景：
+
+```bash
+ros2 launch turtle_tf2_py turtle_tf2_demo.launch.py
+```
+
+终端 B 先运行查询，观察数次输出后按 `Ctrl+C`，再运行监视工具：
+
+```bash
+ros2 run tf2_ros tf2_echo world turtle1
+ros2 run tf2_ros tf2_monitor world turtle1
+```
+
+预期第一只海龟未运动时，位置可以保持不变，但动态 TF 的样本时间仍在更新。tf2_monitor 会给出所监视关系的频率与延迟统计；这些数值受示例实现、调度和运行环境影响，不要求等于项目的 50 Hz，也不能把 tf2_echo 的屏幕刷新间隔当作发布周期。
+
+**验收与结束：**记录一次时间输出和一组监视统计，说明“位姿暂时不变”为什么仍可以通过动态 TF 发布。B 停止监视，A 停止 launch，再进行实验二。
+
+### 实验二：可重复地观察插值与外推边界
+
+**实验目标：**在已知样本时间的条件下，验证查询何时成功、何时报外推错误。
+
+下面是依据官方时间查询教程及 [Python Buffer API](https://github.com/ros2/geometry2/blob/humble/tf2_ros_py/tf2_ros/buffer.py)编写的最小课堂练习，**不是官方完整示例程序**。它只向本进程的官方 TF 缓冲区放入构造样本，不发布 `/tf`、不模拟硬件测量，也不依赖网络或系统当前时间；因此能稳定观察指定的时间边界。
+
+沿用已加载 Humble 环境的终端，直接执行：
+
+```bash
+python3 - <<'PY'
+import rclpy
+from geometry_msgs.msg import TransformStamped
+from rclpy.duration import Duration
+from rclpy.time import Time
+from tf2_py import ExtrapolationException
+from tf2_ros import Buffer
+
+
+def sample(parent, child, seconds, x=0.0, z=0.0):
+    transform = TransformStamped()
+    transform.header.frame_id = parent
+    transform.child_frame_id = child
+    transform.header.stamp = Time(seconds=seconds).to_msg()
+    transform.transform.translation.x = x
+    transform.transform.translation.z = z
+    transform.transform.rotation.w = 1.0
+    return transform
+
+
+rclpy.init()
+try:
+    buffer = Buffer(cache_time=Duration(seconds=10.0))
+    buffer.set_transform(sample('lab_odom', 'lab_base', 10.0, x=0.0), 'lesson')
+    buffer.set_transform(sample('lab_odom', 'lab_base', 12.0, x=2.0), 'lesson')
+    buffer.set_transform_static(
+        sample('lab_base', 'lab_sensor', 10.0, z=0.032), 'lesson')
+
+    for label, seconds in [('middle', 11.0), ('future', 13.0), ('past', 9.0)]:
+        try:
+            result = buffer.lookup_transform('lab_odom', 'lab_sensor', Time(seconds=seconds))
+            value = result.transform.translation
+            print(f'{label}: x={value.x:.3f}, z={value.z:.3f}')
+        except ExtrapolationException:
+            print(f'{label}: ExtrapolationException')
+
+    latest = buffer.lookup_transform('lab_odom', 'lab_sensor', Time())
+    print(f'latest: x={latest.transform.translation.x:.3f}')
+    buffer.set_transform(sample('lab_odom', 'lab_base', 13.0, x=3.0), 'lesson')
+    result = buffer.lookup_transform('lab_odom', 'lab_sensor', Time(seconds=13.0))
+    print(f'after sample: x={result.transform.translation.x:.3f}')
+finally:
+    rclpy.shutdown()
+PY
+```
+
+**预期结果：**
+
+```text
+middle: x=1.000, z=0.032
+future: ExtrapolationException
+past: ExtrapolationException
+latest: x=2.000
+after sample: x=3.000
+```
+
+10 s 和 12 s 的位置分别为 x=0、x=2，查询 11 s 得到中间值 x=1；传感器到车体的静态高度为 0.032 m，所以组合结果始终带有这段高度。13 s 起初超出动态样本范围，加入 13 s 样本后才可查询；9 s 仍早于最早样本。`Time()` 在此接口中表示查询最新可用变换，初次查询得到的是 12 s 对应的 x=2，并没有获得 13 s 的状态。
+
+**验收：**学生解释五行输出，并指出为什么一条静态边能够使用，不代表整条含动态边的链在任意时刻都可查询。本练习只观察平移插值和时间范围，不用于验证旋转插值精度、真实发布频率或网络 QoS。
+
+**排查：**Python 导入失败时核对依赖安装、Humble 环境和当前 Python 解释器，避免混入未配置 ROS 的虚拟环境；外推错误没有按预期被捕获时核对所用发行版与 API。实验一启动阶段可能暂时缺少样本，应先等 TF 建立；持续缺少 frame 时先查发布进程与名称。本练习执行后自动结束，没有后台发布者需要关闭。
+
+### 课堂提问
+
+> 把同一份里程计位姿分别标上两个略有差别的时间，会发生什么？
+
+参考答案：Odometry 与 TF 表达了不同的状态有效时间，下游可能在错误时刻组合数据，产生错位或查询失败；应统一该状态的时间来源。
+
+> 请求 13 s，而最新动态样本只有 12 s，tf2 能否按前两帧的速度自动预测？
+
+参考答案：普通时间查询不会这样预测，超出可用范围会报外推错误。可以在接收仍正常运行的前提下有界等待对应样本，但不能把等待当作预测。
+
+> 为什么不能简单把所有查询都改成最新时间来解决报错？
+
+参考答案：最新变换不一定对应传感器采样时刻。这样可能使查询成功，却把不同时间的数据混在一起，掩盖真正的时间同步问题。
+
+这页最后可以总结：
+
+> **静态 TF 说明固定关系，动态 TF 说明带时间的状态；树连得通只是第一步，查询时刻也落在有效范围内，数据才能按正确时间组合。**
