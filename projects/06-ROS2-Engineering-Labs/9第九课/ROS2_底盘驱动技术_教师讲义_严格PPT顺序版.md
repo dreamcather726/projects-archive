@@ -4119,3 +4119,186 @@ invalid xy block: Var(error_x-error_y)=-0.002000 m^2
 这页最后可以总结：
 
 > **协方差要同时读数值、单位和变量关系；诚实报告不确定性，并明确下游是否使用该量，比用零值或大数代替判断更可靠。**
+
+---
+
+## 第 27 页｜本项目的协方差设计
+
+这页你可以把它讲成：
+
+> **前两页讲清了结构和含义，现在把 PPT 给出的项目数值放回具体字段。位置与速度各有一份矩阵，它们的六个对角项要分别赋值。平面位置、平面速度和航向相关量是本页重点，其余方向用大方差表达当前设计没有提供可靠估计。读这些数字时，还要问清数据来源、单位以及依据；代码填对只能证明声明被写进了消息，不能证明声明已经符合实际误差。**
+
+### 讲解与例子
+
+**1. 先把左右两栏变成一张赋值对照表。**
+
+以下数值按本页 PPT 整理。当前课程目录没有找到第九课底盘驱动源码，因此它们是**课件给出的设计值**，尚不能当作已经核对过的实机代码或标定结果。依据 Humble 官方 [PoseWithCovariance](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/PoseWithCovariance.msg) 与 [TwistWithCovariance](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/TwistWithCovariance.msg) 的布局，对照如下：
+
+| 对角索引 | pose 中的量 | pose 方差 | twist 中的量 | twist 方差 |
+| --- | --- | --- | --- | --- |
+| 0 | x 位置 | `1e-3 m²` | vx 线速度 | `1e-3 (m/s)²` |
+| 7 | y 位置 | `1e-3 m²` | vy 线速度 | `1e-3 (m/s)²` |
+| 14 | z 位置 | `1e6 m²` | vz 线速度 | `1e6 (m/s)²` |
+| 21 | 绕 x 的姿态误差（roll） | `1e6 rad²` | wx 角速度 | `1e6 (rad/s)²` |
+| 28 | 绕 y 的姿态误差（pitch） | `1e6 rad²` | wy 角速度 | `1e6 (rad/s)²` |
+| 35 | 绕 z 的姿态误差（yaw） | `1e-2 rad²` | wz 角速度 | `1e-3 (rad/s)²` |
+
+因此两组对角线分别为：
+
+```text
+pose： [0.001, 0.001, 1000000, 1000000, 1000000, 0.01]
+twist：[0.001, 0.001, 1000000, 1000000, 1000000, 0.001]
+```
+
+这两行各有 6 个数，只是对角线摘要，不是能够直接赋给 covariance 的完整数组；实际字段各要 36 项。本页实验将其展开，非对角项采用零的教学简化。
+
+**2. 把“为什么这样设计”接回运动信息的来源。**
+
+按 PPT 的设计说明，平面位置由反馈速度结合航向进行位移积分得到，平面速度来自编码器反馈换算，航向来自下位机 IMU 融合姿态；课件还说明 z 轴角速度来自陀螺仪瞬时测量。后续实操应沿串口解析变量和赋值链核实，不能仅因消息里字段名为 `angular.z` 就认定来源必然是陀螺仪。
+
+位置积分还会受到时间间隔、轮径误差、打滑和航向误差影响。“编码器积分的位置可信”应讲成项目对平面估计作出了这一不确定性声明，不能解释成长期位置误差总是保持几厘米。固定方差也不会自动随行驶时间传播误差。
+
+瞬时速度测量避免了在该字段中再次累计全部历史误差，但仍可能有零偏、噪声、比例误差或打滑影响；“直接测量”本身并不保证高精度。是否合理，需要结合实际输出、标定和运动场景评估。
+
+**3. 高度、倾角的大方差，描述的是这份里程计的建模范围。**
+
+这里宜表述为“本页里程计设计没有为这些方向提供可靠估计”，而不是“所有地面机器人都永远无法观测 z、roll、pitch”。例如 IMU 可为倾角提供信息，但本页 Odometry 是否使用这些信息，是另一项实现选择。
+
+同样，平面假设可以提供模型约束；它与某个传感器实际测到了高度或倾角不同。`1e6` 沿用上一页的大方差做法，不是自动禁用协议。对 robot_localization，应按其[数据准备说明](https://github.com/cra-ros-pkg/robot_localization/blob/humble-devel/doc/preparing_sensor_data.rst)明确配置使用哪些变量，而不是单靠放大方差代替配置。
+
+本项目是可横移的麦克纳姆轮底盘，不能照抄差速底盘“vy 恒为零”的运动约束。[robot_localization 官方配置说明](https://github.com/cra-ros-pkg/robot_localization/blob/humble-devel/doc/configuring_robot_localization.rst)中的非完整约束轮式机器人示例依赖其运动假设，不应原样用于本项目。
+
+**4. PPT 的关键对比要保留物理单位。**
+
+```text
+pose 的 yaw 方差：0.01 rad² → 标准差 0.1 rad，约 5.73°
+twist 的 wz 方差：0.001 (rad/s)² → 标准差约 0.0316 rad/s，约 1.81°/s
+```
+
+右栏标注的“yaw”应在讲解中读成 z 轴角速度 wz。它与左栏的偏航角不是同一种物理量，因此不能把两个方差相除就说“角速度比航向可信十倍”。两份矩阵虽然都用索引 35，该索引承载的变量不同。
+
+PPT 用“瞬时测量”和“融合后的积分量”解释设计动机，可以帮助学生理解累计误差的来源；更严谨的结论是：**这些数值表达了不同变量各自的不确定性假设，是否合理必须分别验证。**融合航向也可能包含外部约束，不能把所有融合姿态都概括成未经修正的陀螺积分。
+
+**5. 赋值检查与可信度验证分开做。**
+
+本页先检查矩阵长度、索引、单位、对称性，以及代码是否按课件声明赋值。后续逐行对照真实代码时，还要确认速度与姿态来源、坐标变换、角度单位和时间处理，检查同一消息的 pose 与 twist 是否被误用为独立信息重复融合。
+
+官方配置说明专门提醒：来自同一运动源的位姿与速度可能重复提供信息。本项目的轮速、融合航向及其他 IMU 输入是否共享来源，也要在配置时考虑；不能因写在不同字段或话题中就视为独立传感器。
+
+### 板书
+
+```text
+                   0      7      14     21     28     35
+pose 对角：       1e-3   1e-3   1e6    1e6    1e6    1e-2
+twist 对角：      1e-3   1e-3   1e6    1e6    1e6    1e-3
+
+pose[35]：航向角误差方差，rad²
+twist[35]：z 轴角速度方差，(rad/s)²
+数值大小不能跨单位直接比较可信度
+
+课件设计值 → 正确写入 36 项数组 → 核对实际数据链 → 实测评估
+```
+
+### 实验：把本页两组设计值展开，并写入官方 Odometry 消息
+
+**实验目标：**将 PPT 对角项正确展开成两份行优先数组，区分 pose 与 twist 的最后一项，并检查消息中的实际赋值。
+
+来源：上述 Humble 官方消息定义。本实验使用官方生成的消息类，赋值与核对步骤按本页 PPT 改编，不是官方完整底盘驱动示例，也不运行 EKF 或修改项目驱动。
+
+**准备条件：**第一段数值检查只需 Python 3 标准库；第二段消息检查需要 Ubuntu 22.04 或 WSL Ubuntu 的 ROS 2 Humble、`nav_msgs` 及其依赖，使用系统 Python。在 Ubuntu Bash 中执行以下数值检查，无需底盘或图形桌面。
+
+**① 展开并打印两份矩阵。**
+
+```bash
+python3 - <<'PY'
+from math import sqrt, degrees
+
+def expand(diagonal):
+    if len(diagonal) != 6 or any(value < 0 for value in diagonal):
+        raise ValueError('Expected six non-negative diagonal variances')
+    result = [0.0] * 36
+    for i, value in enumerate(diagonal):
+        result[6*i+i] = float(value)
+    return result
+
+pose = expand([1e-3, 1e-3, 1e6, 1e6, 1e6, 1e-2])
+twist = expand([1e-3, 1e-3, 1e6, 1e6, 1e6, 1e-3])
+
+for name, covariance in [('pose', pose), ('twist', twist)]:
+    print(name)
+    for row in range(6):
+        print(' '.join(f'{value:g}' for value in covariance[6*row:6*row+6]))
+    assert len(covariance) == 36
+    assert all(covariance[6*i+j] == 0.0
+               for i in range(6) for j in range(6) if i != j)
+
+assert [i for i in range(36) if pose[i] != twist[i]] == [35]
+print(f'pose yaw sigma: {sqrt(pose[35]):.6f} rad = {degrees(sqrt(pose[35])):.3f} deg')
+print(f'twist wz sigma: {sqrt(twist[35]):.6f} rad/s = {degrees(sqrt(twist[35])):.3f} deg/s')
+PY
+```
+
+预期各打印 6 行、每行 6 项；非对角项为零。两组矩阵只有索引 35 不同，最后两行约为：
+
+```text
+pose yaw sigma: 0.100000 rad = 5.730 deg
+twist wz sigma: 0.031623 rad/s = 1.812 deg/s
+```
+
+这些零非对角项表达本实验采用的无相关性假设，不证明实际误差独立。两份对角矩阵形式合法，也不意味着数值已经经过实测标定。
+
+**② 在 ROS 环境中核对正式消息字段。**
+
+以下是独立脚本，不依赖上一段的进程变量。为完整展示字段赋值，重新生成数组：
+
+```bash
+source /opt/ros/humble/setup.bash
+python3 - <<'PY'
+from nav_msgs.msg import Odometry
+
+def expand(diagonal):
+    result = [0.0] * 36
+    for i, value in enumerate(diagonal):
+        result[6*i+i] = float(value)
+    return result
+
+msg = Odometry()
+msg.pose.covariance = expand([1e-3, 1e-3, 1e6, 1e6, 1e6, 1e-2])
+msg.twist.covariance = expand([1e-3, 1e-3, 1e6, 1e6, 1e6, 1e-3])
+
+indices = [0, 7, 14, 21, 28, 35]
+for index in indices:
+    print(f'index={index}: pose={msg.pose.covariance[index]:g}, '
+          f'twist={msg.twist.covariance[index]:g}')
+assert msg.pose.covariance[35] == 0.01
+assert msg.twist.covariance[35] == 0.001
+PY
+```
+
+预期六行索引按 `0、7、14、21、28、35` 输出，最后一行为 `index=35: pose=0.01, twist=0.001`。这段只检查协方差字段；对象的其他字段保留默认值，不发布为完整里程计观测。
+
+**③ 回答赋值与融合之间还缺什么。**
+
+试想把最后一项误写成相同值：程序仍可能接受两组 36 项数组，但它已不符合本页 PPT。反过来，即使数值完全一致，也尚未验证它们是否符合实际噪声、长期漂移或下游配置。
+
+**验收：**提交两份矩阵、两行标准差和六个消息索引记录；说明 pose[35] 与 twist[35] 的不同单位，指出哪些数据来源还需核对真实驱动代码，并解释为何麦轮不能直接采用差速底盘的 vy = 0 约束。
+
+**排查与结束：**协方差赋值失败时检查长度是否误为 6、赋值路径是否混入内层 pose/twist；`nav_msgs` 无法导入时检查已 source Humble、依赖已安装且使用系统 Python。角度换算保留 `/s`，不要把角速度标准差写成角度。两段脚本均自动退出，不生成文件或后台进程，不发送实机命令。
+
+### 课堂提问
+
+> 本页左右两栏的 x 方差都为 `1e-3`，是否能互相替代？
+
+参考答案：不能。左边描述位置误差，右边描述线速度误差；单位不同，数据来源与时间行为也不同。
+
+> 航向和角速度都来自 IMU，是否就应设置相同方差？
+
+参考答案：不是。它们是不同物理量，可能经历不同处理链；应分别按误差模型与验证结果设计，不能由共用设备直接推出数值。
+
+> 矩阵赋值全部符合 PPT，能否直接宣布底盘里程计精度达标？
+
+参考答案：不能。这只证明消息声明与课件一致，还需核对真实实现、下游融合选择，并通过适当的参考与实测评估准确性。
+
+这页最后可以总结：
+
+> **先按变量、单位和索引写对两份矩阵，再核对数据链与实测依据；课件中的设计值是待验证的不确定性声明，不是精度保证。**
