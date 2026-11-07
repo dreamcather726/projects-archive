@@ -3923,3 +3923,199 @@ twist:
 这页最后可以总结：
 
 > **读 Odometry 要顺着层级找数值，按时间和参考系解释运动，并分别理解位姿与速度的不确定性；消息装对了，才有条件让下游正确使用估计结果。**
+
+---
+
+## 第 26 页｜协方差矩阵：不确定度的“官方语言”
+
+这页你可以把它讲成：
+
+> **上一页认识了消息里的两组 36 个数，这一页要读懂这些数在说什么。对角线说明各个方向有多大不确定性，其他位置说明误差之间怎样共同变化。下游算法可以据此决定一份观测应当产生多大影响，但前提是这些声明合理。不能为了让滤波结果好看就随意缩小方差，也不能把没有测到的量包装成完全确定的零。**
+
+### 讲解与例子
+
+**1. 协方差描述误差的分布，不是一次误差的大小。**
+
+以平面位置为例，设估计误差为 `ex = 估计 x - 参考 x`、`ey = 估计 y - 参考 y`。在所采用的误差模型中：
+
+```text
+Var(ex)     = E[(ex - E[ex])²]
+Cov(ex, ey) = E[(ex - E[ex])·(ey - E[ey])]
+```
+
+对角项是方差，标准差为其平方根；非对角项是协方差。这里的 E 表示期望，不要求学生在本页完成统计估计推导。一次测量偏了多少，与描述许多可能误差的分布，是两种不同的信息。
+
+协方差本身也不会完整记录固定偏差。例如每次都偏 10 cm，但波动很小，围绕均值计算的方差仍可能很小。因此还要检查偏差、参考真值与模型假设，不能只凭“方差小”认定估计准确。
+
+**2. 从 6×6 矩阵到 36 项数组，保留上一页的变量顺序。**
+
+Humble [PoseWithCovariance 官方定义](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/PoseWithCovariance.msg)规定行优先存储，以及三个平移和三个固定轴旋转分量的顺序。以位姿协方差记为 Σ，可写成：
+
+```text
+              x       y       z      roll    pitch     yaw
+x           Var(x)  Cov(x,y)   …        …       …        …
+y          Cov(y,x)  Var(y)    …        …       …        …
+z              …       …    Var(z)     …       …        …
+roll           …       …      …    Var(roll)   …        …
+pitch          …       …      …        …   Var(pitch)   …
+yaw            …       …      …        …       …     Var(yaw)
+
+covariance[6*i + j] = Σ[i,j]，i、j 从 0 开始
+对角项：索引 0、7、14、21、28、35
+对称项：例如 covariance[1] 与 covariance[6] 都是 x、y 的协方差
+```
+
+合法的协方差矩阵应对称且半正定：沿任意组合方向算出的方差都不能为负。仅把上下三角填得一样，还不足以保证合法。[SciPy 官方多元正态分布文档](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.multivariate_normal.html)也以对称半正定矩阵描述协方差；本页不要求学生使用该软件或计算全部特征值。
+
+速度协方差沿用 `[vx, vy, vz, wx, wy, wz]` 的顺序。位置方差单位为 m²，姿态角方差为 rad²，线速度方差为 (m/s)²；不同种类的数不能脱离单位直接比较“谁更可信”。
+
+**3. 把 PPT 的三个数量级翻译回物理尺度。**
+
+| PPT 中的方差示例 | 标准差 √方差 | 正确的讲解边界 |
+| --- | --- | --- |
+| x 或 y 方差 `1e-3 m²` | 约 0.0316 m，即 3.16 cm | 表示模型声明的位置不确定性尺度；不能据此认定所有编码器里程计都达到此精度 |
+| yaw 方差 `1e-2 rad²` | 0.1 rad，约 5.73° | 是角度尺度，不是 0.01 rad 的标准差；是否足够要看任务 |
+| 位置方差 `1e6 m²` | 1000 m | 相对于室内定位通常非常大，但仍是有限方差，不是禁用标记 |
+
+若 `1e6` 填在角度方差上，平方根的单位就是 rad；PPT 最后一行的“1000”必须结合变量解释。“较可信”“中等可信”是课堂直觉，不是 ROS 官方给出的等级或项目实测结论。
+
+标准差也不是保证误差绝不超出的界限。没有说明分布模型时，不能把“σ 为 3.16 cm”直接改讲成“所有误差都不超过 3.16 cm”。
+
+**4. 非对角项是协方差，不是无单位的相关系数。**
+
+PPT 将非对角项概括成“相关性”，实际存储的是协方差。两者在标准差非零时通过以下关系相连：
+
+```text
+相关系数 ρxy = Cov(ex, ey) / (σx·σy)
+|ρxy| ≤ 1；Cov(ex, ey) 的单位是两种误差单位的乘积
+```
+
+例如 x、y 方差都为 `0.001 m²`，协方差为 `0.0004 m²`，则相关系数为 0.4。正协方差表示两种中心化误差倾向于同号变化；负协方差表示倾向于反号变化。它不表示机器人一定向某个方向运动。
+
+非对角项置零，是采用误差不相关的模型简化，不能证明真正独立。共同的航向误差、速度来源或坐标变换都可能引入相关性。这里先说明含义，不要求本页给出项目全部交叉项的标定结果。
+
+**5. 用一维更新说明零方差与大方差的影响。**
+
+从官方 [robot_localization 的 Humble EKF 校正实现](https://github.com/cra-ros-pkg/robot_localization/blob/humble-devel/src/ekf.cpp)中的矩阵更新，取只有一个状态、直接观测该状态、预测误差与观测误差不相关的特例：
+
+```text
+预测状态 x⁻，预测方差 P；观测值 z，观测方差 R
+K = P / (P + R)
+x⁺ = x⁻ + K·(z - x⁻)
+```
+
+先固定 `P = 0.04`。R 越大，观测对本次更新的影响越小；理想公式中 `R = 0` 且 `P > 0` 时，K = 1，状态会直接跟随观测。这说明零方差不是“不知道”的自然写法。这里的 z 是观测符号，不是特指高度坐标。
+
+但 **R 必须相对于 P 来判断大小**。`R = 1e6`、`P = 0.04` 时 K 约为 `4e-8`；若 P 也增大到 `1e8`，同一个 R 会得到约 0.9901 的 K。即使 R 数值很大，也不保证算法忽略它；多维更新还涉及状态相关性等因素。
+
+PPT 的“填 0 表示 100% 确定”可用于解释理想方差含义，但具体实现可能对过小方差加下限，不能断言所有滤波器都会按原始零值计算或一定崩溃。该 EKF 实现就包含小方差保护；保护措施不等于误填已经合理。
+
+对于真正没有提供的观测，应明确选择哪些量参与融合。Humble [robot_localization 数据准备说明](https://github.com/cra-ros-pkg/robot_localization/blob/humble-devel/doc/preparing_sensor_data.rst)建议用对应配置忽略变量，不靠夸大方差代替配置。因此 PPT 的“告诉下游别用”应解释为大方差在特定条件下使影响减小，而不是统一的自动屏蔽协议。
+
+### 板书
+
+```text
+对角：方差 σ²；非对角：协方差；标准差 σ = √方差
+Σ 对称、半正定；行优先 36 项
+
+0.001 m² → 约 0.0316 m
+0.01 rad² → 0.1 rad → 约 5.73°
+1e6 m² → 1000 m（有限大数，不是“禁用”）
+
+一维、直接观测：K = P/(P+R)
+固定 P，R 增大 → K 减小；R=0、P>0 → 理想 K=1
+不知道某个量 ≠ 精确知道它为 0
+```
+
+### 实验：按官方消息布局检查协方差，再比较一维融合权重
+
+**实验目标：**验证标准差换算、行优先与对称项，观察相同观测在不同方差声明下产生的更新差异。
+
+来源：上述官方 PoseWithCovariance 定义与 robot_localization EKF 实现。先用官方命令查看接口，再用本页编写的纯 Python 数值实验提取矩阵布局及一维更新原理。该脚本是教学简化，不是官方完整 EKF 示例，不运行 ROS 滤波节点，也不复现其异常拒绝、方差保护或时间预测流程。
+
+**准备条件：**接口查看在已安装 ROS 2 Humble、`geometry_msgs`、`ros2interface` 的 Ubuntu 22.04 或 WSL Ubuntu 中进行；数值脚本只需系统 Python 3 标准库，无需底盘、网络或图形桌面。在 Ubuntu Bash 中执行：
+
+```bash
+source /opt/ros/humble/setup.bash
+ros2 interface show geometry_msgs/msg/PoseWithCovariance
+```
+
+**① 对照官方注释确认长度、顺序与行优先。随后运行数值脚本。**
+
+```bash
+python3 - <<'PY'
+from math import sqrt, degrees, isclose
+
+# Classroom pose covariance in the official row-major layout.
+diagonal = [1e-3, 1e-3, 1e6, 1e6, 1e6, 1e-2]
+cov = [0.0] * 36
+for i, variance in enumerate(diagonal):
+    cov[6 * i + i] = variance
+cov[1] = cov[6] = 4e-4
+
+assert len(cov) == 36
+assert all(cov[6*i+j] == cov[6*j+i] for i in range(6) for j in range(6))
+assert cov[1]**2 <= cov[0] * cov[7]
+print(f'sigma_x={sqrt(cov[0]):.6f} m')
+print(f'sigma_yaw={sqrt(cov[35]):.6f} rad = {degrees(sqrt(cov[35])):.3f} deg')
+print(f'rho_xy={cov[1] / sqrt(cov[0] * cov[7]):.3f}')
+
+# Each row starts from the same prior: these are independent comparisons.
+prior_x, observation = 0.0, 1.0
+prior_variance = 0.04
+for r in (1e-3, 1e-2, 1e6, 0.0):
+    gain = prior_variance / (prior_variance + r)
+    updated = prior_x + gain * (observation - prior_x)
+    print(f'R={r:g}: K={gain:.9f}, updated_x={updated:.9f} m')
+
+gain_large_prior = 1e8 / (1e8 + 1e6)
+assert isclose(gain_large_prior, 100.0 / 101.0)
+print(f'P=1e8, R=1e6: K={gain_large_prior:.9f}')
+
+# Symmetry alone is insufficient: variance of error_x - error_y must be >= 0.
+bad_cov_xy = 0.002
+bad_difference_variance = cov[0] + cov[7] - 2 * bad_cov_xy
+assert bad_difference_variance < 0
+print(f'invalid xy block: Var(error_x-error_y)={bad_difference_variance:.6f} m^2')
+PY
+```
+
+**② 对照预期结果，解释每一项。**
+
+```text
+sigma_x=0.031623 m
+sigma_yaw=0.100000 rad = 5.730 deg
+rho_xy=0.400
+R=0.001: K=0.975609756, updated_x=0.975609756 m
+R=0.01: K=0.800000000, updated_x=0.800000000 m
+R=1e+06: K=0.000000040, updated_x=0.000000040 m
+R=0: K=1.000000000, updated_x=1.000000000 m
+P=1e8, R=1e6: K=0.990099010
+invalid xy block: Var(error_x-error_y)=-0.002000 m^2
+```
+
+四个 R 的比较每次都从同一个预测开始，不是依次更新四遍。位置观测都为 1 m，数值相同而方差不同，产生的修正也不同。R = 0 一行只展示理想公式，不能当作真实软件会原样采用零方差的运行结果。
+
+最后一项故意把 x、y 协方差改得过大：虽然上下对称、对角线仍为正，却让误差差值的方差变成负数，说明这组矩阵不合法。脚本中的对称与二元界限检查不是任意 6×6 矩阵的完整合法性检验；本例之外仍需检查半正定性等条件。
+
+**验收：**提交输出，解释 `0.01 rad²` 为什么对应约 5.73°；比较两种 P 下同为 `1e6` 的 R，说明为什么不能把它当作自动忽略开关；再指出最后一行暴露的矩阵问题。
+
+**排查与结束：**接口找不到时检查 ROS 环境与依赖；数值不符时检查是否把标准差直接填进方差、角度与弧度是否混用，以及对称项的索引。纯数值部分无需 ROS Python 模块，脚本结束自行退出，不产生文件或后台进程。这里验证的是数学与布局，不证明项目协方差已标定或实际 EKF 融合有效。
+
+### 课堂提问
+
+> 非对角项能不能随便写成 0.8，表示“有八成相关”？
+
+参考答案：不能。数组存的是带单位的协方差，不是相关系数；要结合两边的标准差换算，并保证整体矩阵合法。
+
+> 方差越小，是否就说明这份数据一定越准确？
+
+参考答案：它只是声明的不确定性较小；模型错误、固定偏差或人为低报方差都可能导致过度自信，需要实测与参考检验。
+
+> 给一个未测量方向填 `1e6`，是否就完成了下游融合设置？
+
+参考答案：没有。有限方差的影响依赖预测不确定性与算法；应按消费者约定配置使用哪些变量，并明确模型约束与真实观测的区别。
+
+这页最后可以总结：
+
+> **协方差要同时读数值、单位和变量关系；诚实报告不确定性，并明确下游是否使用该量，比用零值或大数代替判断更可靠。**
