@@ -904,3 +904,147 @@ ros2 topic info /lesson9/qos_demo --verbose
 这页最后可以总结：
 
 > **QoS 要同时检查两端的匹配、缓存策略和数据时效。选型依据是实际用途与运行结果，不能只凭话题名称或预设名称判断。**
+
+---
+
+## 第 9 页｜核心消息类型
+
+这页你可以把它讲成：
+
+> **驱动把串口里的字节转换出来以后，还要把它们放进含义明确的消息。速度要求用 Twist，运动估计用 Odometry，惯性信息用 Imu，电池状态用 BatteryState。读消息时要一起检查字段、单位、参考系和有效性，不能只看数值像不像。**
+
+### 讲解与例子
+
+**1. `geometry_msgs/msg/Twist`：线速度与角速度。**
+
+`linear` 与 `angular` 各有 x、y、z 三个分量，分别使用 m/s 和 rad/s。本课的 `cmd_vel` 按车体系约定：x 前、y 左、z 上。全向底盘可以使用 `linear.y` 表达侧向速度，理想差速模型通常将其设为零；平面控制主要使用 `linear.x`、`linear.y` 与 `angular.z`。
+
+Twist 是通用速度结构，本身没有 Header，也不强制限定车体系。本课的车体系来自控制接口约定；“地面机器人某些分量为零”也是当前模型与接口的限制，不是消息类型禁止这些字段取其他值。
+
+**2. `nav_msgs/msg/Odometry`：位姿、速度与不确定度。**
+
+按图片中的例子，`header.frame_id` 为 `odom`，`child_frame_id` 为 `base_footprint`。`pose.pose` 给出子坐标系在父参考系中的位置和姿态，`twist.twist` 给出的速度分量在子坐标系中表达。不能把两个部分都直接按 odom 轴向解释。
+
+例如，机器人相对 odom 已左转 90°，车体系反馈 `linear.x = 0.2`、`linear.y = 0`，那么它沿车头前进，对应 odom 的正 y 方向，而不是正 x 方向。
+
+`pose.covariance` 与 `twist.covariance` 各有 36 个元素，按行优先保存 6×6 矩阵。位姿部分描述位置与绕三轴旋转的不确定度，速度部分描述对应线速度和角速度的不确定度；不能因姿态用四元数，就把位姿协方差理解为四元数四个分量的协方差。
+
+**3. `sensor_msgs/msg/Imu`：惯性测量与可用的姿态估计。**
+
+`orientation` 为姿态四元数，`angular_velocity` 为三轴角速度，`linear_acceleration` 为三轴加速度数据。角速度必须转换为 rad/s，加速度必须转换为 m/s²，不能直接把 °/s 或以 g 为单位的原始读数填进去。加速度数据是否包含重力影响，需要核对设备输出和下游约定。
+
+三部分各带一个 9 元素的 3×3 协方差矩阵。官方 Imu 定义约定：某部分协方差全零表示不确定度未知；若根本没有该部分的估计，应将相应协方差的第一个元素设为 -1。姿态不确定度描述绕三轴的旋转，不是四个四元数分量。
+
+图片中的“下位机已融合”是本项目的处理分工，不代表所有 IMU 驱动都输出有效姿态。消费者必须检查数据与有效性标记。此处的全零约定来自 Imu 消息，不能直接套用到所有消息的协方差上。
+
+**4. `sensor_msgs/msg/BatteryState`：电池状态。**
+
+`voltage` 单位为 V，`current` 单位为 A；官方约定电流在放电时为负。下位机若使用相反符号，驱动需要先换算。
+
+图片写“只使用这两个字段，其余默认”，实现时仍需遵守各字段的未知值约定。例如未测量的温度、剩余电量比例等浮点字段应按定义填写 NaN，不能把默认零当作“已测得为零”。电量比例 `percentage` 的有效范围是 0～1；没有电量估计时，不应填 0 来表达未知。
+
+10 Hz 是课件中电池话题的发布频率，不是 BatteryState 消息自带的限制。
+
+### 板书
+
+```text
+Twist：linear（m/s）+ angular（rad/s），参考系由接口约定
+Odometry：pose 在 header.frame_id；twist 在 child_frame_id
+Imu：姿态、角速度、加速度，各带 3×3 协方差
+BatteryState：电压 V；电流 A，放电为负；未知值按字段定义表达
+
+检查顺序：类型 → 字段 → 单位 → 坐标系 → 时间 → 有效性
+```
+
+### 命令行实验：查看官方定义并核对字段
+
+**实验目标：**用官方命令读取四种消息的定义，再用官方生成的 Python 消息类完成一次字段检查。
+
+来源：Humble 官方 [Twist](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/Twist.msg)、[Odometry](https://github.com/ros2/common_interfaces/blob/humble/nav_msgs/msg/Odometry.msg)、[Imu](https://github.com/ros2/common_interfaces/blob/humble/sensor_msgs/msg/Imu.msg)、[BatteryState](https://github.com/ros2/common_interfaces/blob/humble/sensor_msgs/msg/BatteryState.msg)，以及 [PoseWithCovariance](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/PoseWithCovariance.msg) 和 [TwistWithCovariance](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/TwistWithCovariance.msg) 定义。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble。使用 Ubuntu Bash，一个终端即可，执行目录不限，无需图形环境或实体底盘。
+
+```bash
+sudo apt update
+sudo apt install ros-humble-geometry-msgs ros-humble-nav-msgs \
+  ros-humble-sensor-msgs ros-humble-ros2interface
+source /opt/ros/humble/setup.bash
+```
+
+**① 读取消息结构。**
+
+```bash
+ros2 interface show geometry_msgs/msg/Twist
+ros2 interface show nav_msgs/msg/Odometry
+ros2 interface show sensor_msgs/msg/Imu
+ros2 interface show sensor_msgs/msg/BatteryState
+```
+
+预期看到嵌套字段与定长数组。请学生找到：Twist 有没有 Header；Odometry 的两个坐标系字段在哪里；Imu 的缺失估计如何标记；BatteryState 对放电电流和未测量字段怎样约定。必要时结合上面的官方源文件阅读注释。
+
+**② 构造字段检查样例。**
+
+下面是依据官方定义编写的最小课堂练习，不是硬件采样程序。只在内存构造消息，不发布话题，也没有填写有效采样时间。示例中的里程计协方差保持默认，仅检查数组长度，不作为可信估计使用。
+
+```bash
+python3 - <<'PY'
+import math
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from sensor_msgs.msg import Imu, BatteryState
+
+command = Twist()
+command.linear.x = 0.2
+print('Twist:', command.linear.x, command.linear.y, command.angular.z)
+
+odom = Odometry()
+odom.header.frame_id = 'odom'
+odom.child_frame_id = 'base_footprint'
+odom.pose.pose.position.x = 1.0
+odom.pose.pose.orientation.z = math.sin(math.pi / 4)
+odom.pose.pose.orientation.w = math.cos(math.pi / 4)
+odom.twist.twist.linear.x = 0.2
+print('Odometry frames:', odom.header.frame_id, odom.child_frame_id)
+print('Odometry covariance lengths:',
+      len(odom.pose.covariance), len(odom.twist.covariance))
+
+imu = Imu()
+imu.orientation_covariance[0] = -1.0
+print('Imu orientation marker:', imu.orientation_covariance[0])
+print('Imu covariance lengths:', len(imu.orientation_covariance),
+      len(imu.angular_velocity_covariance), len(imu.linear_acceleration_covariance))
+
+battery = BatteryState()
+battery.present = True
+battery.voltage = 12.4
+battery.current = -0.5
+for field in ('temperature', 'charge', 'capacity', 'design_capacity', 'percentage'):
+    setattr(battery, field, float('nan'))
+print('Battery discharging:', battery.current < 0)
+print('Battery percentage unknown:', math.isnan(battery.percentage))
+PY
+```
+
+**预期结果：**Twist 的三个打印值为 `0.2 0.0 0.0`；两个里程计坐标系分别为 `odom`、`base_footprint`；Odometry 的两个协方差长度均为 36；Imu 的三个协方差长度均为 9，姿态缺失标记为 -1；最后两项电池检查均为 `True`。程序运行后自行结束。
+
+**验收：**学生能解释本例中车体系前进速度对应 odom 的哪个方向，指出 IMU 姿态为何不能当作有效数据使用，并区分电量为零与电量未知。不能将样例中的期望速度与里程计速度恰好相等，理解成真实设备已经执行。
+
+**排查：**找不到接口时检查依赖安装和 Humble 环境；Python 无法导入消息类时，确认使用的是能加载系统 ROS 2 包的 Python 环境，避免与未配置 ROS 路径的虚拟环境混用。本实验没有启动发布者，因此不应期待 `ros2 topic echo /odom` 能收到本例数据。
+
+### 课堂提问
+
+> `pose.pose.position.x` 与 `twist.twist.linear.x` 能否直接按同一个坐标轴解释？
+
+参考答案：要先看两个坐标系。前者在 `header.frame_id` 中，后者在 `child_frame_id` 中；车体发生旋转后，两个 x 轴可能不同。
+
+> Imu 的协方差全零，是否意味着测量完全没有噪声？
+
+参考答案：按该消息的约定，全零表示不确定度未知。若某部分根本没有估计，应使用对应协方差首元素 -1 的标记。
+
+> 电池电量没有估计时，为什么不能把 percentage 留为零？
+
+参考答案：零是有效的电量比例，会被误认为电量耗尽；未知应按定义使用 NaN。
+
+这页最后可以总结：
+
+> **标准消息提供了共同结构，驱动还必须正确填写单位、坐标、时间与有效性，才能让下游正确使用数据。**
