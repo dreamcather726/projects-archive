@@ -1527,3 +1527,159 @@ ros2 run tf2_tools view_frames
 这页最后可以总结：
 
 > **先用 REP 统一轴向和含义，再用模型与配置确认坐标原点和 TF 层级；名字相同不保证定义正确，数据能够相互转换才说明坐标关系真正接通。**
+
+---
+
+## 第 13 页｜本项目的 TF 树
+
+这页你可以把它讲成：
+
+> **这一页把上一页的坐标约定落实到本项目。先从 odom 找到机器人在地面上的参考，再向上找到本体，最后找到 IMU。第一条关系随机器人运动变化，后两条描述固定的几何关系。读图时，每根箭头都要说清父坐标系、子坐标系，以及子坐标系相对父坐标系的位置和朝向。**
+
+### 讲解与例子
+
+**1. 沿着三条边读图，不要只记四个名字。**
+
+| 父坐标系 → 子坐标系 | PPT 的设置 | 物理含义 |
+| --- | --- | --- |
+| `odom → base_footprint` | 动态，目标 50 Hz | 机器人平面参考相对里程计参考的运动位姿 |
+| `base_footprint → base_link` | 静态，平移 `(0, 0, 0.032)` m，无旋转 | 车体原点比地面参考高 32 mm，坐标轴方向一致 |
+| `base_link → imu` | 静态，零平移、无旋转 | 本页模型把 IMU 参考与车体参考设为重合、同向 |
+
+这里的箭头表示 TF 树的父子关系；平移是**子坐标系原点在父坐标系中的坐标**，旋转描述子坐标轴相对父坐标轴的朝向。例如，第二条不是说地面参考在本体上方，而是本体原点在地面参考上方。
+
+本页聚焦底盘驱动负责连接的四个坐标系。上一页出现的 `map → odom` 可以由建图、定位组件在上游提供，图中未画出它，不代表启动底盘驱动时就已经具备全局定位。
+
+**2. 0.032 m 怎么来，为什么不能直接套到所有底盘？**
+
+课件给出麦轮直径 64 mm，半径为 32 mm，即 0.032 m。如果把 base_footprint 原点放在地面，并把 base_link 原点放在轮轴中心高度，那么向上的平移就是 `(0, 0, 0.032)` m。
+
+这里同时用了轮子尺寸和坐标原点的建模假设。若模型把 base_link 原点放在机身中心、控制板或其他位置，高度就可能不同。因此应核对 URDF、静态变换配置与实际结构，不能仅凭轮径决定 base_link 高度；更不能把 32 mm 直接填成 32 m。
+
+**3. “零偏移”是模型声明，不等于没有 IMU 误差。**
+
+`base_link → imu` 为单位变换，表示两个参考原点重合，而且 x、y、z 三轴逐一对齐。PPT 用“IMU 焊在板中央、x 轴朝前”解释这种简化，讲解时要补充：板中央未必就是 base_link 原点，只确认 x 轴也不足以确定完整的安装朝向。
+
+实际接入时，应核对 IMU 测量参考点的安装位置、三轴方向，以及驱动是否已经把输出转换到车体系。若仍按传感器自身轴向发布，就需要与之匹配的安装 TF；若驱动已转换到车体系，应核对消息的 frame 声明，避免重复旋转。
+
+这里的“零偏移”说的是几何安装关系，不是陀螺仪零偏、加速度计偏置或姿态误差。将 TF 设为单位变换不会完成传感器标定，也不会消除测量漂移。
+
+**4. 动态 50 Hz 与静态 TF 的发布方式要分开理解。**
+
+`odom → base_footprint` 的目标周期是 20 ms，发布时应带有与位姿估计一致的时间戳。即使机器人暂时不动，它仍是运动估计链路，不能用一个固定 TF 替代后续更新。50 Hz 是课件中的目标配置，实际频率和时间有效性还要检查。
+
+两条安装关系通常通过 `/tf_static` 发布，不需要照着动态 TF 每 20 ms 重发。官方静态广播机制使后加入的 TF 监听者也能获得固定关系；课堂上应保持发布进程运行，不能把它理解成一条普通话题消息发完就可随意退出。
+
+发布 Odometry 消息也不会自动生成这条动态 TF，需要相应广播者。反过来，能查到 TF 也不代表已经发布了 Odometry 消息。每条父子关系应由明确的发布者维护，避免驱动、URDF 的 robot_state_publisher 和手工命令重复发布同一关系。
+
+来源：Humble 官方 [静态 TF 教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Static-Broadcaster-Py.rst)。
+
+### 板书
+
+```text
+odom
+ └─ base_footprint    动态，目标 50 Hz / 20 ms
+     └─ base_link     静态，z = +0.032 m，无旋转
+         └─ imu       静态，零平移、无旋转（课件模型）
+
+64 mm ÷ 2 = 32 mm = 0.032 m
+高度来自：轮子尺寸 + 原点选取
+IMU 单位 TF ≠ 传感器零偏为零
+```
+
+### 实验：用官方工具连接并查询两条静态 TF
+
+**实验目标：**按 PPT 参数建立静态子链，验证逐段查询、跨段组合和反向查询的结果。
+
+来源：Humble 官方 [static_transform_publisher 用法](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Static-Broadcaster-Py.rst)与 [tf2 查询、坐标树工具示例](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Intermediate/Tf2/Introduction-To-Tf2.rst)。使用官方可执行工具，参数按本页课件设置，**用于验证课件模型，不作为实机安装标定结果**。本实验不发布假的 odom，也不连接或控制硬件。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble，无需图形桌面即可执行查询。以下使用 Ubuntu Bash：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-tf2-ros ros-humble-tf2-tools
+```
+
+先结束前一页海龟实验及其他手工 TF 发布进程。打开终端 A、B、C，**每个终端都执行**以下设置；若 99 已用于其他实验，统一换用空闲 Domain ID。
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=99
+export ROS_LOCALHOST_ONLY=1
+```
+
+**① 终端 A 发布地面参考到车体参考的安装关系。**
+
+```bash
+ros2 run tf2_ros static_transform_publisher \
+  --x 0.0 --y 0.0 --z 0.032 \
+  --roll 0.0 --pitch 0.0 --yaw 0.0 \
+  --frame-id base_footprint --child-frame-id base_link
+```
+
+**② 终端 B 发布车体参考到 IMU 参考的单位变换。**
+
+```bash
+ros2 run tf2_ros static_transform_publisher \
+  --x 0.0 --y 0.0 --z 0.0 \
+  --roll 0.0 --pitch 0.0 --yaw 0.0 \
+  --frame-id base_link --child-frame-id imu
+```
+
+A、B 均保持运行。零旋转对应四元数 `(0, 0, 0, 1)`；不要把“零旋转”写成全零四元数。
+
+**③ 终端 C 逐段和跨段查询。**
+
+依次执行下列命令，每次观察输出后按 `Ctrl+C`，再执行下一条：
+
+```bash
+ros2 run tf2_ros tf2_echo base_footprint base_link
+ros2 run tf2_ros tf2_echo base_link imu
+ros2 run tf2_ros tf2_echo base_footprint imu
+ros2 run tf2_ros tf2_echo imu base_footprint
+```
+
+| 查询命令中的坐标顺序 | 预期平移，单位 m | 预期旋转 |
+| --- | --- | --- |
+| `base_footprint base_link` | `(0, 0, +0.032)` | 单位四元数 |
+| `base_link imu` | `(0, 0, 0)` | 单位四元数 |
+| `base_footprint imu` | `(0, 0, +0.032)` | 单位四元数 |
+| `imu base_footprint` | `(0, 0, -0.032)` | 单位四元数 |
+
+前一个名称是本次输出的参考系，后一个是被查询的坐标系。跨段查询不需要额外发布 `base_footprint → imu`，TF 会沿已有链组合。反向查询得到负的高度，是因为地面参考在 IMU 参考下方；本例没有旋转，所以反向平移恰好取负，含旋转的一般情况不能只机械地改符号。
+
+查询工具的屏幕刷新速度不等于 TF 发布速度；看到输出每秒更新，不能据此说动态 TF 只有 1 Hz，更不能说这两条静态 TF 必须按 50 Hz 发送。查询方向的含义也可核对官方 [tf2_echo 工具说明](https://github.com/ros2/geometry2/blob/humble/tf2_ros/src/tf2_echo.cpp)。
+
+**④ 终端 C 生成坐标树。**
+
+结束当前查询，在可写目录中执行：
+
+```bash
+mkdir -p ~/ros2_project_tf_lab
+cd ~/ros2_project_tf_lab
+ros2 run tf2_tools view_frames
+```
+
+预期生成包含 `base_footprint → base_link → imu` 的三坐标系树。此时查不到 odom 是正常的：实验只启动了两条静态安装关系，动态里程计广播者尚未运行。不能为了让图看起来完整，再用静态命令把 odom 固定到车体上。
+
+**验收：**记录四组查询结果并解释高度正负号；指出为什么跨段查询不需要新建一条边；说明完整项目还缺少哪条动态关系，以及它与本实验的静态安装关系有何区别。
+
+**排查与结束：**结果不符时先核对父子名称、m/mm 单位和旧发布进程；出现缺少 frame 时检查 A、B 的运行状态及终端环境。如果关闭某个静态发布者后，已经运行的监听者仍能查询，可能是它保留了静态缓存，不能据此确认发布者仍在工作；重新启动查询进程再检查。生成报告失败时检查目录写权限和工具依赖。实验结束后 C 停止查询，B、A 依次按 `Ctrl+C` 退出。
+
+### 课堂提问
+
+> 为什么 base_footprint 到 base_link 是正 0.032 m，反过来查询却是负值？
+
+参考答案：前者表达车体原点在地面参考上方，后者表达地面参考在车体下方；参考系与被描述对象交换了。本例两系无相对旋转，因而平移直接变号。
+
+> IMU 焊在板中央、x 轴朝前，是否足以证明安装 TF 为单位变换？
+
+参考答案：还不够。需要确认测量参考点与 base_link 原点重合，并核对 y、z 轴方向及驱动是否已做坐标转换。
+
+> 实验里能查询 base_footprint 到 imu，是否说明还要发布这条直接连接？
+
+参考答案：不需要。TF 可以组合已有两条边；再给 imu 增加另一个父坐标系会破坏预期的树结构。
+
+这页最后可以总结：
+
+> **动态 TF 连接运动估计，静态 TF 连接安装几何；读懂每条边的方向、单位和来源，再用逐段与跨段查询验证整条链。**
