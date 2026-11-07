@@ -558,3 +558,176 @@ ros2 interface show sensor_msgs/msg/Imu
 这页最后可以总结：
 
 > **读驱动接口时，先判断通信模式，再检查传输策略，最后核对消息的字段、单位与参考系。**
+
+---
+
+## 第 7 页｜计算图：四种通信方式
+
+这页你可以把它讲成：
+
+> **这一页把节点之间的接口放到一张计算图里。连续更新速度和状态，用话题；发起一次查询或操作，用服务；配置某个节点，用参数；提交需要持续执行、观察进度的任务，用动作。同一个底盘节点可以同时使用这些接口，关键是根据操作的含义选择。**
+
+### 讲解与例子
+
+计算图描述运行中的节点及其通信关系。读图时先找到节点，再看它发布什么、订阅什么、提供哪些服务和动作，以及有哪些参数。一个节点可以同时承担多个通信角色。
+
+| 方式 | 交互模式 | 怎样获得数据或结果 | 本项目中的典型用途 |
+| --- | --- | --- | --- |
+| 话题 | 发布与订阅 | 持续接收消息；没有逐条对应的业务响应 | 下发速度要求，上报里程计、IMU 与电池状态 |
+| 服务 | 请求与响应 | 针对一次请求获得响应；客户端可同步等待或异步处理 | 一次查询或触发操作，具体接口由驱动提供 |
+| 参数 | 节点配置的键值读写 | 读取配置值，或获得设置是否被接受的结果 | 串口名、波特率、发布频率等配置 |
+| 动作 | 目标、反馈与结果 | 获得目标处理状态、执行反馈与最终结果，可请求取消 | 导航到目标点等需要跟踪执行过程的任务 |
+
+**话题：持续交换数据。**
+
+话题可以有多个发布者和多个订阅者。发布速度消息没有直接返回“电机执行成功”，需要通过状态、诊断或实际观察检查结果。多个控制来源同时发布速度还可能互相干扰，因此系统应明确指令来源与仲裁方式。
+
+**服务：一次请求对应一次响应。**
+
+PPT 把服务标成“同步”，应理解为图中列举了一种等待响应的使用方式。服务本身不要求客户端必须阻塞调用。同步等待可能因服务端不响应而长期占用调用线程；异步调用可以避免直接阻塞，但仍需处理未完成请求、超时与错误。参见[官方同步与异步服务说明](https://github.com/ros2/ros2_documentation/blob/humble/source/How-To-Guides/Sync-Vs-Async.rst)。
+
+**参数：属于具体节点的配置。**
+
+读取波特率时，要先说明读取哪个节点的哪个参数。两个节点即使具有同名参数，也各自维护取值。远程参数读写通常通过该节点的参数服务完成；是否允许运行时修改、修改后是否重新打开串口，需要节点代码支持。
+
+**动作：管理有执行过程的任务。**
+
+以导航为例，目标是到达某个位置，反馈用于报告执行进展，结果用于说明任务怎样结束。动作建立在话题和服务之上；目标接受、持续反馈和任务完成是不同阶段，接受目标不等于已经完成。取消也是请求，服务端需要按其实现处理。
+
+因此，这四项是面向使用者的接口分类，不是四套完全独立的底层传输机制。
+
+### 对照本项目的数据流
+
+```text
+导航或手柄
+    │ 速度要求：cmd_vel
+    ▼
+base_control 节点
+    ├─ 里程计 odom：课件标注 50 Hz
+    ├─ 惯性信息 imu：课件标注 50 Hz
+    ├─ 电池状态 battery：课件标注 10 Hz
+    └─ 动态 TF：odom → base_footprint
+```
+
+50 Hz 对应约 20 ms 的更新间隔，10 Hz 对应约 100 ms。这些是课件给出的案例值，实际话题名称、频率与发布来源要在运行系统中查询，不能只凭图认定已经达到。
+
+TF 中的 `odom` 是坐标系名称，数据流中的 `odom` 是话题名称，两者含义不同。TF 关系通过消息广播；发布了里程计话题，也不意味着对应的 TF 一定同时存在。
+
+### 板书
+
+```text
+持续更新 → 话题           一次请求 → 服务
+节点配置 → 参数           目标、进度、结果 → 动作
+
+消息发出 ≠ 设备执行成功
+参数名称相同 ≠ 属于同一个配置对象
+目标接受 ≠ 任务完成
+```
+
+### 命令行实验：在官方 turtlesim 中观察四类接口
+
+**实验目标：**在同一套官方示例中找到四类接口，并分别完成消息观察、服务调用、参数读写和动作执行。
+
+来源：ROS 2 Humble 官方教程[话题](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.rst)、[服务](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.rst)、[参数](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters.rst)与[动作](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.rst)。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，ROS 2 Humble，图形环境可用。命令在 Ubuntu Bash 执行，目录不限。缺少示例包时安装：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-turtlesim
+```
+
+准备 A、B、C 三个终端，每个终端先执行：
+
+```bash
+source /opt/ros/humble/setup.bash
+echo "${ROS_DOMAIN_ID:-0}"
+```
+
+确认 Domain ID 相同。可以复用上一页仍在运行的同一套 turtlesim；若已停止，再启动 A、B，不重复启动同名节点。
+
+**A：运行仿真。**
+
+```bash
+ros2 run turtlesim turtlesim_node
+```
+
+**B：运行键盘控制。**
+
+```bash
+ros2 run turtlesim turtle_teleop_key
+```
+
+**C：先列出计算图中的接口。**
+
+```bash
+ros2 node list
+ros2 node info /turtlesim
+ros2 topic list -t
+ros2 service list -t
+ros2 param list /turtlesim
+ros2 action list -t
+```
+
+预期能找到 `/turtle1/cmd_vel` 话题、`/spawn` 服务、背景颜色参数，以及 `/turtle1/rotate_absolute` 动作。注意同一个 `/turtlesim` 节点承担了多种接口角色。
+
+**① 观察话题：C 运行，B 按方向键。**
+
+```bash
+ros2 topic echo /turtle1/cmd_vel
+```
+
+预期出现 Twist 消息。C 按 `Ctrl+C` 停止观察后，再执行后续步骤；随后先停止在 B 输入控制按键。
+
+**② 调用服务：C 请求生成一只新海龟。**
+
+```bash
+ros2 interface show turtlesim/srv/Spawn
+ros2 service call /spawn turtlesim/srv/Spawn "{x: 2.0, y: 2.0, theta: 0.0, name: ''}"
+```
+
+预期窗口出现新海龟，响应包含其名称。空名称要求服务端分配名称，因此不要把返回值固定写成某个名字。对照接口中 `---` 上方的请求字段与下方的响应字段。
+
+**③ 读写参数：C 查询所属节点，再修改背景红色分量。**
+
+```bash
+ros2 param get /turtlesim background_r
+ros2 param set /turtlesim background_r 150
+ros2 param get /turtlesim background_r
+ros2 param list /teleop_turtle
+```
+
+预期设置成功，查询值为 150，背景颜色随之改变；键盘节点的参数列表与仿真节点不同。本次设置仅影响当前节点会话。参数的运行时效果取决于节点实现，不可据此推断修改任意底盘参数都会立即生效。
+
+**④ 执行动作：C 提交旋转目标，B 保持无按键输入。**
+
+```bash
+ros2 interface show turtlesim/action/RotateAbsolute
+ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute "{theta: 1.57}" --feedback
+```
+
+预期看到目标接受信息、旋转过程中的 `remaining` 反馈，以及结束时的 `delta` 结果与 `SUCCEEDED` 状态。角度单位为弧度；如果当前方向已接近目标，执行可能很快，可改成 `theta: -1.57` 再观察。接口定义中的两条 `---` 分隔目标、结果和反馈，定义顺序与运行时的到达顺序需要分别理解。
+
+**验收：**学生各举出本实验的一类接口，并说明它属于持续数据、一次操作、节点配置还是可跟踪的执行任务；指出服务响应、参数设置结果和动作最终结果分别表达什么。
+
+**排查与结束：**找不到接口时检查 A、B 是否运行、节点名和 Domain ID；参数设置失败时看返回原因；动作执行异常时先停止键盘输入并查看 A 的日志。C 若仍在执行持续观察，可按 `Ctrl+C` 结束；实验完成后 B 按 `q`，A 按 `Ctrl+C`。
+
+本实验只演示官方示例的通信接口，没有创建 `base_control`、项目里程计或硬件 IMU 数据，也没有验证图中标注的发布频率。
+
+### 课堂提问
+
+> 为什么发布 `cmd_vel` 后，还需要检查里程计或其他反馈？
+
+参考答案：话题发布没有逐条对应的执行响应。驱动可能未收到、通信可能失败、设备也可能无法按要求运动；状态与实际观察才能帮助判断执行情况。
+
+> 两个底盘节点都声明了 `baudrate`，修改其中一个会自动修改另一个吗？
+
+参考答案：不会。参数属于具体节点；除非系统额外实现联动，否则各节点独立管理配置。
+
+> 导航动作已经接受目标，机器人是否已经到达？
+
+参考答案：还没有这个结论。需要观察执行反馈及最终结果，并结合任务约定判断。
+
+这页最后可以总结：
+
+> **读计算图要同时看接口的使用方式和业务含义：数据怎样更新、配置属于谁、一次操作怎样响应、任务怎样结束。**
