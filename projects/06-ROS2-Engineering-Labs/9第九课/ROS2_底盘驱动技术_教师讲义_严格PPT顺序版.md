@@ -3723,3 +3723,203 @@ zero_variance: z=0.0 m, variance_z=0 m^2, sigma_z=0 m
 这页最后可以总结：
 
 > **里程计既报告估计值，也交代时空参考和不确定性；数值为零不代表误差为零，没有观测更不等于完全确定，协方差与下游配置必须一起理解。**
+
+---
+
+## 第 25 页｜什么是里程计 & Odometry 消息结构
+
+这页你可以把它讲成：
+
+> **里程计是机器人对自身运动的估计。在本项目里，我们把反馈速度与航向按时间累计，得到位姿，再将位姿、速度及它们的不确定性装进 Odometry。读这条消息时，先看时间和坐标系，再读数值：位置在哪个参考里，速度沿哪组轴，哪份协方差对应哪组量。两层 pose、两层 twist 看起来重复，实际是外层包装不确定性、内层存具体运动数值。**
+
+### 讲解与例子
+
+**1. 里程计是运动估计，不只是“走过多少米”。**
+
+日常里程表常表示累计路程，本课的机器人里程计还包括位置、朝向与运动速度。机器人先前进再退回起点，累计路程会增加，但最终位置可以接近初始位置；不能把路程总和直接填进位置 x。
+
+本项目使用轮速反馈与融合航向进行航位推算。一般意义上的里程计还可来自视觉等运动估计方式；`nav_msgs/msg/Odometry` 是承载结果的消息接口，其名称并不限定必须采用哪一种传感器或积分算法。
+
+**2. 把 PPT 中的展开结构还原为明确的父子层级。**
+
+依据 Humble [Odometry 官方定义](https://github.com/ros2/common_interfaces/blob/humble/nav_msgs/msg/Odometry.msg)，可先画下面这棵字段树。缩进表示包含关系，并不是把所有字段平铺到同一层：
+
+```text
+Odometry
+├── header
+│   ├── stamp                         数据对应的时间
+│   └── frame_id                      pose 的参考系，例如 odom
+├── child_frame_id                    车体坐标系，例如 base_footprint
+├── pose                             PoseWithCovariance
+│   ├── pose                         Pose
+│   │   ├── position                 x、y、z
+│   │   └── orientation              四元数 x、y、z、w
+│   └── covariance                   36 个元素，6×6 位姿协方差
+└── twist                            TwistWithCovariance
+    ├── twist                        Twist
+    │   ├── linear                   三轴线速度
+    │   └── angular                  三轴角速度
+    └── covariance                   36 个元素，6×6 速度协方差
+```
+
+因此 Python 中位置 x 的路径为 `msg.pose.pose.position.x`，前向速度为 `msg.twist.twist.linear.x`。相应的不确定性位于 `msg.pose.covariance` 与 `msg.twist.covariance`，不要误写成 `msg.pose.pose.covariance`。
+
+| 要读取的信息 | 字段路径 | 单位或含义 |
+| --- | --- | --- |
+| 数据时间 | `header.stamp` | 秒与纳秒组成的时间戳 |
+| 位姿参考系 | `header.frame_id` | 本项目示例为 `odom` |
+| 被描述的车体坐标系 | `child_frame_id` | 本项目示例为 `base_footprint`，也是 twist 的表达坐标系 |
+| 位置 | `pose.pose.position` | m |
+| 姿态 | `pose.pose.orientation` | 单位四元数，不是四个角度 |
+| 线速度 | `twist.twist.linear` | m/s |
+| 角速度 | `twist.twist.angular` | rad/s |
+
+时间戳应反映数据对应的时刻；同一条消息中的估计要在时间上相互对应。真实驱动不能因为“现在发布”，就无条件把一份较早采集的反馈标成当前采样。本页实验会使用当前时间表示人为构造的快照，不承担真实采集与同步任务。[Header 官方定义](https://github.com/ros2/common_interfaces/blob/humble/std_msgs/msg/Header.msg)给出了时间与参考系字段。
+
+**3. pose 和 twist 的坐标系分工必须按消息定义落实。**
+
+PPT 以 `odom` 与 `base_footprint` 为例：pose 表示车体在 odom 中的位置与姿态；twist 则把运动速度按车体轴向表达。这里的 odom 是连续但会漂移的局部参考，不等于已经完成地图定位或 GPS 定位。
+
+给一个与前面旋转矩阵相接的例子：机器人在 odom 中位于 `(1, 2)` m，车头相对 odom 左转 90°，此刻沿自身前向以 0.2 m/s 行驶。消息中的 `twist.twist.linear.x` 可以是 0.2，而不是因为 odom 中的运动朝正 y 就改填 `linear.y = 0.2`。若要得到 odom 中的速度，需要结合姿态转换。
+
+准确地说，**pose 使用 `header.frame_id`，twist 使用 `child_frame_id`**，这是 Odometry 消息注释直接规定的；`odom`、`base_footprint` 是本项目的具体名称，不是消息类型强制写死的字符串。前文 REP-105 说明的是坐标系角色，两者不要混作同一条规定。
+
+**4. 两份 6×6 协方差的尺寸相同，描述的变量不同。**
+
+按照 [PoseWithCovariance](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/PoseWithCovariance.msg) 与 [TwistWithCovariance](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/TwistWithCovariance.msg) 的官方定义，数组以行优先方式存储：
+
+```text
+pose 协方差的分量顺序：
+[x, y, z, 绕固定 X 轴旋转, 绕固定 Y 轴旋转, 绕固定 Z 轴旋转]
+本课常简记为 [x, y, z, roll, pitch, yaw]
+
+twist 协方差的分量顺序：
+[vx, vy, vz, wx, wy, wz]
+对应 linear.x/y/z 与 angular.x/y/z
+
+行优先索引：covariance[6*i + j] = 第 i 行、第 j 列，i、j 从 0 开始
+六个对角项索引：0、7、14、21、28、35
+```
+
+PPT 最后给出的 `[x, y, z, roll, pitch, yaw]` 有助于记住六个方向，但讲速度协方差时要改读为线速度与角速度，不能把其中的 yaw 当成偏航角本身。[Twist 官方定义](https://github.com/ros2/common_interfaces/blob/humble/geometry_msgs/msg/Twist.msg)包含完整三轴向量；PPT 写的 Vx、Vy、ω 是本项目平面运动的常用分量，不代表消息里只有这三个字段。一般三维运动中，三轴角速度也不直接等于三个欧拉角的时间导数。
+
+例如，`pose.covariance[0]` 是 x 位置方差，单位 m²；`twist.covariance[0]` 是 x 向线速度方差，单位 (m/s)²。它们不能因为索引相同就共用一个数。四元数虽然存四个分量，位姿协方差仍按三个旋转误差方向表达，不变成 7×7。
+
+**5. Odometry 消息和 TF 相互配合，但不会自动互相生成。**
+
+发布 Odometry 不会自动广播 `odom → base_footprint` 的 TF；驱动或指定的估计节点仍需按职责发布变换。同一时刻，消息的 pose 与对应 TF 应一致，不能出现两套不同的位置与朝向。
+
+TF 表达坐标关系，Odometry 额外承载速度及两份协方差；二者不能完全互相替代。本页先学会读结构，不在这里展开协方差估计或实机定位精度验证。
+
+### 板书
+
+```text
+机器人里程计 ≠ 只累计路程
+本项目：运动反馈 + 航向 + 时间 → 位姿与速度估计
+
+msg.pose.pose.position.x          位置
+msg.pose.covariance               位姿不确定性
+msg.twist.twist.linear.x          线速度
+msg.twist.covariance              速度不确定性
+
+pose 看 header.frame_id；twist 看 child_frame_id
+两份 covariance 各 36 项；对角索引 0、7、14、21、28、35
+发布 Odometry ≠ 自动发布 TF
+```
+
+### 实验：用官方命令发布并逐字段读取一条 Odometry 快照
+
+**实验目标：**在接收端找到嵌套字段、参考系及两份协方差，结合姿态解释速度，而不是只看字段名字猜方向。
+
+来源：ROS 2 Humble 官方[话题教程](https://github.com/ros2/ros2_documentation/blob/humble/source/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.rst)中的 `interface show`、`topic echo` 与 `topic pub`。本实验使用官方命令，Odometry 数据是课堂改编的单时刻样例，不是底盘实测或官方完整里程计驱动。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，已安装 ROS 2 Humble，以及 `nav_msgs`、`ros2interface`、`ros2topic`。无需底盘或图形桌面。结束之前的实验进程，在 A、B 两个 Ubuntu Bash 终端中**分别执行**；若 99 已被占用，统一换用空闲 Domain ID：
+
+```bash
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=99
+export ROS_LOCALHOST_ONLY=1
+```
+
+**① 终端 A 查看官方接口。**
+
+```bash
+ros2 interface show nav_msgs/msg/Odometry
+ros2 interface show geometry_msgs/msg/TwistWithCovariance
+```
+
+对照字段树找到两份 covariance，确认各有 36 个元素；注意 `twist` 外层包装与内层向量不是同一层。
+
+**② 先在终端 B 等待接收。**显式写出类型，允许在发布者启动前建立订阅；收到一条后自动退出：
+
+```bash
+ros2 topic echo /lab/odom nav_msgs/msg/Odometry --once
+```
+
+**③ 再在终端 A 发送一条样例。**
+
+```bash
+ros2 topic pub --once -w 1 /lab/odom nav_msgs/msg/Odometry '
+header:
+  stamp: now
+  frame_id: odom
+child_frame_id: base_footprint
+pose:
+  pose:
+    position: {x: 1.0, y: 2.0, z: 0.0}
+    orientation: {x: 0.0, y: 0.0, z: 0.7071067811865475, w: 0.7071067811865476}
+  covariance: [0.0025, 0, 0, 0, 0, 0,
+               0, 0.01, 0, 0, 0, 0,
+               0, 0, 1000000.0, 0, 0, 0,
+               0, 0, 0, 1000000.0, 0, 0,
+               0, 0, 0, 0, 1000000.0, 0,
+               0, 0, 0, 0, 0, 0.04]
+twist:
+  twist:
+    linear: {x: 0.2, y: 0.1, z: 0.0}
+    angular: {x: 0.0, y: 0.0, z: 0.05}
+  covariance: [0.0004, 0, 0, 0, 0, 0,
+               0, 0.0009, 0, 0, 0, 0,
+               0, 0, 1000000.0, 0, 0, 0,
+               0, 0, 0, 1000000.0, 0, 0,
+               0, 0, 0, 0, 1000000.0, 0,
+               0, 0, 0, 0, 0, 0.0025]'
+```
+
+`--once` 表示只发一条，`-w 1` 等待至少一个匹配订阅者；若一直等待，先检查 B 是否已启动。`stamp: now` 使用 Humble 命令行支持的当前时间展开，表示这个教学快照的时间。真实驱动仍应按数据时间设计赋值。
+
+本例沿用上一页的大方差示意，仅帮助认出矩阵位置；所有方差均为教学假设，不是项目标定值，也不替代下游变量选择配置。这里只发布一个运动瞬间，不构成连续里程计轨迹，且没有广播 TF。
+
+**④ 从 B 的输出完成字段核对。**
+
+| 检查项 | 预期结果 |
+| --- | --- |
+| 时间与参考系 | 时间戳已展开；`frame_id` 为 `odom`，`child_frame_id` 为 `base_footprint` |
+| 位姿 | odom 中位置 `(1, 2, 0)` m；四元数对应约 +90° 偏航 |
+| 速度 | 车体系线速度 `(0.2, 0.1, 0)` m/s；绕 z 角速度 0.05 rad/s |
+| 位姿协方差 | 36 项；索引 0 为 0.0025，索引 35 为 0.04 |
+| 速度协方差 | 另有 36 项；索引 0 为 0.0004，索引 35 为 0.0025 |
+
+**再做一次解释而非改写消息：**将车体系速度按约 90° 偏航旋转到 odom，得到 `vx_odom ≈ -0.1 m/s`、`vy_odom ≈ 0.2 m/s`。B 中的原始 twist 仍应是 `(0.2, 0.1)`，不会因为 echo 显示它就自动转换坐标系。
+
+**验收：**保存 B 的一次输出，标出 `pose.pose`、`twist.twist` 及两份 covariance；写出上述速度转换结果，并说明哪份索引 0 的单位是 m²、哪份是 (m/s)²，以及为什么本实验结束后不会自动得到一条 TF 边。
+
+**排查与结束：**无输出时核对两个终端的 ROS 环境、Domain ID、话题名和消息类型；已错过单次消息时重新启动 B，再在 A 重发。YAML 报错时检查缩进、外层单引号及两组数组各 36 项。A、B 正常收到后均自行退出；仍在等待时按 `Ctrl+C`。实验不发送速度控制指令，不生成文件。
+
+### 课堂提问
+
+> 为什么读取位置要写两次 pose？
+
+参考答案：外层是包含 pose 和 covariance 的 PoseWithCovariance，内层 Pose 才包含 position 与 orientation。
+
+> 机器人朝 odom 的正 y 方向前进，twist.linear.x 是否必须为零？
+
+参考答案：不是。要看 child_frame_id 的轴向；车头相对 odom 偏航 90° 时，自身前向速度仍可记为车体系的正 x 分量。
+
+> 两份 covariance 的最后一个对角项，是否都表示 yaw 角方差？
+
+参考答案：不是。pose 中对应绕 z 的姿态误差方差；twist 中对应 z 轴角速度方差，变量和单位都不同。
+
+这页最后可以总结：
+
+> **读 Odometry 要顺着层级找数值，按时间和参考系解释运动，并分别理解位姿与速度的不确定性；消息装对了，才有条件让下游正确使用估计结果。**
