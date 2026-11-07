@@ -731,3 +731,176 @@ ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute "
 这页最后可以总结：
 
 > **读计算图要同时看接口的使用方式和业务含义：数据怎样更新、配置属于谁、一次操作怎样响应、任务怎样结束。**
+
+---
+
+## 第 8 页｜话题通信与 QoS 服务质量
+
+这页你可以把它讲成：
+
+> **话题名和消息类型相同，还要检查双方怎样交付和接收数据。QoS 就是这部分约定。本页先看两个维度：可靠性决定如何对待样本丢失，队列深度影响暂存多少样本。选择时既要考虑能否收到，也要考虑收到的数据是否仍然及时。**
+
+### 讲解与例子
+
+**1. Reliability：可靠性。**
+
+`RELIABLE` 支持可靠交付和必要的重传，`BEST_EFFORT` 不要求补齐每个丢失样本。PPT 用 TCP 与 UDP 帮助理解可靠性差异，但这是行为类比，不能据此认为 reliable 就是 TCP；ROS 2 的可靠交付也可以基于 UDP 实现。
+
+可靠性交付属于通信环节，不代表接收回调一定及时，更不代表 MCU 或电机已经执行。断连、进程退出、资源限制和旧指令处理仍需由系统设计考虑。
+
+**2. Depth：队列深度。**
+
+深度与 History 配合使用。`KEEP_LAST` 保留最近 N 个样本，depth 指定 N；发布端和订阅端都可以配置历史缓存，并非只有订阅端有队列。`KEEP_ALL` 则受资源限制约束，不能直接按同样的 depth 解释。
+
+队列较大可以容纳更多暂时来不及处理的数据，也可能积累旧样本；较小的队列更容易在积压时覆盖旧样本，但不能单独保证低时延。发布速率、回调耗时、网络与执行器调度都影响实际表现。
+
+例如，50 Hz 数据每隔约 20 ms 更新一次。如果订阅者处理不过来，持续增大队列不会提高处理能力，需要同时检查处理耗时与数据时效要求。
+
+### 本项目 QoS 选择怎样理解
+
+| 话题 | 相对驱动的方向 | 图片中的配置 | 讲解时需要补充的条件 |
+| --- | --- | --- | --- |
+| `cmd_vel` | 订阅 | `system_default`，图中按可靠交付说明 | system default 依赖中间件默认值，不能仅凭名字认定可靠；控制端与驱动端还要匹配，并处理指令超时 |
+| `odom`、`imu` | 发布 | `sensor_data`，图中标注 50 Hz | 尽力交付适用于可容忍一定丢帧的场景；下游若请求 reliable，将无法与 best-effort 发布端匹配 |
+| `battery` | 发布 | `sensor_data`，图中标注 10 Hz | 应评估状态丢失、过期及晚加入订阅者的需求；更新较慢并不自动决定必须使用哪一种可靠性 |
+
+Humble 的官方 `sensor_data` 预设采用 `KEEP_LAST`、depth 为 5、`BEST_EFFORT` 和 `VOLATILE`。`system_default` 与明确的默认发布订阅 profile 是不同预设：前者使用底层实现的默认策略，不能与后者混为一谈。预设定义见[官方 RMW QoS 源码](https://github.com/ros2/rmw/blob/humble/rmw/include/rmw/qos_profiles.h)。
+
+本页列的是项目案例中的选型，需要用运行端点验证；50 Hz、10 Hz 是课件值，不是 QoS 自动保证的发布频率。
+
+### 可靠性匹配规则
+
+订阅者提出接收要求，发布者提供相应能力。只考虑可靠性、其他相关策略兼容时：
+
+| 发布端提供 | 订阅端请求 | 能否匹配 |
+| --- | --- | --- |
+| `BEST_EFFORT` | `BEST_EFFORT` | 能 |
+| `BEST_EFFORT` | `RELIABLE` | 不能 |
+| `RELIABLE` | `BEST_EFFORT` | 能 |
+| `RELIABLE` | `RELIABLE` | 能 |
+
+因此，看到话题存在却没有数据时，不能只看节点是否启动，还应对照两端的 QoS。可靠性匹配之后，其他影响兼容的策略也需兼容。规则依据见[Humble 官方 QoS 文档](https://github.com/ros2/ros2_documentation/blob/humble/source/Concepts/Intermediate/About-Quality-of-Service-Settings.rst)。
+
+### 怎样理解“里程计丢一帧，速度指令丢一帧”
+
+里程计通常连续提供累计位姿估计。消费者漏收一条消息后，后续消息仍可带来新的累计状态；但中间时刻的信息并没有因此全部恢复，丢帧仍可能影响控制、插值或融合。如果驱动自己漏掉了底层测量，估计误差也可能已经产生。
+
+`cmd_vel` 通常同样是周期更新的速度要求，并非天然的一次性事件。丢失一条停止或转向指令可能影响运动，长期执行旧指令也可能造成问题，因此要结合更新频率、接收时效与超时保护设计。
+
+这段直觉用于比较数据用途，不能简化为“里程计随便丢都没关系”或“控制指令用了 reliable 就一定执行”。
+
+### 板书
+
+```text
+Reliability：丢失的样本是否要求可靠交付
+History + Depth：怎样保存尚未处理的样本
+
+发布 BEST_EFFORT → 订阅 RELIABLE：不匹配
+发布 RELIABLE → 订阅 BEST_EFFORT：可靠性可匹配
+
+传输可靠性 + 数据时效 + 指令超时处理，共同影响控制行为
+```
+
+### 命令行实验：用官方 CLI 观察不匹配与恢复
+
+**实验目标：**只改变可靠性配置，观察有话题却收不到消息的情况；再比较两端的深度设置。本实验使用独立的 `/lesson9/qos_demo` 话题，不向实体底盘发送速度。
+
+实验依据为上面的官方匹配规则，命令参数对照 Humble 官方 [ros2 topic pub](https://github.com/ros2/ros2cli/blob/humble/ros2topic/ros2topic/verb/pub.py)与 [ros2 topic echo](https://github.com/ros2/ros2cli/blob/humble/ros2topic/ros2topic/verb/echo.py)实现。操作使用官方工具，无需编写节点。
+
+**准备条件：**Ubuntu 22.04 或 WSL Ubuntu 22.04，ROS 2 Humble，无需图形环境。以下命令在 Ubuntu Bash 执行，目录不限。缺少工具或消息包时安装：
+
+```bash
+sudo apt update
+sudo apt install ros-humble-ros2topic ros-humble-std-msgs
+```
+
+准备 A、B、C 三个终端，每个终端执行：
+
+```bash
+source /opt/ros/humble/setup.bash
+echo "${ROS_DOMAIN_ID:-0}"
+```
+
+各终端 Domain ID 一致，并停止其他在 `/lesson9/qos_demo` 上运行的发布者。本实验用 5 Hz 便于观察输出，不代表项目实际频率。A、B 中的持续命令均需先按 `Ctrl+C`，才能切换配置。
+
+**① A：以 best effort 持续发布。**
+
+```bash
+ros2 topic pub /lesson9/qos_demo std_msgs/msg/String "{data: 'qos_demo'}" \
+  --rate 5 --qos-reliability best_effort --qos-durability volatile \
+  --qos-history keep_last --qos-depth 5
+```
+
+**B：以 reliable 请求接收。**
+
+```bash
+ros2 topic echo /lesson9/qos_demo std_msgs/msg/String \
+  --qos-reliability reliable --qos-durability volatile \
+  --qos-history keep_last --qos-depth 5
+```
+
+**C：检查发现的端点。**
+
+```bash
+ros2 topic info /lesson9/qos_demo --verbose
+```
+
+预期 A 持续输出发布记录，C 可以发现发布与订阅端点，但 B 收不到业务消息；具体实现可能同时提示可靠性不兼容。不要把发现了订阅端点等同于已经成功匹配，也不要仅凭有没有警告判断实验结果。
+
+**② 保持 A 不变，B 按 `Ctrl+C` 后改为 best effort。**
+
+```bash
+ros2 topic echo /lesson9/qos_demo std_msgs/msg/String \
+  --qos-reliability best_effort --qos-durability volatile \
+  --qos-history keep_last --qos-depth 5
+```
+
+预期 B 开始持续收到 `data: qos_demo`。此处改变的是订阅端的可靠性，话题名与消息类型不变。
+
+**③ B 保持 best effort，A 按 `Ctrl+C` 后改为 reliable。**
+
+```bash
+ros2 topic pub /lesson9/qos_demo std_msgs/msg/String "{data: 'qos_demo'}" \
+  --rate 5 --qos-reliability reliable --qos-durability volatile \
+  --qos-history keep_last --qos-depth 5
+```
+
+预期发现并匹配新端点后，B 继续收到消息，说明可靠发布端可以匹配尽力订阅端。
+
+**④ 保持 A 的 reliable 发布，B 按 `Ctrl+C` 后请求 reliable，并将深度改为 1。**
+
+```bash
+ros2 topic echo /lesson9/qos_demo std_msgs/msg/String \
+  --qos-reliability reliable --qos-durability volatile \
+  --qos-history keep_last --qos-depth 1
+```
+
+C 再次查询：
+
+```bash
+ros2 topic info /lesson9/qos_demo --verbose
+```
+
+预期 B 能收到消息，C 显示发布端深度为 5、订阅端深度为 1。两端深度不必相同；本步骤验证配置和匹配，不证明 depth 为 1 就一定降低了延迟，也不通过肉眼输出推断网络丢包率。
+
+**验收：**记录四次发布端与订阅端的可靠性及收数情况，完成匹配表；在最后一步指出两端各自的深度。解释第一步“端点存在但没有数据”的原因，以及 reliable 为什么不能替代设备执行反馈。
+
+**排查与结束：**所有组合都无数据时，先检查环境、Domain ID、话题名与类型，再查发布进程及端点信息；第一步意外收到数据时，检查是否还有其他 reliable 发布者。某个参数不被识别时运行 `ros2 topic pub --help` 或 `ros2 topic echo --help`，核对实际工具版本。实验完成后 B、A 分别按 `Ctrl+C` 结束。
+
+### 课堂提问
+
+> IMU 发布端使用 sensor_data，订阅端指定 reliable，为什么可能完全收不到消息？
+
+参考答案：sensor_data 的可靠性为 best effort，不能满足 reliable 订阅请求。应按上下游需求调整兼容配置，而非只增加队列深度。
+
+> 队列深度从 5 改成 100，是否就解决了处理速度不足？
+
+参考答案：没有提高处理能力，可能只是容纳更多积压数据。应检查回调耗时、调度、发布速率与允许的数据年龄。
+
+> 使用 system_default，是否可以直接在报告中写“已确保 reliable”？
+
+参考答案：不能。需要核对底层默认值或运行端点；明确要求可靠性时应显式配置并验证。
+
+这页最后可以总结：
+
+> **QoS 要同时检查两端的匹配、缓存策略和数据时效。选型依据是实际用途与运行结果，不能只凭话题名称或预设名称判断。**
