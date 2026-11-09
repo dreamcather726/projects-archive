@@ -4552,3 +4552,121 @@ pitch_30: (-4.900, 0.000, 8.487) m/s^2; norm=9.800
 这页最后可以总结：
 
 > **先弄清传感器测什么、在哪组轴上表达、经过什么处理，再讨论融合与传输；物理含义清楚，才有依据判断 IMU 数据是否可用。**
+
+---
+
+## 第 30 页｜IMU 是什么 & 陀螺仪原理
+
+这页你可以把它讲成：
+
+> **本项目的六轴 IMU 包含三轴陀螺仪和三轴加速度计，下位机还会上报融合姿态。先看陀螺仪：它测的是转动速度，不是直接测航向。静止时理想读数接近零，但实际数据既可能上下抖动，也可能整体偏离零。这两种误差必须分开看：抖动用标准差描述，偏移用零偏描述；标准差很小，也不能保证积分后的航向不漂移。**
+
+### 讲解与例子
+
+**1. IMU 的组成与姿态输出是两层概念。**
+
+课件中的基本组合是陀螺仪与加速度计；有些惯性传感器系统还配磁力计，为姿态估计提供其他信息。本课六轴平台按 PPT 描述为“陀螺三轴 + 加计三轴”，不能默认它已经包含磁力计或绝对航向参考。
+
+原始角速度、比力与融合后的四元数应分别理解。官方 [Humble Imu 消息定义](https://github.com/ros2/common_interfaces/blob/humble/sensor_msgs/msg/Imu.msg)将它们放在不同字段中；课件说下位机一并上报，是项目的数据流设计，不表示 ROS 自动从原始字段生成姿态。
+
+**2. MEMS 陀螺仪利用振动结构感知转动。**
+
+可以把微小质量块想象成沿一个方向持续振动的结构：器件转动时，科里奥利效应引起另一方向的响应，电路检测该响应并换算角速度。这是振动式 MEMS 陀螺仪的基本思路，参见芯片厂商 [Analog Devices 的角速度传感原理说明](https://www.analog.com/en/resources/analog-dialogue/articles/imems-angular-rate-sensing-gyroscope.html)。
+
+PPT 的“垂直位移”指相对于驱动运动等方向的响应，不是无论怎样安装都向地面的竖直方向移动。本页不展开器件结构或公式推导，重点记住输出是各轴角速度，ROS 单位为 rad/s。
+
+**3. 用一个模型区分噪声与零偏。**
+
+```text
+测得角速度 = 真实角速度 + 零偏 b + 随机噪声 n
+静止近似：真实角速度 ≈ 0
+```
+
+| 误差 | 静止数据中的表现 | 能做什么 |
+| --- | --- | --- |
+| 噪声 | 围绕均值抖动，std 描述其尺度 | 评估统计特性，合理滤波与融合；不能靠减去一个常量消除随机波动 |
+| 零偏 | 均值偏离理想静止值 | 在确认静止等条件下估计并补偿；还要关注温度、时间变化与剩余误差 |
+
+“噪声无法校准”应理解为随机波动不能被一次固定偏移校正逐点消除，不表示它不能测量、建模或抑制。“零偏可校准”也不等于校准一次后永久为零。
+
+若残余零偏为 `0.01 rad/s`，静止积分 600 s 就会产生 `6 rad ≈ 343.8°` 的累计角度误差。这个数是累计量；若显示程序把角度折回 ±π，屏幕数值可能已经绕回，不能据此认定漂移变小。
+
+**4. 右侧阈值是课件经验判断，不能单独作为验收标准。**
+
+PPT 将静止陀螺 std 小于 `0.005 rad/s` 称为“优秀”，小于 `0.02 rad/s` 称为“中等”，大于 `0.02 rad/s` 提示噪声偏大。实际使用规则还应明确边界、统计窗口、采样率与滤波带宽；这些不是 ROS 的统一质量等级。
+
+课件报告本项目 std 约为 `6e-4 rad/s`，在该经验划分中较小；但当前未提供 `imu_static_eval.py` 与原始记录，不能据此复核每轴结果，更不能直接推出“所有情况下都放心使用”。还要看静止均值、单位、轴向、时间戳、动态响应与任务需求。
+
+### 板书
+
+```text
+六轴：三轴陀螺 + 三轴加计；不默认有磁力计
+陀螺测角速度 rad/s，不直接测航向
+
+ω测量 = ω真实 + b + n
+std 看波动；静止均值帮助估计零偏
+残余 b=0.01 rad/s → 600 s 累计 6 rad ≈ 343.8°
+低 std ≠ 低零偏 ≠ 航向长期准确
+```
+
+### 实验：静止零偏补偿与积分漂移
+
+**实验目标：**观察减去静止均值的作用，以及零偏变化后旧补偿为何失效。
+
+使用 Python 官方 [statistics](https://docs.python.org/3/library/statistics.html) 的均值与标准差函数。以下样本和积分场景均为课堂构造，不是项目实测或完整 IMU 标定工具；只需 Python 3 标准库，在 Ubuntu Bash 中运行：
+
+```bash
+python3 - <<'PY'
+from statistics import mean, stdev
+from math import degrees, fsum, isclose
+
+# Synthetic calibration samples, all in rad/s.
+noise = [-0.0008, -0.0004, 0.0, 0.0004, 0.0008]
+calibration = [0.01 + value for value in noise] * 20
+bias_hat = mean(calibration)
+print(f'estimated bias={bias_hat:.6f} rad/s')
+print(f'calibration std={stdev(calibration):.6f} rad/s')
+
+dt, duration = 0.02, 600
+count = round(duration / dt)
+for label, actual_bias in [('same_bias', 0.01), ('changed_bias', 0.012)]:
+    # A separate synthetic interval; repeated noise is for reproducibility.
+    rates = [actual_bias + noise[i % len(noise)] for i in range(count)]
+    raw_angle = fsum(rates) * dt
+    corrected_angle = fsum(value - bias_hat for value in rates) * dt
+    assert isclose(raw_angle, actual_bias * duration, abs_tol=1e-10)
+    assert isclose(corrected_angle, (actual_bias - bias_hat) * duration,
+                   abs_tol=1e-10)
+    print(f'{label}: raw error={degrees(abs(raw_angle)):.3f} deg, '
+          f'corrected error={degrees(abs(corrected_angle)):.3f} deg')
+PY
+```
+
+预期输出：
+
+```text
+estimated bias=0.010000 rad/s
+calibration std=0.000569 rad/s
+same_bias: raw error=343.775 deg, corrected error=0.000 deg
+changed_bias: raw error=412.530 deg, corrected error=68.755 deg
+```
+
+第一种情况的零偏恰好被估准，且人为构造的重复噪声在整个窗口内相互抵消，所以补偿后误差显示为零；这不是实际陀螺能实现零漂移的证明，也不是随机噪声积分的一般结果。第二种情况保留原校准值，只将真实零偏增加 `0.002 rad/s`，600 s 后仍积累约 68.8°，说明旧补偿不能自动适应变化。
+
+**验收：**记录输出，分别指出 std 与估计零偏；手算第二种情况的残余偏差与累计误差，并解释为什么不能仅凭“std 很小”宣布航向可靠。
+
+**排查与结束：**核对 rad/s 与 °/s、积分时间间隔及角度是否被折回显示。实机估计零偏前必须确认静止，不能把真实慢转动当作零偏减掉。脚本自动退出，不修改驱动或产生文件；实际校准与动态表现需另做实测验证。
+
+### 课堂提问
+
+> 一个陀螺仪静止 std 为 0.0006 rad/s，均值为 0.01 rad/s，能否直接积分？
+
+参考答案：波动虽小，但均值显示明显零偏；直接积分会产生累计误差，应先核对单位、静止条件并评估补偿。
+
+> 减去一次静止均值，是否就同时消除了噪声和所有未来零偏？
+
+参考答案：没有。它只补偿估计到的偏移，随机波动、估计误差和后续零偏变化仍然存在。
+
+这页最后可以总结：
+
+> **陀螺仪测转速，航向需要估计；噪声和零偏分开评估，才能解释静止数据为什么看似稳定，积分后却仍可能持续漂移。**
