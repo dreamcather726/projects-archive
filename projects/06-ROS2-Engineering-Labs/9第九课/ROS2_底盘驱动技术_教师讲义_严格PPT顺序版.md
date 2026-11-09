@@ -5063,3 +5063,132 @@ int16_overflow: rejected
 这页最后可以总结：
 
 > **先约定位宽、符号、字节序、缩放和单位，再检查范围与量化误差；能正确还原物理量，比多显示几位小数更重要。**
+
+---
+
+## 第 34 页｜IMU 在机器人系统中的作用
+
+这页你可以把它讲成：
+
+> **IMU 在系统里有三种不同的用法：给航位推算提供姿态信息，给 SLAM 提供旋转和重力方向约束，还能参与静止检测。它们使用的数据和前提各不相同。融合姿态不等于绝对航向，读数平稳不等于机器人没动，数据噪声大时也不能对所有 SLAM 都直接关闭 IMU。先判断数据是否适合当前用途，再决定怎样使用。**
+
+### 讲解与例子
+
+**1. 提供航向：把车体系速度转换到 odom 系。**
+
+按照前面的项目设计，航位推算中的 θ 来自下位机融合姿态，而不是在 ROS 驱动里再次积分角速度。由四元数得到相应参考系下的 yaw 后，用它旋转编码器反馈速度，再积分得到平面位置。
+
+这里仍须确认 IMU 姿态参考系、安装变换与 odom 初始航向之间的关系；不能未经对齐就把传感器 yaw 当作 odom 航向。六轴融合也没有凭空增加绝对偏航参考，长期漂移仍需外部信息约束。“比纯积分更稳定”应通过实际数据验证，不能只因输出叫“融合值”就保证效果。
+
+**2. SLAM 约束：旋转信息与重力信息各有用途。**
+
+IMU 角速度帮助预测扫描之间的转动，加速度中的重力信息帮助估计重力方向，进而支持姿态对齐。快速转动时，合理的运动预测有助于扫描匹配；安装变换、时间戳和单位错误，则可能让预测变差。
+
+“消除 roll/pitch 影响”应理解为帮助估计和处理倾斜，不是让算法无条件消除一切坡面、振动或非平面运动误差。Cartographer 的[官方算法说明](https://google-cartographer-ros.readthedocs.io/en/latest/algo_walkthrough.html)介绍了 IMU、姿态外推和扫描匹配的关系，并明确区分 2D 可选 IMU 与 3D 需要 IMU 的情况。
+
+还要区分数据使用路径：本项目航位推算使用融合姿态；上游 Cartographer 的 [ImuData 定义](https://github.com/cartographer-project/cartographer/blob/master/cartographer/sensor/imu_data.h)包含时间、加速度和角速度，不能据此认为它直接采用 `Imu.orientation` 作为航向。本机 ROS 2 移植版本的实际接入方式仍应核对源码。
+
+Cartographer 的[官方数据检查教程](https://google-cartographer-ros.readthedocs.io/en/latest/your_bag.html)还要求保留 IMU 加速度中的重力信息。不能为了让静止数据接近零，就先去掉重力再直接送入这个处理链。
+
+**3. 静止检测：IMU 只能提供证据，不能单独证明速度为零。**
+
+静止时，陀螺读数应接近零偏附近，加速度模长应接近当地 g，短时间内波动较小。但理想匀速直线运动也可能产生几乎相同的 IMU 读数，因此“陀螺和加计接近静止值 → 机器人静止”不能作为充分条件。
+
+实际检测可结合持续时间窗口、各轴均值与波动、编码器速度及其他运动观测。只看陀螺标准差也不够：恒定旋转可能标准差很小，但均值明显不为零。轮速也可能因打滑失真，多个判据都需要结合工况解释。
+
+在可靠确认静止后，估计器可以引入零速观测，即 ZUPT，以约束速度误差；这不是把累计位置清零，也不是所有底盘默认具备的功能。静止窗口还可用于估计陀螺零偏，但不能把含重力投影的加速度均值直接当成零偏全部减掉。截图未提供实现，讲义将这些作为可扩展用途，不宣称当前固件已启用。
+
+**4. 噪声大时，先诊断，再做适合当前模式的对照。**
+
+若静止 30 秒测得陀螺 std = 0.03 rad/s，可以先按课堂经验判断为值得排查的噪声水平；它不是跨设备、带宽和采样率通用的关闭阈值。应核实是否真正静止、有无振动、单位与定标是否正确、采样是否稳定，并同时检查零偏和安装关系。
+
+对于 Cartographer 2D，可依据实际安装版本的配置，比较启用和禁用 IMU 的效果。上游[官方 2D 配置](https://github.com/cartographer-project/cartographer/blob/master/configuration_files/trajectory_builder_2d.lua)中对应的是 Lua 配置项：
+
+```lua
+TRAJECTORY_BUILDER_2D.use_imu_data = false
+```
+
+这只是配置位置示意，不代表已修改项目文件，也不是可直接套用的 ROS 动态参数命令。通常需修改实际加载的 Lua 并重新启动对应节点，按同一数据、同一评价标准比较轨迹和地图。3D 不能照搬此做法关闭必需的 IMU；其他算法也未必有同名选项。
+
+### 板书
+
+```text
+航位推算：融合姿态 → 对齐参考系 → θ → 旋转速度并积分
+SLAM：角速度 / 重力信息 → 运动预测与姿态约束
+静止检测：窗口统计 + 轮速等证据 → 确认后才考虑 ZUPT / 零偏估计
+
+平稳读数 ≠ 静止；低 std ≠ 零角速度
+坏数据先诊断；Cartographer 2D 可做启停对照，3D 不能直接照搬
+```
+
+### 实验：检查消息来源，识别“看似静止”的反例
+
+**实验目标：**区分数据接口检查和静止判据验证，解释为什么仅凭 IMU 不能启动零速修正。
+
+在已安装 ROS 2 Humble 且底盘驱动正在发布数据的 Ubuntu 终端，使用官方 CLI 检查接口；若实际话题名不同，先用 `ros2 topic list -t` 确认后替换 `/imu`：
+
+```bash
+source /opt/ros/humble/setup.bash
+ros2 topic info /imu --verbose
+ros2 topic echo /imu --once --qos-reliability best_effort
+```
+
+记录发布节点、消息类型、QoS、`header.frame_id` 和时间戳，并确认加速度是否保留重力。命令只查看数据，不发布运动指令；若没有发布者，停止等待并检查驱动。不能仅凭这一帧判断静止，下面再用窗口反例说明原因。
+
+以下是自行编写的课堂模型，仅用 Python 标准库，不是官方静止检测算法。假设平面运动，示例检查 z 轴角速度窗口、加速度模长和轮式平移速度；实机还需覆盖三轴及更多异常。阈值用于演示，不作为项目标定结果。
+
+```bash
+python3 - <<'PY'
+from statistics import mean, stdev
+
+n = 1500
+quiet = [0.001 + (0.0006 if i % 2 else -0.0006) for i in range(n)]
+noisy = [0.03 if i % 2 else -0.03 for i in range(n)]
+cases = [
+    ('stationary', quiet, 9.8, 0.0),
+    ('uniform_motion', quiet, 9.8, 0.2),
+    ('vibration', noisy, 9.8, 0.0),
+    ('constant_rotation', [0.2] * n, 9.8, 0.0),
+]
+results = []
+for name, gyro, accel_norm, wheel_speed in cases:
+    imu_candidate = (abs(mean(gyro)) < 0.02 and stdev(gyro) < 0.005
+                     and abs(accel_norm - 9.8) < 0.2)
+    stationary = imu_candidate and abs(wheel_speed) < 0.01
+    results.append((imu_candidate, stationary))
+    print(f'{name}: imu_candidate={imu_candidate}, stationary={stationary}')
+
+assert results == [(True, True), (True, False), (False, False), (False, False)]
+PY
+```
+
+预期输出：
+
+```text
+stationary: imu_candidate=True, stationary=True
+uniform_motion: imu_candidate=True, stationary=False
+vibration: imu_candidate=False, stationary=False
+constant_rotation: imu_candidate=False, stationary=False
+```
+
+**验收：**解释前两组 IMU 数据相同却不应触发相同零速处理的原因，以及恒定旋转为什么不能只靠 std 排除。这里输出的 `stationary` 只是模型判定，不保证复杂实机工况中的真实静止。
+
+**排查与结束：**窗口统计需有足够样本，单位、重力处理和轮速含义必须一致。话题检查无数据时按 Ctrl+C 退出；Python 模型自动退出且不生成文件，不改变 SLAM 配置。本实验没有验证真实 ZUPT 或固件自动校准功能。
+
+### 课堂提问
+
+> 静止时加计 z 为什么可以是 +9.8，而不是 -9.8？
+
+参考答案：在传感器 z 向上、未去重力的条件下，加计报告向上约 +g 的比力；重力本身仍向下。
+
+> 仅按 0.01 rad/s 的恒定零偏积分，10 分钟会积累多少航向误差？
+
+参考答案：未展开角度误差为 `0.01×600 = 6 rad ≈ 343.8°`，这是简化模型，不能当作所有设备的固定指标。
+
+> 静止 30 秒测得陀螺 std = 0.03 rad/s，是否应立即关闭 use_imu_data？
+
+参考答案：先检查测量条件与数据链；若为 Cartographer 2D，可在排查后考虑禁用 IMU 的同数据对照实验。不能只凭单一阈值决定，更不能照搬到需要 IMU 的 3D 模式。
+
+这页最后可以总结：
+
+> **IMU 能提供姿态、运动约束与静止证据，但每种用途都有前提；检查数据质量、参考系和算法需求，才能让它帮助系统而不是误导系统。**
