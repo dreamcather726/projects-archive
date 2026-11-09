@@ -6067,3 +6067,200 @@ closed: True
 这页最后可以总结：
 
 > **先正确配置并管理串口生命周期，再理解每次读写的返回值；超时控制等待，缓冲与协议解析负责把零散字节组织成有效消息。**
+
+---
+
+## 第 41 页｜串口读取策略与缓冲区
+
+这页你可以把它讲成：
+
+> **串口交给程序的是连续字节，不自带应用协议的包边界。一次读取可能只有半帧，也可能包含几帧。接收程序要把字节留下来，找帧头、检查长度、等待完整数据、验证校验，再交给业务处理。未收全要等，已经确认错误则要向前移动，不能永远卡在同一个坏帧头。**
+
+### 讲解与例子
+
+**1. 三种读取策略：读取方式与协议格式配套。**
+
+| 策略（按 PPT 顺序） | 适用场景 | 讲解重点 |
+| --- | --- | --- |
+| 定长读取 | 已知固定帧长的协议 | `read(N)` 在有限超时下仍可能短读，需要累计；固定长度也不能自动保证从帧头开始 |
+| 分隔符读取 | 明确定义结束符的文本协议 | `readline()` 常按换行读取；超时可能返回未结束的一段，二进制载荷也可能恰好包含换行值 |
+| 状态机读取 | 帧头、长度、载荷、校验等分阶段识别 | 截图说明本项目采用此思路；可逐字节输入，也可按块读取后驱动解析过程 |
+
+状态机不等于必须每次调用 `read(1)`。`read(64)` 后逐步消费缓冲区同样能实现“找帧头 → 读长度 → 收完整候选帧 → 校验”的状态推进。块大小 64 是读取策略参数，不是应用帧长度。
+
+**2. 缓冲区维护：把读取边界与帧边界分开。**
+
+```text
+同一帧被拆开：read① [帧A前段] → 保留
+              read② [帧A后段 + 帧B] → 追加 → 解析A → 继续解析B
+
+每次追加后循环解析，直到：没有可用候选帧，或需要等待更多字节
+```
+
+`bytearray` 适合课堂演示追加和删除。需要区分适配器、操作系统中的接收缓冲与应用程序维护的 `bytearray`；清空后者不是清空所有串口缓冲，调用 `reset_input_buffer()` 也不能代替正确的拆帧逻辑。
+
+**3. “解析失败”至少要分成三种情况。**
+
+| 情况 | 应采取的动作 | 原因 |
+| --- | --- | --- |
+| 帧头或合法长度已找到，但数据不足 | 保留候选数据，等待后续输入 | 半帧并没有被证明错误 |
+| 长度非法、校验已失败 | 记录错误并重新同步，例如丢弃候选起点的一个字节，再找帧头 | 永久保留同一个坏候选会阻止后面的有效帧被处理 |
+| 校验通过 | 复制或解析完整帧，再移除已消费字节，继续处理剩余数据 | 一次读取可能包含多帧 |
+
+截图“解析失败保留等待更多数据”主要适用于数据不足，不能直接用于已确认的 CRC 错误。丢一个字节重新搜索是一种保守的课堂策略；实际协议可能规定其他恢复办法。若使用多字节帧头，搜索不到完整帧头时还要保留可能构成下一次帧头的末尾前缀。
+
+长度字段在用于切片、分配或等待之前先验证范围。即使长度合法，错误候选也可能长时间收不完整；真实接收器应结合协议最大帧长和合理组帧期限限制等待。期限应依据帧长、波特率和设备允许的间隔设计，不能看到一次 10 ms 空读就一律丢掉半帧。
+
+**4. 缓冲上限是恢复策略，不只是“太大就全清空”。**
+
+无帧头噪声应及时丢弃；非法长度应立即拒绝；已经处理的帧应及时移除。还需限制应用缓冲规模并统计溢出、长度错误、校验失败与有效帧数。超限时可按协议丢弃旧数据重新同步，也可清空并明确记录丢包，但任何丢弃都可能损失有效数据，不能静默当作解析成功。
+
+如果解析与读取分属不同线程，必须明确缓冲区的所有者并同步访问。长期高速运行时，反复删除 `bytearray` 头部可能产生搬移开销，可以再考虑读写游标或环形缓冲；本页先掌握正确的边界处理。
+
+**5. 对照截图中的读取循环。**
+
+```python
+# 接收结构示意；parse_available 是需要按真实协议实现的解析器。
+buffer = bytearray()
+while running:
+    data = ser.read(64)
+    if data:
+        buffer.extend(data)
+    # 检查组帧期限与缓冲上限；从 buffer 中循环提取完整有效帧。
+    # 未收全保留；确认错误则重新同步；成功则消费已处理字节。
+```
+
+`running`、退出机制和真实协议解析都需要由程序实现。延续上一页的 `timeout=0.01` 时，这里是有限超时读取，截图注释“非阻塞读”不够准确；只有 `timeout=0` 才是该 API 的非阻塞配置。非阻塞空循环还要避免忙等；有限超时也不替代 ROS 2 回调和线程调度设计。
+
+### 板书
+
+```text
+read 的一块 ≠ 协议的一帧
+追加 → 搜索帧头 → 检查长度 → 等待完整 → 校验 → 消费 → 继续
+未收全：保留等待；已判错：前移重同步；已成功：移除整帧
+限制长度、等待时间、缓冲规模；记录错误与丢弃
+```
+
+### 实验：模拟半帧、多帧、噪声和校验错误
+
+**实验目标：**不打开串口，用可控字节块验证解析器不依赖每次读取的边界。以下是课堂自定义玩具协议，**不是本项目底盘协议**；截图只显示帧头提示与 CRC 流程，不能据此补造真实长度字段和 CRC 参数。
+
+为突出缓冲逻辑，练习采用简单累加校验，不把它称为 CRC，也不用于实际底盘：
+
+```text
+帧头：5A（1字节） | 载荷长度 L（1字节，0～8） | 载荷（L字节） | SUM（1字节）
+SUM = (L + 所有载荷字节之和) & 0xFF；总帧长 = L + 3
+```
+
+在 Ubuntu Bash 中运行，只需要 Python 3。示例按字节接纳输入，边追加边解析，使内部缓冲不随外部块大小无限增长。
+
+```bash
+python3 - <<'PY'
+MAX_PAYLOAD = 8
+
+def make_frame(payload):
+    if len(payload) > MAX_PAYLOAD:
+        raise ValueError('payload too long')
+    body = bytes([len(payload)]) + payload
+    return b'\x5A' + body + bytes([sum(body) & 0xFF])
+
+class Parser:
+    def __init__(self):
+        self.buffer = bytearray()
+        self.bad_length = 0
+        self.bad_sum = 0
+
+    def feed(self, chunk):
+        frames = []
+        for byte in chunk:
+            self.buffer.append(byte)
+            while self.buffer:
+                start = self.buffer.find(b'\x5A')
+                if start < 0:
+                    self.buffer.clear()  # 单字节帧头，无需保留部分前缀
+                    break
+                del self.buffer[:start]
+                if len(self.buffer) < 2:
+                    break
+                length = self.buffer[1]
+                if length > MAX_PAYLOAD:
+                    self.bad_length += 1
+                    del self.buffer[0]
+                    continue
+                total = length + 3
+                if len(self.buffer) < total:
+                    break  # 未收全，不是校验失败
+                candidate = bytes(self.buffer[:total])
+                if (sum(candidate[1:-1]) & 0xFF) != candidate[-1]:
+                    self.bad_sum += 1
+                    del self.buffer[0]  # 确认错误，前移并重新搜索
+                    continue
+                frames.append(candidate[2:-1])
+                del self.buffer[:total]
+            assert len(self.buffer) <= MAX_PAYLOAD + 3
+        return frames
+
+a = make_frame(b'AB')
+b = make_frame(b'CD')
+p = Parser()
+assert p.feed(b'\x00\xFF' + a[:2]) == []
+print('partial buffered:', p.buffer.hex(' '))
+frames = p.feed(a[2:] + b)
+assert frames == [b'AB', b'CD'] and not p.buffer
+print('split and combined:', frames)
+
+bad = bytearray(make_frame(b'XY'))
+bad[-1] ^= 1
+frames = p.feed(bytes(bad) + b'\x5A\xFF' + a)
+assert frames == [b'AB']
+assert p.bad_sum == 1 and p.bad_length == 1
+print('recovered:', frames)
+print('errors:', p.bad_sum, p.bad_length)
+
+wire = b'\x00' + a + b + make_frame(b'\x5A\x0A')
+for split in range(len(wire) + 1):
+    q = Parser()
+    result = q.feed(wire[:split]) + q.feed(wire[split:])
+    assert result == [b'AB', b'CD', b'\x5A\x0A']
+    assert not q.buffer
+assert p.feed(b'\x00' * 10000) == [] and not p.buffer
+assert p.feed(make_frame(b'')) == [b'']
+print('all split points, noise and empty payload: passed')
+PY
+```
+
+预期输出：
+
+```text
+partial buffered: 5a 02
+split and combined: [b'AB', b'CD']
+recovered: [b'AB']
+errors: 1 1
+all split points, noise and empty payload: passed
+```
+
+**验收：**学生能解释为什么第一块只有帧头和长度时不丢弃，为什么第二块可提取两帧，以及坏校验之后如何找到后面的有效帧。载荷中的 `0x5A` 和 `0x0A` 用于说明：已经获得合法长度后，不能随意把载荷中的帧头值或换行值当成边界。遍历所有两块切分位置，验证这一组数据不依赖读取分块。
+
+**范围与排查：**本例不含真实 CRC、组帧期限、线程同步或硬件串口。一个合法长度的错误候选若一直收不全，会在有界缓冲中等待，实际项目还需按协议增加超时恢复。断言失败时检查是否把“数据不足”误写成清空，以及校验失败分支是否确实消费了字节；否则可能丢半帧或无限重复同一错误。实验结束即退出，无设备和文件需要清理。
+
+### 课堂提问
+
+> 一次 read 返回三帧，解析第一帧后就退出本轮，是否合理？
+
+参考答案：通常应继续处理已缓存的完整帧，直到需要更多数据；若为避免长时间占用线程而设置处理预算，还要安排后续继续消费，不能遗忘剩余数据。
+
+> 校验失败后一直保留候选帧，等更多字节，能自动修好吗？
+
+参考答案：已经收全且校验失败的候选不会因继续追加就自动变正确，应记录错误并重新同步；只有未收全的候选才适合继续等待。
+
+> 清空超大缓冲后没有内存增长，是否说明通信恢复正常？
+
+参考答案：不能。还要统计丢弃并检查消费速度、长度定义、输入噪声和协议匹配，确认后续有效帧能够持续被正确解析。
+
+### 教师参考
+
+`read(size)` 的超时与短读行为参见 [pySerial API 官方文档](https://pyserial.readthedocs.io/en/latest/pyserial_api.html)，按换行读取及其超时限制参见 [pySerial 官方入门](https://pyserial.readthedocs.io/en/latest/shortintro.html)。本页玩具协议、错误恢复策略与切分实验是课堂扩展，真实项目需替换为已核实的帧格式和校验规则。
+
+这页最后可以总结：
+
+> **把串口当字节流，把解析当持续推进的过程：未收全就保留，已判错就恢复同步，成功就消费，并始终限制等待与缓冲规模。**
