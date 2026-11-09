@@ -5892,3 +5892,178 @@ Ubuntu 用户加组及重新登录参见 [Ubuntu UART 连接指南](https://docu
 这页最后可以总结：
 
 > **先找到设备，再核对运行身份和使用者；用可验证的稳定路径连接底盘，才能让串口配置在重插和多设备环境中保持可追踪。**
+
+---
+
+## 第 40 页｜Python serial 库基础
+
+这页你可以把它讲成：
+
+> **前面已经找到设备并核对权限，现在用 Python 打开它。serial 库负责收发字节，但不会替我们识别底盘协议。尤其要记住：read(64) 是一次读取请求，不是一帧协议；timeout=0.01 是读取等待条件，不是程序每隔 10 ms 自动执行一次，也不代表线程完全不阻塞。**
+
+### 讲解与例子
+
+**1. 按 PPT 顺序读代码：打开、读取、发送、关闭。**
+
+下面按截图保留最小示例，用于逐行讲解；不要直接把示例字节当成底盘运动指令发送。
+
+```python
+import serial
+
+ser = serial.Serial('/dev/ttyUSB0', baudrate=115200, timeout=0.01)
+data = ser.read(64)
+ser.write(b'\x5A\xA5')
+ser.close()
+```
+
+安装包名是 **pyserial**，导入名是 **serial**。若当前 Python 环境尚未安装，在该环境运行 `python3 -m pip install pyserial`；若系统限制直接安装，使用课程虚拟环境或发行版包管理方式。可用 `python3 -m pip show pyserial` 核对安装位置；项目文件不要命名为 `serial.py`，以免遮蔽库。
+
+| 代码 | 教师讲解 |
+| --- | --- |
+| `import serial` | 加载 pySerial 提供的模块 |
+| `serial.Serial(...)` | 给出实际设备路径时立即尝试打开；路径也可使用上一页验证过的 `/dev/chassis` |
+| `baudrate=115200` | 波特率；未写出的字符格式默认是 8 数据位、无奇偶校验、1 停止位 |
+| `timeout=0.01` | 读取超时按秒设置，0.01 秒即 10 ms |
+| `read(64)` | 返回 bytes；可能读满 64 字节，也可能因超时返回更少甚至空字节串 |
+| `write(b'\x5A\xA5')` | 发送两个二进制字节，返回写入字节数；不是发送可见文本“5A A5” |
+| `close()` | 释放端口；实际代码应保证发生异常时也执行关闭 |
+
+截图先读再写并不是所有设备都适用的交互顺序。主动上报设备可以先读；请求应答设备通常需要先发合法请求再等回复。不能仅调整先后顺序就认为任意两字节都是合法协议。
+
+**2. timeout 决定读取行为，不是协议帧长度或定时器。**
+
+| 配置 | 正常情况下 `read(64)` 的行为 | 使用时注意 |
+| --- | --- | --- |
+| `timeout=None` | 等待直到收满请求的 64 字节 | 对端停止发送时可能一直等待；异常、关闭等另行处理 |
+| `timeout=0` | 立即返回当前可取得的字节，最多 64 字节 | 空循环反复读取可能消耗 CPU |
+| `timeout=0.01` | 收满时可提前返回，否则等到读取超时后返回已有字节 | 属于有限等待的阻塞读取，不保证严格 10 ms 的墙钟返回上限 |
+
+最后一种情况下，返回 `b''` 通常表示这次等待没有收到字节，不等于设备一定掉线；返回 7 字节也不自动表示一个完整的 7 字节协议帧。每次循环再次调用 `read()` 会重新进行一次读取等待，外围循环也必须有退出或取消机制。
+
+截图“既不阻塞主线程”应解释为避免无期限等待，而不是完全没有阻塞。若把读取放在 ROS 2 单线程执行器的回调里，等待期间仍会占用该回调的执行线程，影响其他回调。是否使用专门接收线程、非阻塞轮询或其他结构，应结合节点调度设计；仅设置 timeout 不能解决所有实时性问题。
+
+**3. 串口是字节流：短读、合并读取都正常。**
+
+例如一条应用帧共 20 字节，第一次读到 7 字节、第二次读到 13 字节，应该累计后按协议解析；一次读到 40 字节，也可能包含两帧。不要把单次 `read()` 返回值直接当成完整帧。
+
+```text
+串口读取 → 接收缓冲区 → 查帧头与长度 → 等待完整帧 → 校验 → 解析字段
+             ↑ 保留未完成部分；后续页面再展开协议解析与缓冲管理
+```
+
+二进制数据先用 `data.hex(' ')` 检查，不要直接对任意内容执行 UTF-8 解码。`b'\x5A\xA5'` 长度为 2；`b'5A A5'` 长度为 5，内容完全不同。也不要给不以换行结束的二进制协议盲目套用 `readline()`。
+
+**4. 写入超时与读取超时分开，关闭用上下文管理器。**
+
+`timeout` 控制读取，`write_timeout` 控制写入等待；只设置前者并不限制写入等待。写入返回值应与计划发送长度比较，写入超时可抛出 `SerialTimeoutException`。写入成功或调用 `flush()` 都不能替代对端应答，更不能证明底盘执行了动作。失败后也不能不看协议就自动重发可能已执行的命令。
+
+硬件代码可采用下面的资源管理结构。这里只配置和打开，不发送示例命令；实际路径需先按上一页确认。
+
+```python
+import serial
+
+try:
+    with serial.Serial(
+        '/dev/chassis', baudrate=115200,
+        bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
+        stopbits=serial.STOPBITS_ONE,
+        timeout=0.01, write_timeout=0.1,
+        xonxoff=False, rtscts=False, dsrdtr=False,
+    ) as ser:
+        data = ser.read(64)
+        print('received:', len(data), data.hex(' '))
+except serial.SerialException as exc:
+    print('serial error:', exc)
+```
+
+显式列出 8N1 和流控选项，便于与 MCU 配置核对。`with` 在正常退出和代码块内异常退出时关闭端口；打开本身失败则进入异常处理。真实适配器打开时可能影响 DTR/RTS 等控制线，需确认目标硬件是否因此复位；本页实验使用软件回环。
+
+### 板书
+
+```text
+pyserial：包名；serial：导入名
+timeout=None：等够请求字节；0：立即返回；0.01：有限等待
+read(64) ≠ 64 字节必达 ≠ 一帧协议
+b'' ≠ 已证明掉线；write 成功 ≠ MCU 已执行
+读取块 → 累计缓冲 → 协议解析；with → 自动关闭
+```
+
+### 实验：用官方 loop:// 观察短读、空读和非阻塞读取
+
+**实验目标：**使用 [pySerial 官方软件回环](https://pyserial.readthedocs.io/en/latest/url_handlers.html#loop)观察读取返回值，不连接底盘、不占用物理串口。代码沿用官方 API，分步对比读取行为是本页课堂扩展。
+
+在已安装 pySerial 的 Python 3 环境运行，Ubuntu Bash 命令如下：
+
+```bash
+python3 - <<'PY'
+import serial
+
+with serial.serial_for_url(
+    'loop://', baudrate=115200,
+    bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE,
+    timeout=0.01, write_timeout=0.1,
+) as ser:
+    payload = b'\x5A\xA5'
+    written = ser.write(payload)
+    assert written == len(payload)
+    data = ser.read(64)
+    print('timed read:', len(data), data.hex(' '))
+    assert data == payload
+
+    empty = ser.read(64)
+    print('empty read:', repr(empty))
+    assert empty == b''
+
+    ser.timeout = 0
+    assert ser.write(b'ABC') == 3
+    first = ser.read(2)
+    second = ser.read(64)
+    print('nonblocking:', repr(first), repr(second))
+    assert first == b'AB' and second == b'C'
+
+    ser.timeout = None
+    assert ser.write(b'OK') == 2
+    exact = ser.read(2)
+    print('blocking, preloaded:', repr(exact))
+    assert exact == b'OK'
+
+print('closed:', not ser.is_open)
+PY
+```
+
+预期输出：
+
+```text
+timed read: 2 5a a5
+empty read: b''
+nonblocking: b'AB' b'C'
+blocking, preloaded: b'OK'
+closed: True
+```
+
+**验收：**能解释为什么请求 64 字节只得到 2 字节，为什么下一次空读不是异常，以及非阻塞读取为什么可分两次取完 ABC。`timeout=None` 的演示提前写入了足够数据，不能改成请求更多字节后无人继续发送；需要观察等待时应另设受控发送者与退出机制。
+
+**排查与结束：**导入失败先查 Python 环境、包名和同名文件；断言失败先核对写入与读取顺序。退出 `with` 后检查 `is_open` 为 False。软件回环不模拟物理波特率传输时间、参数失配或底盘应答，不用它测串口的真实带宽；硬件验证仍按第 36、39 页进行。
+
+### 课堂提问
+
+> timeout=0.01 能保证 ROS 2 主线程永远不被串口阻塞吗？
+
+参考答案：不能。它限制的是一次读取的等待条件，读取仍会占用执行线程，写入又有独立超时；还需考虑调度、循环和其他处理开销。
+
+> read(64) 返回 12 字节，应该立即判为坏帧并丢弃吗？
+
+参考答案：不能仅根据本次读取长度判断。先累计到接收缓冲区，再按协议帧头、长度和校验处理，保留尚未收全的部分。
+
+> 为什么不用无限阻塞的 read(64) 接收偶尔才发一条 20 字节消息的设备？
+
+参考答案：它可能一直等后续字节，程序无法及时处理已经到达的消息。应根据协议和调度要求选择读取方式，并提供退出机制。
+
+### 教师参考
+
+本页串口参数、读写返回与超时行为依据 [pySerial API 官方文档](https://pyserial.readthedocs.io/en/latest/pyserial_api.html)；上下文管理器与基本读写示例参见 [pySerial 官方入门](https://pyserial.readthedocs.io/en/latest/shortintro.html)。接收缓冲和 ROS 2 调度讨论是基于字节流接口的课堂设计说明，不代表 pySerial 自动提供了底盘协议解析器。
+
+这页最后可以总结：
+
+> **先正确配置并管理串口生命周期，再理解每次读写的返回值；超时控制等待，缓冲与协议解析负责把零散字节组织成有效消息。**
