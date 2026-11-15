@@ -2,7 +2,7 @@
 
 ## Robotics · Embedded · AI | 按含金量排序的精选工程集合
 
-[**查看全部 14 项工程源码（按技术深度排序） →**](projects/README.md)。排名综合技术实现、系统完整度和可复现教学价值；不代表已取得商业使用权或全部项目已完成实机验证。
+[**查看全部 15 项工程源码（原 14 项排名 + 新增工程） →**](projects/README.md)。排名综合技术实现、系统完整度和可复现教学价值；不代表已取得商业使用权或全部项目已完成实机验证。
 
 - **[AegisMotion RTOS](projects/01-AegisMotion-RTOS/)** — STM32F407 + FreeRTOS 实时麦克纳姆底盘
 - **[CogniFlow ROS2](projects/02-CogniFlow-ROS2/)** — 本地 AI 语音交互与机器人任务编排
@@ -19,11 +19,13 @@
 - **[HandPose CV](projects/13-HandPose-CV/)** — 手部姿态视觉识别实验
 - **[EdgeLink ESP32](projects/14-EdgeLink-ESP32/)** — ESP32-S3 串口协议及基础驱动
 
-> 本仓库为私有技术资产库。本次只调整精选项目的目录编号及说明文档，**源码内容、原始归档、个人独立仓库及组织仓库均保持不变**。商业发布前请查看 [商品化审核清单](projects/COMMERCIALIZATION_CHECKLIST.md)。
+> 本仓库为私有技术资产库。2026-11-15 新增 AI Team Manager 源码快照；既有项目源码、原始归档及独立仓库保持不变。商业发布前请查看 [商品化审核清单](projects/COMMERCIALIZATION_CHECKLIST.md)。
+
+- **[AI Team Manager](ai/AI-Team-Manager/)** — VS Code 多智能体开发工作台（0.8.3 源码快照，2026-11-15 新增，暂不参与原 14 项排名）
 
 个人项目源码归档，来自 C 盘和 D 盘的开发目录。整理于 **2026-10-13**。
 
-当前收录 **65 个项目/版本目录**、**10066 个源码与资源文件**。
+当前收录 **66 个项目/版本目录**、**10325 个源码与资源文件**。
 
 - [完整项目目录](docs/PROJECTS.md)
 - [文件清单与 SHA-256 校验值](docs/manifest.json)
@@ -35,7 +37,7 @@
 | [embedded](embedded/) | 嵌入式与单片机 | 22 |
 | [robotics](robotics/) | 机器人与机械臂 | 12 |
 | [vision](vision/) | 视觉与灵巧手 | 6 |
-| [ai](ai/) | AI 与语音 | 8 |
+| [ai](ai/) | AI 与语音 | 9 |
 | [applications](applications/) | 应用与毕业设计 | 2 |
 | [courses](courses/) | 课程与实验 | 10 |
 | [references](references/) | 参考示例 | 5 |

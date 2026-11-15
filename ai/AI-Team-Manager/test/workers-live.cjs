@@ -1,0 +1,22 @@
+// Real readonly Claude sessions: no task writes are enabled before Task07.3/07.4 safety validation.
+const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict');
+const {ClaudeWorkerManager,ClaudeService,ReviewGit,git}=require('../.tools/task02-test/api.cjs');
+(async()=>{
+ const dir=path.resolve('.tools',`task072-workers-${Date.now()}`),project=path.join(dir,'project');await fs.mkdir(project,{recursive:true});await fs.writeFile(path.join(project,'README.md'),'Readonly multi-Session test fixture. No file may be changed.\n');await git(project,['init','--quiet']);await git(project,['add','README.md']);await git(project,['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','--quiet','-m','fixture']);
+ const options={project_id:'read-only-fixture',directory:path.join(dir,'history'),maxConcurrent:3,service:()=>new ClaudeService('claude'),verify:async()=>{assert.equal((await git(project,['status','--porcelain'])).trim(),'');},timeout:()=>180000};
+ const branch=(await git(project,['branch','--show-current'])).trim();let manager=new ClaudeWorkerManager(options);await manager.load();const workers=[];for(let i=0;i<3;i++)workers.push(await manager.create('task-'+i,project,branch));
+ const active=[],progress=[];const runs=workers.map((w,i)=>manager.run(w.worker_id,`这是纯对话测试，禁止调用任何工具、读取或修改任何文件。本会话唯一记忆标记为 CALIBRATION-${i}-${w.worker_id}。请记住，并只返回该完整标记。`).finally(()=>progress.push({worker:w.worker_id,finished:Date.now()})));
+ for(let i=0;i<50;i++){active.push(manager.list().filter(w=>w.status==='RUNNING').length);if(active.at(-1)===3)break;await new Promise(r=>setTimeout(r,100));}
+ for(const w of workers)await manager.select(w.worker_id);await Promise.all(runs);assert(active.includes(3));
+ const initial=workers.map((w,i)=>{const d=manager.detail(w.worker_id);assert.equal(d.worker.status,'COMPLETED');assert(d.worker.execution_result.final_answer.includes(`CALIBRATION-${i}-${w.worker_id}`));assert(d.worker.events.every(e=>e.worker_id===w.worker_id&&e.task_id==='task-'+i));return d;});assert.equal(new Set(initial.map(d=>d.worker.session_id)).size,3);
+ const intervals=initial.map(d=>({worker:d.worker.worker_id,start:Date.parse(d.worker.events.find(e=>e.event.type==='session').time),end:Date.parse(d.worker.events.find(e=>e.event.type==='result').time)}));assert(Math.max(...intervals.map(x=>x.start))<Math.min(...intervals.map(x=>x.end)),'actual CLI event intervals must overlap');
+ await manager.dispose();manager=new ClaudeWorkerManager(options);await manager.load();for(let i=0;i<3;i++)assert.equal(manager.detail(workers[i].worker_id).worker.session_id,initial[i].worker.session_id);
+ const target=workers[0].worker_id,startCursor=manager.detail(target).worker.events.length;
+ const pausing=manager.run(target,'这是只读输出测试，不使用任何工具。请逐行从1写到1000，每行解释一句标识符为何应保持独立，直到被用户停止。').then(()=>false,()=>true);
+ const others=workers.slice(1).map(w=>manager.run(w.worker_id,'禁止使用工具。请只输出本会话先前记住的完整记忆标记，不输出其他会话内容。'));
+ for(let n=0;n<600&&!manager.detail(target).worker.events.slice(startCursor).some(e=>e.event.type==='session');n++)await new Promise(r=>setTimeout(r,100));
+ assert(manager.detail(target).worker.events.slice(startCursor).some(e=>e.event.type==='session'),'real target CLI must have started');await manager.stop(target,true);assert(await pausing);assert.equal(manager.detail(target).worker.status,'PAUSED');await Promise.all(others);for(const w of workers.slice(1))assert.equal(manager.detail(w.worker_id).worker.status,'COMPLETED');
+ await manager.resume(target,'禁止使用工具。请只输出本会话先前记住的完整记忆标记，不输出其他会话内容。');
+ const resumed=workers.map((w,i)=>{const d=manager.detail(w.worker_id);assert.equal(d.worker.session_id,initial[i].worker.session_id);assert(d.worker.execution_result.final_answer.includes(`CALIBRATION-${i}-${w.worker_id}`));for(let j=0;j<3;j++)if(j!==i)assert(!d.worker.execution_result.final_answer.includes(`CALIBRATION-${j}-`));return d;});
+ assert.equal((await git(project,['status','--porcelain'])).trim(),'');await fs.writeFile(path.join(dir,'result.json'),JSON.stringify({passed:true,realClaude:true,readOnly:true,projectUnchanged:true,threeConcurrent:true,actualEventIntervals:intervals,backendReloadRetainedSessions:true,selectionDidNotSendMessages:initial.every(d=>d.chat.conversation.requests.length===1),targetPauseAndResume:true,otherWorkersUnaffected:true,initial,resumed,progress},null,2));await manager.dispose();console.log(dir);
+})().catch(e=>{console.error(e);process.exitCode=1;});

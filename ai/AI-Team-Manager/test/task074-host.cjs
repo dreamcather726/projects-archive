@@ -1,0 +1,8 @@
+const vscode=require('vscode'),fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict');
+const {UserEditProtectionManager,ReviewStorage,git}=require('../.tools/task02-test/api.cjs');
+const {editorFileState}=require('../.tools/task02-test/protection-host.cjs');
+exports.run=async()=>{const dir=process.env.ATM_HOST_TEST_DIR,stage=(await fs.access(path.join(dir,'stage1.json')).then(()=>true,()=>false))?2:1,root=vscode.workspace.workspaceFolders[0].uri.fsPath,file=path.join(root,'source.py'),base=(await git(root,['rev-parse','HEAD'])).trim();
+ const original=await fs.readFile(file,'utf8'),doc=await vscode.workspace.openTextDocument(file);await vscode.window.showTextDocument(doc);const edit=new vscode.WorkspaceEdit();edit.insert(doc.uri,new vscode.Position(0,0),'# ACTUAL_UNSAVED_USER_BUFFER\n');assert(await vscode.workspace.applyEdit(edit));assert(doc.isDirty);
+ const manager=new UserEditProtectionManager(root,()=>editorFileState(root),new ReviewStorage(path.join(dir,'protection')));await manager.load();const state=await manager.capture(base,['source.py']);assert(state.files[0].reasons.includes('UNSAVED_BUFFER'));let applied=false;await assert.rejects(manager.authorize(base,['source.py'],true),/WAITING_INTEGRATION/);assert.equal(await fs.readFile(file,'utf8'),original);assert(doc.getText().startsWith('# ACTUAL_UNSAVED_USER_BUFFER'));
+ await fs.writeFile(path.join(dir,`stage${stage}.json`),JSON.stringify({passed:true,actualVSCode:true,actualUnsavedBuffer:true,mainDiskUnchanged:true,bufferPreserved:true,integrationApplied:applied,protection:state}));await vscode.commands.executeCommand('workbench.action.files.revert');await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+};

@@ -1,0 +1,6 @@
+const fs=require('node:fs/promises'),path=require('node:path'),os=require('node:os'),{git,resolveClaudeExecutable}=require('../.tools/task0710/api.cjs');
+(async()=>{const root=path.resolve('test-results','task0710-host-project-'+Date.now());await fs.mkdir(root,{recursive:true});await fs.writeFile(path.join(root,'README.md'),'Two independent standard library Python modules; each contains unittest tests.\n');await git(root,['init','--quiet']);await git(root,['add','README.md']);await git(root,['-c','user.name=Acceptance','-c','user.email=acceptance@example.invalid','commit','--quiet','-m','acceptance fixture']);
+ const ext=path.join(os.homedir(),'.vscode','extensions'),installed=(await fs.readdir(ext)).filter(n=>n.startsWith('anthropic.claude-code-')).sort((a,b)=>b.localeCompare(a,undefined,{numeric:true}));
+ process.env.ATM_HOST_CLAUDE_EXE=(await resolveClaudeExecutable('claude',{extensionDirectory:()=>path.join(ext,installed[0])})).command;
+ process.env.ATM_HOST_CODEX_REAL='1';process.env.ATM_HOST_TEST_MODULE=path.resolve('test/task0710-host.cjs');process.env.ATM_HOST_WORKSPACE=root;process.env.ATM_HOST_LABEL='task0710-package-host';process.env.ATM_HOST_TIMEOUT_MS='1200000';require('./run-host.cjs');
+})().catch(e=>{console.error(e);process.exitCode=1;});

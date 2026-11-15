@@ -69,3 +69,9 @@
 | [ai/spacemit_llm](../ai/spacemit_llm/) | Python | 4 | D盘/BaiduNetdiskDownload/spacemit_llm |
 | [ai/spacemit_tts](../ai/spacemit_tts/) | Python | 65 | D盘/BaiduNetdiskDownload/spacemit_tts |
 | [ai/voice-assistant-scripts](../ai/voice-assistant-scripts/) | Python | 7 | D盘/BaiduNetdiskDownload |
+
+## 2026-11-15 新增
+
+| 项目目录 | 技术标志 | 文件数 | 来源 |
+| --- | --- | ---: | --- |
+| [ai/AI-Team-Manager](../ai/AI-Team-Manager/) | TypeScript / VS Code / Codex / Claude Code | 259 | dreamcather726/AI-Team-Manager，0.8.3，提交 3c4fd05 |

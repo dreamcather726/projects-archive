@@ -1,0 +1,3 @@
+const path=require('node:path'),fs=require('node:fs'),crypto=require('node:crypto');
+const source=path.resolve(process.env.ATM_PACKAGE_SOURCE||'.');const version=JSON.parse(fs.readFileSync(path.join(source,'package.json'),'utf8')).version;
+Object.assign(process.env,{ATM_HOST_CODEX_REAL:'1',ATM_HOST_TEST_MODULE:path.resolve('test/r1-package-host.cjs'),ATM_HOST_LABEL:'r1-01-package',ATM_HOST_TIMEOUT_MS:'120000',ATM_HOST_VSIX:path.resolve(process.env.ATM_PACKAGE_VSIX||'test-results/ai-team-manager-'+version+'.vsix'),ATM_EXPECTED_VERSION:version,ATM_EXPECTED_BUNDLE:crypto.createHash('sha256').update(fs.readFileSync(path.join(source,'dist/extension.js'))).digest('hex')});require('./run-host.cjs');

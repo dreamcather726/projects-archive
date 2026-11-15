@@ -1,0 +1,3 @@
+const fs=require('node:fs/promises'),path=require('node:path');
+const {git}=require('../.tools/task02-test/api.cjs');
+(async()=>{const root=path.resolve('.tools',`task074-fixture-${Date.now()}`);await fs.mkdir(root,{recursive:true});await fs.writeFile(path.join(root,'source.py'),'original=1\n');await git(root,['init','--quiet']);await git(root,['add','source.py']);await git(root,['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','--quiet','-m','fixture']);process.env.ATM_HOST_TEST_MODULE=path.resolve('test/task074-host.cjs');process.env.ATM_HOST_WORKSPACE=root;process.env.ATM_HOST_LABEL='task074-host';require('./run-host.cjs');})().catch(e=>{console.error(e);process.exitCode=1});

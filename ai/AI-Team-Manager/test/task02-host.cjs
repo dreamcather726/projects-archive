@@ -1,0 +1,57 @@
+const vscode = require('vscode');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+exports.run = async () => {
+  const extension=vscode.extensions.getExtension('ai-team-manager.ai-team-manager');assert(extension);
+  const api=await extension.activate();assert(extension.isActive);
+  const dir=process.env.ATM_HOST_TEST_DIR || path.join(extension.extensionPath,'.tools','task02-host');await fs.mkdir(dir,{recursive:true});
+  await fs.writeFile(path.join(dir,'workspace-initial.json'),JSON.stringify(api.getWorkspaceSnapshot()));
+  const commands=await vscode.commands.getCommands(true);
+  for(const name of ['startCodeReview','runReviewTests','stopCodeReview','codeReviewHistory'])assert(commands.includes('aiTeamManager.'+name));
+  for(const name of ['checkClaudeConnection','newClaudeConversation','stopClaudeResponse','claudeHistory','selectClaudeProject'])assert(commands.includes('aiTeamManager.'+name));
+  for(const name of ['openDashboard','diagnoseEnvironment','refreshDashboard','openSettings','newGPTConversation','stopGPTResponse','gptHistory','clearGPTConversations','selectGPTProject','checkCodexConnection']) assert(commands.includes('aiTeamManager.'+name));
+  await vscode.commands.executeCommand('aiTeamManager.openDashboard');
+  await vscode.commands.executeCommand('aiTeamManager.refreshDashboard');
+  await vscode.commands.executeCommand('aiTeamManager.checkCodexConnection');
+  for(let i=0;i<100&&!api.getWorkspace().ready;i++)await new Promise(resolve=>setTimeout(resolve,100));
+  assert(api.getWorkspace().open&&api.getWorkspace().ready,'Editor workspace must load');
+  assert(vscode.window.tabGroups.all.some(group=>group.tabs.some(tab=>tab.input instanceof vscode.TabInputWebview&&tab.input.viewType.includes('aiTeamManager.workspace'))),'Workspace must be an editor tab');
+  const initialTabCount=vscode.window.tabGroups.all.flatMap(g=>g.tabs).length;
+  await vscode.commands.executeCommand('aiTeamManager.openDashboard');
+  assert.equal(vscode.window.tabGroups.all.flatMap(g=>g.tabs).length,initialTabCount,'Opening dashboard must reuse panel');
+  for(const view of ['commander','agents','tasks','logs'])await vscode.commands.executeCommand(`aiTeamManager.${view}.focus`);
+  for(let i=0;i<100&&!api.getViews().every(v=>v.ready&&v.hasCsp);i++)await new Promise(resolve=>setTimeout(resolve,100));
+  assert(api.getViews().every(v=>v.ready&&v.hasCsp),'Webviews must load local scripts and contain CSP: '+JSON.stringify(api.getViews()));
+  const saved=JSON.parse(await fs.readFile(path.join(dir,'stage1.json'),'utf8').catch(()=>'null'));
+  await fs.writeFile(path.join(dir,'workspace-status.json'),JSON.stringify(api.getWorkspace()));
+  if(!saved)await fs.copyFile(path.join(dir,'workspace-initial.json'),path.join(dir,'workspace-empty.json'));
+  if(!saved){
+    await api.workspace.saveLayout({...api.getWorkspace().layout,navWidth:238,split:62,mode:'triple',logsCollapsed:true,navigation:{route:'projects',hiddenTabs:['claude-01']}});
+    const workspaceTab=vscode.window.tabGroups.all.flatMap(g=>g.tabs).find(tab=>tab.input instanceof vscode.TabInputWebview&&tab.input.viewType.includes('aiTeamManager.workspace'));
+    await vscode.window.tabGroups.close(workspaceTab);
+    await vscode.commands.executeCommand('aiTeamManager.openDashboard');
+    assert.equal(api.getWorkspace().layout.navWidth,238,'Closing panel must retain layout');
+    assert.equal(api.getWorkspace().layout.navigation.route,'projects');
+    assert.deepEqual(api.getWorkspace().layout.navigation.hiddenTabs,['claude-01']);
+    await vscode.commands.executeCommand('aiTeamManager.newGPTConversation');
+    await api.chat.handle({type:'send',text:'CODEX_CONNECT_OK'});
+    const first=api.chat.snapshot();assert.equal(first.conversation.status,'COMPLETED',JSON.stringify(first));assert(first.conversation.threadId);
+    await api.chat.handle({type:'send',text:'上一条消息是什么？'});
+    const state=api.chat.snapshot();assert.equal(state.conversation.threadId,first.conversation.threadId);assert.equal(state.conversation.requests.length,2);
+    assert.equal(state.conversation.messages.at(-1).text,'CODEX_CONNECT_OK');
+    await fs.writeFile(path.join(dir,'stage1.json'),JSON.stringify({activated:true,commands:10,views:4,id:state.conversation.id,thread:state.conversation.threadId,messages:state.conversation.messages.length}));
+  } else {
+    assert.equal(api.getWorkspace().layout.mode,'triple');assert.equal(api.getWorkspace().layout.navWidth,238);assert.equal(api.getWorkspace().layout.logsCollapsed,true,'Restart must retain layout');
+    assert.equal(api.getWorkspace().layout.navigation.route,'projects','Restart must retain page route');
+    assert.deepEqual(api.getWorkspace().layout.navigation.hiddenTabs,['claude-01'],'Restart must retain hidden session tabs');
+    const restored=api.chat.snapshot();assert.equal(restored.conversation.id,saved.id);assert.equal(restored.conversation.threadId,saved.thread);assert(restored.conversation.messages.length>=saved.messages);
+    await api.chat.handle({type:'send',text:'重启后继续'});const state=api.chat.snapshot();assert.equal(state.conversation.threadId,saved.thread);assert.equal(state.conversation.status,'COMPLETED');
+    await fs.writeFile(path.join(dir,'stage2.json'),JSON.stringify({restartRestored:true,continuedSameThread:true,messages:state.conversation.messages.length,webviews:api.getViews()}));
+  }
+  await vscode.commands.executeCommand('aiTeamManager.stopGPTResponse');
+  await vscode.commands.executeCommand('aiTeamManager.diagnoseEnvironment');
+  assert.equal(api.getDiagnostics().length,6);
+  await fs.writeFile(path.join(dir,'diagnostics.json'),JSON.stringify(api.getDiagnostics(),null,2));
+  await vscode.commands.executeCommand('aiTeamManager.openSettings');
+};

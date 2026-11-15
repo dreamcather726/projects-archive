@@ -1,0 +1,281 @@
+{
+  "name": "ai-team-manager",
+  "displayName": "AI Team Manager - Multi Agent",
+  "description": "Multi-panel AI workspace with independent Codex and Claude Code CLI sessions",
+  "version": "0.8.3",
+  "publisher": "ai-team-manager",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onWebviewPanel:aiTeamManager.workspace"
+  ],
+  "scripts": {
+    "compile": "node esbuild.js",
+    "package:vsix": "vsce package",
+    "typecheck": "tsc --noEmit",
+    "vscode:prepublish": "npm run typecheck && npm run compile",
+    "test": "node test/run.cjs",
+    "test:retry": "node test/run-retry.cjs",
+    "test:ui:r1": "node test/run-r1-ui.cjs",
+    "test:review-evidence": "node test/run-review-evidence.cjs",
+    "test:progress": "node test/run-progress.cjs",
+    "test:progress-ui": "node test/run-progress-ui.cjs",
+    "test:task0710": "node test/run-task0710.cjs",
+    "test:task0710-live": "node test/run-task0710.cjs && node test/task0710-live.cjs",
+    "test:host": "npm run compile && node test/run-host.cjs",
+    "test:claude-live": "npm test && node test/claude-live.cjs",
+    "test:claude-host-live": "npm run compile && node test/run-claude-host.cjs",
+    "test:review-live": "npm test && node test/review-live.cjs",
+    "test:review-host-live": "npm run compile && node test/run-review-host.cjs",
+    "test:permissions-live": "npm test && node test/permissions-live.cjs",
+    "test:permissions-host-live": "npm run compile && node test/run-permission-host.cjs",
+    "test:repair-host-live": "npm run compile && node test/run-repair-host.cjs",
+    "test:dispatch-host-live": "npm run compile && node test/run-dispatch-host.cjs",
+    "test:recovery": "node test/run-recovery.cjs",
+    "test:recovery-host": "npm run test:recovery && npm run compile && node test/run-recovery-host.cjs",
+    "test:task0711": "node test/run-task0711.cjs",
+    "test:task0711-live": "node test/run-task0711.cjs && node test/task0711-live.cjs && node test/task0711-safety-live.cjs",
+    "test:task0711-host": "npm run compile && node test/run-task0711-host.cjs"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "aiTeamManager.configureDispatcher",
+        "title": "AI Team Manager: Configure GPT Claude Dispatcher"
+      },
+      {
+        "command": "aiTeamManager.stopDispatchedTask",
+        "title": "AI Team Manager: Stop Dispatched Claude Task"
+      },
+      {
+        "command": "aiTeamManager.openRepairs",
+        "title": "AI Team Manager: Open Targeted Repairs"
+      },
+      {
+        "command": "aiTeamManager.configureClaudePermissions",
+        "title": "AI Team Manager: Configure Claude Task Permissions"
+      },
+      {
+        "command": "aiTeamManager.startCodeReview",
+        "title": "AI Team Manager: Review Claude Code Changes"
+      },
+      {
+        "command": "aiTeamManager.runReviewTests",
+        "title": "AI Team Manager: Run Tests for Code Review"
+      },
+      {
+        "command": "aiTeamManager.stopCodeReview",
+        "title": "AI Team Manager: Stop Code Review"
+      },
+      {
+        "command": "aiTeamManager.codeReviewHistory",
+        "title": "AI Team Manager: Code Review History"
+      },
+      {
+        "command": "aiTeamManager.openDashboard",
+        "title": "AI Team Manager: Open Dashboard",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "aiTeamManager.diagnoseEnvironment",
+        "title": "AI Team Manager: Diagnose Environment"
+      },
+      {
+        "command": "aiTeamManager.refreshDashboard",
+        "title": "AI Team Manager: Refresh Dashboard"
+      },
+      {
+        "command": "aiTeamManager.openSettings",
+        "title": "AI Team Manager: Open Settings"
+      },
+      {
+        "command": "aiTeamManager.newGPTConversation",
+        "title": "AI Team Manager: New GPT Conversation"
+      },
+      {
+        "command": "aiTeamManager.stopGPTResponse",
+        "title": "AI Team Manager: Stop GPT Response"
+      },
+      {
+        "command": "aiTeamManager.gptHistory",
+        "title": "AI Team Manager: GPT Conversation History"
+      },
+      {
+        "command": "aiTeamManager.clearGPTConversations",
+        "title": "AI Team Manager: Clear GPT Conversations"
+      },
+      {
+        "command": "aiTeamManager.selectGPTProject",
+        "title": "AI Team Manager: Select GPT Project"
+      },
+      {
+        "command": "aiTeamManager.checkCodexConnection",
+        "title": "AI Team Manager: Check Codex Connection"
+      },
+      {
+        "command": "aiTeamManager.checkClaudeConnection",
+        "title": "AI Team Manager: Check Claude Connection"
+      },
+      {
+        "command": "aiTeamManager.newClaudeConversation",
+        "title": "AI Team Manager: New Claude Conversation"
+      },
+      {
+        "command": "aiTeamManager.stopClaudeResponse",
+        "title": "AI Team Manager: Stop Claude Response"
+      },
+      {
+        "command": "aiTeamManager.claudeHistory",
+        "title": "AI Team Manager: Claude Conversation History"
+      },
+      {
+        "command": "aiTeamManager.selectClaudeProject",
+        "title": "AI Team Manager: Select Claude Project"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "aiTeamManager",
+          "title": "AI Team Manager",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "aiTeamManager": [
+        {
+          "name": "GPT 总指挥",
+          "id": "aiTeamManager.commander",
+          "type": "webview"
+        },
+        {
+          "id": "aiTeamManager.agents",
+          "name": "Claude 团队"
+        },
+        {
+          "name": "任务管理",
+          "id": "aiTeamManager.tasks",
+          "type": "webview"
+        },
+        {
+          "name": "执行日志",
+          "id": "aiTeamManager.logs",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "aiTeamManager.openDashboard",
+          "when": "view == aiTeamManager.commander",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AI Team Manager",
+      "properties": {
+        "aiTeamManager.claudeExecutable": {
+          "type": "string",
+          "default": "claude",
+          "scope": "machine",
+          "description": "现有 Claude Code 可执行文件；默认查找 PATH 和已启用的 Claude Code 扩展。修改后重新加载窗口。"
+        },
+        "aiTeamManager.claudeRequestTimeoutMs": {
+          "type": "number",
+          "default": 300000,
+          "minimum": 1000,
+          "maximum": 3600000,
+          "description": "Claude 单轮执行超时（毫秒）；停止和超时不会回滚已发生的文件修改。"
+        },
+        "aiTeamManager.claudeRetryMaxRetries": {
+          "type": "integer",
+          "default": 3,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Claude 临时上游错误的最大自动重试次数（不含首次请求）。仅在确认没有执行副作用时重试；0 禁用。"
+        },
+        "aiTeamManager.claudeRetryBaseDelayMs": {
+          "type": "integer",
+          "default": 2000,
+          "minimum": 100,
+          "maximum": 10000,
+          "description": "Claude 自动重试的基础等待毫秒数；指数退避与正向抖动，单次最多等待 60000ms。Retry-After 超限时停止自动重试。"
+        },
+        "aiTeamManager.diagnosticTimeoutMs": {
+          "type": "number",
+          "default": 10000,
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "版本检查超时（毫秒）"
+        },
+        "aiTeamManager.codexExecutable": {
+          "type": "string",
+          "default": "codex",
+          "scope": "machine",
+          "description": "现有 Codex 文件名或绝对路径。默认自动查找 PATH 和已安装 Codex 扩展；手动路径优先。修改后重载窗口。"
+        },
+        "aiTeamManager.requestTimeoutMs": {
+          "type": "number",
+          "default": 180000,
+          "minimum": 1000,
+          "maximum": 3600000,
+          "description": "GPT 单轮请求超时毫秒数。"
+        },
+        "aiTeamManager.teamMaxConcurrent": {
+          "type": "integer",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 8,
+          "description": "新计划的最大 Worker 数量与并发数。已有计划可在团队设置中调整并发。"
+        },
+        "aiTeamManager.teamMaxRepairRounds": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "每个候选的自动测试修复与 GPT 定向返工最大轮数。0 表示禁止自动返工。"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.6",
+    "@types/node": "^22.0.0",
+    "@types/vscode": "~1.95.0",
+    "@vscode/vsce": "^4.1.0",
+    "esbuild": "^0.25.0",
+    "jsdom": "^27.0.0",
+    "playwright": "^1.65.0",
+    "typescript": "^5.7.0"
+  },
+  "overrides": {
+    "@vscode/vsce": {
+      "minimatch": "^11.0.1"
+    }
+  },
+  "dependencies": {
+    "cross-spawn": "^7.0.6"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "Codex 和 Claude 只在受信任的工作区中运行。"
+    },
+    "virtualWorkspaces": {
+      "supported": false
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dreamcather726/AI-Team-Manager.git"
+  }
+}
