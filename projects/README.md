@@ -1,6 +1,6 @@
 # Robotics · Embedded · AI | 精选工程源码集合
 
-> **按技术含金量从高到低排列，共 15 个工程项目（原排序 14 项，新增 1 项待综合比较）。** 这是私人源码资产库，不是可以直接售卖的发行包。每个目录包含实际源码，项目的原始归档与个人独立仓库保留不变。
+> **按技术含金量从高到低排列，共 15 个工程项目（原排序 14 项，新增 1 项待综合比较）。** 这是私人源码资产库，不是可以直接售卖的发行包。每个目录包含实际源码，重复的原始归档已合并到此目录，旧路径保留导航和来源。
 
 ## 新增工程
 
@@ -191,3 +191,7 @@
 5. 各项目原有独立仓库、所有原归档目录与 Git 提交历史均未删除、覆盖或重写。创建精选副本不改变任何第三方版权归属。
 6. 不保证各项目已经重新编译、实机运行或具备商业授权。特别需要复核公司/团队权属、第三方许可证、模型权重、密钥及设备连接配置。详见 [商品化审核清单](COMMERCIALIZATION_CHECKLIST.md)。
 7. 原始归档有 65 个项目/版本目录；2026-11-15 新增 AI Team Manager 后为 66 个，不在本次精选范围的资料仍可通过 [完整归档目录](../docs/PROJECTS.md) 查找。
+
+## Source consolidation (2026-11-15)
+
+Eight byte-identical archive copies were consolidated here. Historical source paths below describe provenance; their directories now link to the canonical project. See [deduplication details](../docs/DEDUPLICATION.md).

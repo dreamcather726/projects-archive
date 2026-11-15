@@ -19,7 +19,7 @@
 - **[HandPose CV](projects/13-HandPose-CV/)** — 手部姿态视觉识别实验
 - **[EdgeLink ESP32](projects/14-EdgeLink-ESP32/)** — ESP32-S3 串口协议及基础驱动
 
-> 本仓库为私有技术资产库。2026-11-15 新增 AI Team Manager 源码快照；既有项目源码、原始归档及独立仓库保持不变。商业发布前请查看 [商品化审核清单](projects/COMMERCIALIZATION_CHECKLIST.md)。
+> 本仓库为私有技术资产库。2026-11-15 新增 AI Team Manager 源码快照；重复归档已合并到 projects/，保留完整源码和原始来源。商业发布前请查看 [商品化审核清单](projects/COMMERCIALIZATION_CHECKLIST.md)。
 
 - **[AI Team Manager](ai/AI-Team-Manager/)** — VS Code 多智能体开发工作台（0.8.3 源码快照，2026-11-15 新增，暂不参与原 14 项排名）
 
@@ -34,13 +34,14 @@
 
 | 分类 | 内容 | 目录数 |
 | --- | --- | ---: |
-| [embedded](embedded/) | 嵌入式与单片机 | 22 |
-| [robotics](robotics/) | 机器人与机械臂 | 12 |
-| [vision](vision/) | 视觉与灵巧手 | 6 |
+| [embedded](embedded/) | 嵌入式与单片机 | 21 |
+| [robotics](robotics/) | 机器人与机械臂 | 8 |
+| [vision](vision/) | 视觉与灵巧手 | 5 |
 | [ai](ai/) | AI 与语音 | 9 |
-| [applications](applications/) | 应用与毕业设计 | 2 |
-| [courses](courses/) | 课程与实验 | 10 |
+| [applications](applications/) | 应用与毕业设计 | 1 |
+| [courses](courses/) | 课程与实验 | 9 |
 | [references](references/) | 参考示例 | 5 |
+| [projects](projects/) | Consolidated archive sources (curated collection: 15 projects) | 8 |
 
 ## 使用项目
 
@@ -51,3 +52,7 @@
 这是源码快照归档。目录中的第三方代码仍适用各自原始许可证；保留了原有许可证文件，没有为所有项目统一授予新许可证。
 
 后续新增项目建议放入相应分类的独立目录，并更新项目目录和 README。
+
+## Project deduplication (2026-11-15)
+
+Eight identical project copies now share their complete source in `projects/`. Original category directories provide navigation. Versions with different contents remain separate. See [deduplication details](docs/DEDUPLICATION.md).

@@ -1,5 +1,7 @@
 {
   "summary": {
+    "last_deduplicated": "2026-11-15",
+    "deduplicated_project_copies": 8,
     "date": "2026-10-13",
     "last_added": "2026-11-15",
     "owner": "dreamcather726",
@@ -344,7 +346,8 @@
     },
     {
       "name": "esp32ROS2RTOS",
-      "directory": "embedded/esp32ROS2RTOS",
+      "directory": "projects/14-EdgeLink-ESP32",
+      "original_directory": "embedded/esp32ROS2RTOS",
       "source": "C盘桌面/workspace/01_ESP32嵌入式/esp32ROS2RTOS",
       "technology": "ESP-IDF / CMake",
       "files": [
@@ -20048,7 +20051,8 @@
     },
     {
       "name": "JXB2.0",
-      "directory": "robotics/JXB2.0",
+      "directory": "projects/04-KineArm-Robotics",
+      "original_directory": "robotics/JXB2.0",
       "source": "C盘桌面/workspace/02_ROS机器人/JXB2.0",
       "technology": "ESP-IDF / CMake、Arduino、Python、ROS、CAD",
       "files": [
@@ -21128,7 +21132,8 @@
     },
     {
       "name": "ROS-CAR",
-      "directory": "robotics/ROS-CAR",
+      "directory": "projects/03-NexusMobile-ROS2",
+      "original_directory": "robotics/ROS-CAR",
       "source": "C盘桌面/workspace/02_ROS机器人/ROS-CAR",
       "technology": "PlatformIO、ESP-IDF / CMake、Arduino、Python、ROS、CAD",
       "files": [
@@ -24866,7 +24871,8 @@
     },
     {
       "name": "VMGUI",
-      "directory": "robotics/VMGUI",
+      "directory": "projects/11-RoboSim-Cockpit",
+      "original_directory": "robotics/VMGUI",
       "source": "C盘桌面/workspace/02_ROS机器人/VMGUI",
       "technology": "Python、ROS",
       "files": [
@@ -29768,7 +29774,8 @@
     },
     {
       "name": "so-arm100-control-experiments",
-      "directory": "robotics/so-arm100-control-experiments",
+      "directory": "projects/05-ServoLab-SOARM",
+      "original_directory": "robotics/so-arm100-control-experiments",
       "source": "C盘桌面/01_开发项目/新建文件夹 (2)",
       "technology": "Python",
       "files": [
@@ -31541,7 +31548,8 @@
     },
     {
       "name": "dexterous-hand-online",
-      "directory": "courses/dexterous-hand-online",
+      "directory": "projects/12-DexterousLab-Hand",
+      "original_directory": "courses/dexterous-hand-online",
       "source": "C盘桌面/05_个人事务/灵巧手线上课程",
       "technology": "Arduino、Python、CAD",
       "files": [
@@ -35153,7 +35161,8 @@
     },
     {
       "name": "handpose-x",
-      "directory": "vision/handpose-x",
+      "directory": "projects/13-HandPose-CV",
+      "original_directory": "vision/handpose-x",
       "source": "D盘/work/handpose_x-main",
       "technology": "Python",
       "files": [
@@ -55832,7 +55841,8 @@
     },
     {
       "name": "iot-seedling-graduation",
-      "directory": "applications/iot-seedling-graduation",
+      "directory": "projects/10-AgroSense-IoT",
+      "original_directory": "applications/iot-seedling-graduation",
       "source": "D盘/大学/毕业设计/毕业设计代码",
       "technology": "Arduino、Python、Node.js / Web",
       "files": [
