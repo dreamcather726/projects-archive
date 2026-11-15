@@ -25,7 +25,7 @@
 
 个人项目源码归档，来自 C 盘和 D 盘的开发目录。整理于 **2026-10-13**。
 
-当前收录 **66 个项目/版本目录**、**10325 个源码与资源文件**。
+当前归档清单保留 **54 个代表项目目录**、**5090 个源码与资源文件**。
 
 - [完整项目目录](docs/PROJECTS.md)
 - [文件清单与 SHA-256 校验值](docs/manifest.json)
@@ -34,20 +34,20 @@
 
 | 分类 | 内容 | 目录数 |
 | --- | --- | ---: |
-| [embedded](embedded/) | 嵌入式与单片机 | 21 |
-| [robotics](robotics/) | 机器人与机械臂 | 8 |
-| [vision](vision/) | 视觉与灵巧手 | 5 |
-| [ai](ai/) | AI 与语音 | 9 |
+| [embedded](embedded/) | 嵌入式与单片机 | 17 |
+| [robotics](robotics/) | 机器人与机械臂 | 6 |
+| [vision](vision/) | 视觉与灵巧手 | 4 |
+| [ai](ai/) | AI 与语音 | 3 |
 | [applications](applications/) | 应用与毕业设计 | 1 |
 | [courses](courses/) | 课程与实验 | 9 |
 | [references](references/) | 参考示例 | 5 |
-| [projects](projects/) | Consolidated archive sources (curated collection: 15 projects) | 8 |
+| [projects](projects/) | Consolidated archive sources (curated collection: 15 projects) | 9 |
 
 ## 使用项目
 
 每个项目保持自身目录结构；打开该项目的原 README、依赖清单或构建入口开始使用。各项目可能需要不同版本的 Python、ESP-IDF、PlatformIO、ROS 或 STM32 工具链，仓库根目录不提供统一构建。
 
-整理过程中在 **50 个文件**中替换了凭据或连接配置候选值。`REDACTED_CONFIGURE_LOCALLY` 表示需要在本地填写配置。原文件保留在原盘目录。
+整理过程中在 **43 个文件**中替换了凭据或连接配置候选值。`REDACTED_CONFIGURE_LOCALLY` 表示需要在本地填写配置。原文件保留在原盘目录。
 
 这是源码快照归档。目录中的第三方代码仍适用各自原始许可证；保留了原有许可证文件，没有为所有项目统一授予新许可证。
 
@@ -55,4 +55,8 @@
 
 ## Project deduplication (2026-11-15)
 
-Eight identical project copies now share their complete source in `projects/`. Original category directories provide navigation. Versions with different contents remain separate. See [deduplication details](docs/DEDUPLICATION.md).
+Eight identical project copies now share their complete source in `projects/`. Original category directories provide navigation. This first pass kept differing versions separate; the second pass below consolidates near duplicates with history references. See [deduplication details](docs/DEDUPLICATION.md).
+
+## 近似版本精简（2026-11-15）
+
+进一步归并 13 个近似或被覆盖的项目目录，删除 270 个完全相同的内部副本。旧版差异通过 Git 历史保留，详见 [整理与恢复记录](docs/NEAR_DUPLICATES.md)。

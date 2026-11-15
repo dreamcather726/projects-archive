@@ -18,3 +18,7 @@ Eight duplicate project copies were consolidated into the curated `projects/` di
 Old directories retain navigation and provenance. The manifest now points to canonical sources and records `original_directory`; redaction paths follow the same mapping. Manifest source counts describe the same archive selection, not every file in the repository.
 
 Versions of Xiaozhi and HandTracking with different contents remain separate. Existing unrelated local deletions are excluded from this commit.
+
+## 后续整理
+
+上文描述第一轮完全重复项目整理。第二轮已进一步归并部分近似版本，当前状态以 [近似项目整理记录](NEAR_DUPLICATES.md) 和 manifest 为准。

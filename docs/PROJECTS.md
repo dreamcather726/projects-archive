@@ -1,77 +1,99 @@
 # 项目目录
 
-项目目录按用途分类，C、D 盘中的不同版本保留来源。完全重复的源码已合并，详见 [去重记录](DEDUPLICATION.md)。
+当前归档保留 **54 个代表项目**，清单记录 **5090 个源码与资源文件**。精选展示见 [projects/](../projects/)。
 
-| 项目目录 | 技术标志 | 文件数 | 来源 |
-| --- | --- | ---: | --- |
-| [embedded/dog](../embedded/dog/) | Arduino | 38 | C盘桌面/workspace/01_ESP32嵌入式/dog |
-| [embedded/ESP32](../embedded/ESP32/) | Arduino | 14 | C盘桌面/workspace/01_ESP32嵌入式/ESP32 |
-| [projects/14-EdgeLink-ESP32](../projects/14-EdgeLink-ESP32/) | ESP-IDF / CMake | 24 | C盘桌面/workspace/01_ESP32嵌入式/esp32ROS2RTOS |
-| [embedded/helloWorld_test](../embedded/helloWorld_test/) | PlatformIO、Arduino、Python | 47 | C盘桌面/workspace/01_ESP32嵌入式/helloWorld_test |
-| [embedded/my_9685_esp32s3](../embedded/my_9685_esp32s3/) | Arduino、Python | 18 | C盘桌面/workspace/01_ESP32嵌入式/my_9685_esp32s3 |
-| [embedded/RTOS_esp32](../embedded/RTOS_esp32/) | PlatformIO、Python | 14 | C盘桌面/workspace/01_ESP32嵌入式/RTOS_esp32 |
-| [embedded/test](../embedded/test/) | Arduino | 13 | C盘桌面/workspace/01_ESP32嵌入式/test |
-| [embedded/xiaozhi-esp32-main](../embedded/xiaozhi-esp32-main/) | ESP-IDF / CMake、Python | 1561 | C盘桌面/workspace/01_ESP32嵌入式/xiaozhi-esp32-main |
-| [embedded/xiaozhi-esp32-main---副本](../embedded/xiaozhi-esp32-main---%E5%89%AF%E6%9C%AC/) | ESP-IDF / CMake、Python | 1561 | C盘桌面/workspace/01_ESP32嵌入式/xiaozhi-esp32-main - 副本 |
-| [embedded/孟](../embedded/%E5%AD%9F/) | Arduino | 34 | C盘桌面/workspace/01_ESP32嵌入式/孟 |
-| [projects/04-KineArm-Robotics](../projects/04-KineArm-Robotics/) | ESP-IDF / CMake、Arduino、Python、ROS、CAD | 127 | C盘桌面/workspace/02_ROS机器人/JXB2.0 |
-| [robotics/ROBO](../robotics/ROBO/) | Node.js / Web | 50 | C盘桌面/workspace/02_ROS机器人/ROBO |
-| [projects/03-NexusMobile-ROS2](../projects/03-NexusMobile-ROS2/) | PlatformIO、ESP-IDF / CMake、Arduino、Python、ROS、CAD | 570 | C盘桌面/workspace/02_ROS机器人/ROS-CAR |
-| [robotics/ROS-CAR-main-publish](../robotics/ROS-CAR-main-publish/) | PlatformIO、Python、ROS | 50 | C盘桌面/workspace/02_ROS机器人/ROS-CAR-main-publish |
-| [projects/11-RoboSim-Cockpit](../projects/11-RoboSim-Cockpit/) | Python、ROS | 26 | C盘桌面/workspace/02_ROS机器人/VMGUI |
-| [robotics/yahboomcar_ws](../robotics/yahboomcar_ws/) | ESP-IDF / CMake、Python、ROS | 140 | C盘桌面/workspace/02_ROS机器人/yahboomcar_ws |
-| [embedded/bugrtoscar](../embedded/bugrtoscar/) | ESP-IDF / CMake、Python、STM32 / Keil | 158 | C盘桌面/workspace/03_STM32/bugrtoscar |
-| [vision/HandTracking-4指](../vision/HandTracking-4%E6%8C%87/) | Arduino、Python | 13 | C盘桌面/workspace/04_灵巧手与视觉/HandTracking-4指 |
-| [vision/灵巧手中文版](../vision/%E7%81%B5%E5%B7%A7%E6%89%8B%E4%B8%AD%E6%96%87%E7%89%88/) | Python | 18 | C盘桌面/workspace/04_灵巧手与视觉/灵巧手中文版 |
-| [courses/竞赛](../courses/%E7%AB%9E%E8%B5%9B/) | Arduino | 43 | C盘桌面/workspace/05_课程资料/竞赛 |
-| [courses/竞赛实验](../courses/%E7%AB%9E%E8%B5%9B%E5%AE%9E%E9%AA%8C/) | Arduino | 29 | C盘桌面/workspace/05_课程资料/竞赛实验 |
-| [courses/课表](../courses/%E8%AF%BE%E8%A1%A8/) | Python | 4 | C盘桌面/workspace/05_课程资料/课表 |
-| [courses/Phase-2_Training_Camp](../courses/Phase-2_Training_Camp/) | Arduino、CAD | 187 | C盘桌面/01_开发项目/Phase 2_Training_Camp |
-| [courses/python](../courses/python/) | Python | 10 | C盘桌面/01_开发项目/python |
-| [courses/ros2_python](../courses/ros2_python/) | ESP-IDF / CMake、Python、ROS | 167 | C盘桌面/01_开发项目/ros2_python |
-| [robotics/tect](../robotics/tect/) | Arduino | 4 | C盘桌面/01_开发项目/tect |
-| [projects/05-ServoLab-SOARM](../projects/05-ServoLab-SOARM/) | Python | 162 | C盘桌面/01_开发项目/新建文件夹 (2) |
-| [embedded/i2c-scanner](../embedded/i2c-scanner/) | Arduino | 1 | C盘桌面/01_开发项目 |
-| [vision/orangepi-hand-control](../vision/orangepi-hand-control/) | Python | 1 | C盘桌面/01_开发项目 |
-| [robotics/ros2-car-stc8](../robotics/ros2-car-stc8/) | Python | 74 | C盘桌面/ros2_car2.0 |
-| [courses/ros2-lessons](../courses/ros2-lessons/) | ESP-IDF / CMake、Python、ROS | 50 | C盘桌面/ros2讲义 |
-| [projects/12-DexterousLab-Hand](../projects/12-DexterousLab-Hand/) | Arduino、Python、CAD | 109 | C盘桌面/05_个人事务/灵巧手线上课程 |
-| [courses/cpp-exercises](../courses/cpp-exercises/) | 源码与配置 | 1 | C盘桌面/Larry |
-| [references/LeLamp](../references/LeLamp/) | ROS、CAD | 119 | C盘桌面/01_开发项目/LeLamp-master/LeLamp-master |
-| [references/microduck](../references/microduck/) | Python | 267 | C盘桌面/01_开发项目/microduck-main/microduck-main |
-| [embedded/platformio-1](../embedded/platformio-1/) | PlatformIO | 10 | C盘文档/PlatformIO/Projects/1 |
-| [embedded/platformio-123](../embedded/platformio-123/) | PlatformIO | 10 | C盘文档/PlatformIO/Projects/123 |
-| [embedded/platformio-a](../embedded/platformio-a/) | PlatformIO | 9 | C盘文档/PlatformIO/Projects/a |
-| [embedded/platformio-pm](../embedded/platformio-pm/) | PlatformIO | 10 | C盘文档/PlatformIO/Projects/pm |
-| [embedded/platformio-ss](../embedded/platformio-ss/) | PlatformIO | 9 | C盘文档/PlatformIO/Projects/ss |
-| [embedded/platformio-test](../embedded/platformio-test/) | PlatformIO、Arduino | 18 | C盘文档/PlatformIO/Projects/test |
-| [embedded/platformio-Wificontrol](../embedded/platformio-Wificontrol/) | PlatformIO | 9 | C盘文档/PlatformIO/Projects/Wificontrol |
-| [robotics/arm-controller](../robotics/arm-controller/) | Arduino、Python | 5 | D盘/work/机械臂（改） |
-| [embedded/robot-head](../embedded/robot-head/) | Arduino | 1 | D盘/work/机械头/esp32 |
-| [vision/hand-software](../vision/hand-software/) | Python | 4 | D盘/work/灵巧手软件 |
-| [projects/13-HandPose-CV](../projects/13-HandPose-CV/) | Python | 12 | D盘/work/handpose_x-main |
-| [vision/HandTracking-4指-d-drive](../vision/HandTracking-4%E6%8C%87-d-drive/) | Arduino、Python | 13 | D盘/work/HandTracking-4指 |
-| [applications/robonexus](../applications/robonexus/) | Node.js / Web | 49 | D盘/work/ROBO/robonexus |
-| [embedded/xiaozhi-esp32-main-d-drive](../embedded/xiaozhi-esp32-main-d-drive/) | ESP-IDF / CMake、Python | 1454 | D盘/work/xiaozhi-esp32-main |
-| [embedded/xiaozhi-latest](../embedded/xiaozhi-latest/) | ESP-IDF / CMake、Python | 1660 | D盘/下载/xiaozhi-esp32-main |
-| [courses/competition-experiments](../courses/competition-experiments/) | Arduino | 91 | D盘/work/竞赛班实验 |
-| [robotics/yahboom-rdk](../robotics/yahboom-rdk/) | ESP-IDF / CMake、Python、ROS | 157 | D盘/work/地瓜RDK系列使用资料/yahboomcar_ws |
-| [projects/10-AgroSense-IoT](../projects/10-AgroSense-IoT/) | Arduino、Python、Node.js / Web | 98 | D盘/大学/毕业设计/毕业设计代码 |
-| [robotics/six-dof-arm-example](../robotics/six-dof-arm-example/) | Arduino、CAD | 30 | D盘/work/6自由度教程资料 |
-| [ai/3-3-课程作业资料](../ai/3-3-%E8%AF%BE%E7%A8%8B%E4%BD%9C%E4%B8%9A%E8%B5%84%E6%96%99/) | Python | 90 | D盘/BaiduNetdiskDownload/3-3 课程作业资料 |
-| [ai/NLP](../ai/NLP/) | Python | 180 | D盘/BaiduNetdiskDownload/NLP |
-| [ai/voice_assistant](../ai/voice_assistant/) | Python | 270 | D盘/BaiduNetdiskDownload/voice_assistant |
-| [references/ESP32连接服务器](../references/ESP32%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/) | Arduino、Python | 3 | D盘/BaiduNetdiskDownload/ESP32连接服务器 |
-| [references/sketch_may29a](../references/sketch_may29a/) | Arduino | 1 | D盘/BaiduNetdiskDownload/sketch_may29a |
-| [references/mano_pybullet-main](../references/mano_pybullet-main/) | Python | 80 | D盘/BaiduNetdiskDownload/mano_pybullet-main |
-| [ai/spacemit_asr](../ai/spacemit_asr/) | Python | 10 | D盘/BaiduNetdiskDownload/spacemit_asr |
-| [ai/spacemit_audio](../ai/spacemit_audio/) | Python | 3 | D盘/BaiduNetdiskDownload/spacemit_audio |
-| [ai/spacemit_llm](../ai/spacemit_llm/) | Python | 4 | D盘/BaiduNetdiskDownload/spacemit_llm |
-| [ai/spacemit_tts](../ai/spacemit_tts/) | Python | 65 | D盘/BaiduNetdiskDownload/spacemit_tts |
-| [ai/voice-assistant-scripts](../ai/voice-assistant-scripts/) | Python | 7 | D盘/BaiduNetdiskDownload |
+完全重复和近似版本已归并；旧版差异保存在 Git 历史，详见 [近似项目整理记录](NEAR_DUPLICATES.md)。原始来源信息仍记录在 manifest 中。
 
-## 2026-11-15 新增
+## projects
 
-| 项目目录 | 技术标志 | 文件数 | 来源 |
-| --- | --- | ---: | --- |
-| [ai/AI-Team-Manager](../ai/AI-Team-Manager/) | TypeScript / VS Code / Codex / Claude Code | 259 | dreamcather726/AI-Team-Manager，0.8.3，提交 3c4fd05 |
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [projects/01-AegisMotion-RTOS](../projects/01-AegisMotion-RTOS/) | ESP-IDF / CMake、Python、STM32 / Keil | 151 |
+| [projects/03-NexusMobile-ROS2](../projects/03-NexusMobile-ROS2/) | PlatformIO、ESP-IDF / CMake、Arduino、Python、ROS、CAD | 570 |
+| [projects/04-KineArm-Robotics](../projects/04-KineArm-Robotics/) | ESP-IDF / CMake、Arduino、Python、ROS、CAD | 127 |
+| [projects/05-ServoLab-SOARM](../projects/05-ServoLab-SOARM/) | Python | 162 |
+| [projects/10-AgroSense-IoT](../projects/10-AgroSense-IoT/) | Arduino、Python、Node.js / Web | 98 |
+| [projects/11-RoboSim-Cockpit](../projects/11-RoboSim-Cockpit/) | Python、ROS | 26 |
+| [projects/12-DexterousLab-Hand](../projects/12-DexterousLab-Hand/) | Arduino、Python、CAD | 109 |
+| [projects/13-HandPose-CV](../projects/13-HandPose-CV/) | Python | 12 |
+| [projects/14-EdgeLink-ESP32](../projects/14-EdgeLink-ESP32/) | ESP-IDF / CMake | 24 |
+
+## embedded
+
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [embedded/dog](../embedded/dog/) | Arduino | 38 |
+| [embedded/ESP32](../embedded/ESP32/) | Arduino | 14 |
+| [embedded/helloWorld_test](../embedded/helloWorld_test/) | PlatformIO、Arduino、Python | 47 |
+| [embedded/i2c-scanner](../embedded/i2c-scanner/) | Arduino | 1 |
+| [embedded/my_9685_esp32s3](../embedded/my_9685_esp32s3/) | Arduino、Python | 18 |
+| [embedded/platformio-1](../embedded/platformio-1/) | PlatformIO | 10 |
+| [embedded/platformio-123](../embedded/platformio-123/) | PlatformIO | 10 |
+| [embedded/platformio-a](../embedded/platformio-a/) | PlatformIO | 9 |
+| [embedded/platformio-pm](../embedded/platformio-pm/) | PlatformIO | 10 |
+| [embedded/platformio-ss](../embedded/platformio-ss/) | PlatformIO | 9 |
+| [embedded/platformio-test](../embedded/platformio-test/) | PlatformIO、Arduino | 18 |
+| [embedded/platformio-Wificontrol](../embedded/platformio-Wificontrol/) | PlatformIO | 9 |
+| [embedded/robot-head](../embedded/robot-head/) | Arduino | 1 |
+| [embedded/RTOS_esp32](../embedded/RTOS_esp32/) | PlatformIO、Python | 14 |
+| [embedded/test](../embedded/test/) | Arduino | 13 |
+| [embedded/xiaozhi-latest](../embedded/xiaozhi-latest/) | ESP-IDF / CMake、Python | 1660 |
+| [embedded/孟](../embedded/%E5%AD%9F/) | Arduino | 34 |
+
+## robotics
+
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [robotics/arm-controller](../robotics/arm-controller/) | Arduino、Python | 5 |
+| [robotics/ROS-CAR-main-publish](../robotics/ROS-CAR-main-publish/) | PlatformIO、Python、ROS | 50 |
+| [robotics/ros2-car-stc8](../robotics/ros2-car-stc8/) | Python | 74 |
+| [robotics/six-dof-arm-example](../robotics/six-dof-arm-example/) | Arduino、CAD | 30 |
+| [robotics/tect](../robotics/tect/) | Arduino | 4 |
+| [robotics/yahboom-rdk](../robotics/yahboom-rdk/) | ESP-IDF / CMake、Python、ROS | 157 |
+
+## vision
+
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [vision/hand-software](../vision/hand-software/) | Python | 4 |
+| [vision/HandTracking-4指](../vision/HandTracking-4%E6%8C%87/) | Arduino、Python | 13 |
+| [vision/orangepi-hand-control](../vision/orangepi-hand-control/) | Python | 1 |
+| [vision/灵巧手中文版](../vision/%E7%81%B5%E5%B7%A7%E6%89%8B%E4%B8%AD%E6%96%87%E7%89%88/) | Python | 18 |
+
+## ai
+
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [ai/AI-Team-Manager](../ai/AI-Team-Manager/) | TypeScript / VS Code / Node.js / Codex / Claude Code | 259 |
+| [ai/NLP](../ai/NLP/) | Python | 90 |
+| [ai/voice_assistant](../ai/voice_assistant/) | Python | 90 |
+
+## applications
+
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [applications/robonexus](../applications/robonexus/) | Node.js / Web | 49 |
+
+## courses
+
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [courses/competition-experiments](../courses/competition-experiments/) | Arduino | 91 |
+| [courses/cpp-exercises](../courses/cpp-exercises/) | 源码与配置 | 1 |
+| [courses/Phase-2_Training_Camp](../courses/Phase-2_Training_Camp/) | Arduino、CAD | 187 |
+| [courses/python](../courses/python/) | Python | 10 |
+| [courses/ros2-lessons](../courses/ros2-lessons/) | ESP-IDF / CMake、Python、ROS | 50 |
+| [courses/ros2_python](../courses/ros2_python/) | ESP-IDF / CMake、Python、ROS | 167 |
+| [courses/竞赛](../courses/%E7%AB%9E%E8%B5%9B/) | Arduino | 43 |
+| [courses/竞赛实验](../courses/%E7%AB%9E%E8%B5%9B%E5%AE%9E%E9%AA%8C/) | Arduino | 29 |
+| [courses/课表](../courses/%E8%AF%BE%E8%A1%A8/) | Python | 4 |
+
+## references
+
+| 项目目录 | 技术方向 | 文件数 |
+| --- | --- | ---: |
+| [references/ESP32连接服务器](../references/ESP32%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/) | Arduino、Python | 3 |
+| [references/LeLamp](../references/LeLamp/) | ROS、CAD | 119 |
+| [references/mano_pybullet-main](../references/mano_pybullet-main/) | Python | 80 |
+| [references/microduck](../references/microduck/) | Python | 267 |
+| [references/sketch_may29a](../references/sketch_may29a/) | Arduino | 1 |

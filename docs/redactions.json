@@ -16,22 +16,6 @@
     "replacements": 1
   },
   {
-    "path": "embedded/xiaozhi-esp32-main/docs/mqtt-udp.md",
-    "replacements": 2
-  },
-  {
-    "path": "embedded/xiaozhi-esp32-main/docs/mqtt-udp_zh.md",
-    "replacements": 2
-  },
-  {
-    "path": "embedded/xiaozhi-esp32-main---副本/docs/mqtt-udp.md",
-    "replacements": 2
-  },
-  {
-    "path": "embedded/xiaozhi-esp32-main---副本/docs/mqtt-udp_zh.md",
-    "replacements": 2
-  },
-  {
     "path": "embedded/孟/Bluetooth_dog/LeArm_ESP32_Arduino.ino",
     "replacements": 2
   },
@@ -80,7 +64,7 @@
     "replacements": 2
   },
   {
-    "path": "robotics/ROBO/robonexus/src/pages/uesr/Login/Login.vue",
+    "path": "applications/robonexus/src/pages/uesr/Login/Login.vue",
     "replacements": 1
   },
   {
@@ -105,18 +89,6 @@
   },
   {
     "path": "embedded/platformio-test/src/main.cpp",
-    "replacements": 2
-  },
-  {
-    "path": "vision/HandTracking-4指-d-drive/CameraWebServer/CameraWebServer.ino",
-    "replacements": 2
-  },
-  {
-    "path": "applications/robonexus/src/pages/uesr/Login/Login.vue",
-    "replacements": 1
-  },
-  {
-    "path": "embedded/xiaozhi-esp32-main-d-drive/docs/mqtt-udp.md",
     "replacements": 2
   },
   {
