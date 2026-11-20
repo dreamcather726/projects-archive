@@ -1,3 +1,0 @@
-managed_monitor:
-  ros__parameters:
-    min_distance: 0.6
